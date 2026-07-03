@@ -1,0 +1,19 @@
+---
+title: "References and Acknowledgements"
+about:
+    template: jolla
+---
+
+## References
+
+- [HMC E155 Course Site](https://hmc-e155.github.io/)
+- [STM32L432KC Datasheet](https://hmc-e155.github.io/assets/doc/ds11451-stm32l432kc.pdf)
+- [STM32L4 Reference Manual](https://hmc-e155.github.io/assets/doc/rm0394-stm32l41xxx42xxx43xxx44xxx45xxx46xxx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)
+- [FatFs Documentation](https://elm-chan.org/fsw/ff/)
+- [ICE40 RAM](https://hmc-e155.github.io/assets/doc/FPGA-TN-02022-1-3-iCE40-SPRAM-Usage-Guide.pdf)
+
+## Acknowledgements
+
+We would like to thank all other students in the lab who helped us find issues and debug some of our code.
+
+We would like to acknowledge Prof. Spencer for not only teaching the class but for helping us with any question we had, big or small. Providing aid when we need it and giving us advice on how to approch our project. 

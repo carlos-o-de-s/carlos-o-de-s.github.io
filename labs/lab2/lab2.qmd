@@ -1,0 +1,254 @@
+## Lab 2: Multiplexed 7-Segment Display
+
+In this Lab, we were tasked to make 2 HEX displays using a single module by multiplexing, and showing the addition of both HEX numbers in a 5 bit binary LED display. This lab uses a code almost identical to last lab, with a few changes. This resulted in a succesful lab2 where we were able to get the two hex numbers displayed with minimal use of pins and showing the sum on LED's.
+
+This lab took around 10 hours to complete.
+
+### Circuits and Diagrams
+
+First, we start by making a circuit that can support using two multiplexed 7 segment displays, thsi was done by controlling the power input of each display with a PNP transistor and outputting the 7 segment signal to the current display we are powering.
+
+![Electrical schematic of teh Lab 2 circuits](images\Lab2top.png)
+
+This looks like this after assembly:
+
+![Lab 2 wiring](images\lab2circuit.jpeg)
+
+After wiring the circuit like this, it was configured as follows to be able to control it using verilog code:
+
+![FPGA pin setup](images\lab2pins.png)
+
+This was then used in our top module, which uses code that was made in Lab1 (lab1_co.sv, which controls the 7 segment display) and the code that controls all the logic and switching between displays.
+
+```{verilog, code-fold: true}
+/*
+by Carlos Ojeda de Silva, September 10 2025
+cojedadesilva@g.hmc.edu
+This file combines both tasks for lab2
+*/
+module top(
+	input 	logic [3:0] s1, s2,
+	output 	logic [1:0] disps,
+	output  logic [6:0] number,
+	output  logic [4:0] leds
+);
+logic [3:0] sout;
+leds_co leds_co(s1[3:0], s2[3:0], disps, sout[3:0], leds[4:0]);
+sevseg sevseg(sout[3:0], number[6:0]);
+endmodule
+```
+
+This top module results in a block diagram that looks as follows:
+
+![Top module Block Diagram](images\lab2diagram.png)
+
+#### Curcuit calculations:
+
+In the previous lab, we used 5v as the V_in of the 7 segment display, which makes the display bleed a bit of current into every LED when off since 3.3v < 5v. This was fixed by changing the V_in to 3.3v and recalculating the required resistance to be:
+
+Math for the yellow LED's for the 5bit display, in this case, the FPGA is not recommended to use over 8mA and the yellow LED has a 2v drop, so:
+
+$$
+0.008 > \frac{3.3-2}{R}
+$$
+$$
+R > 130
+$$
+
+For these LED's, we used a 160Ω resistor
+
+Voltage drop of around 0.4V in the transistor, a red LED has a voltage drop of around 1.8v at the current we are driving them at, so:
+
+$$
+0.010 > \frac{3.3-0.4-1.8}{R}
+$$
+$$
+R > 110
+$$
+
+For the transisitor, we need to calculate the resistor that we will connect to the base:
+The desired base current is between 2-3 mA based on the datasheet and our desired output current (up to 70mA) and the voltage drop would be around 0.95V:
+
+$$
+R = \frac{0.95}{0.0025}
+$$
+$$
+R = 380
+$$
+
+In this case, we also chose 10mA for the 7 segment display since the datasheet does recommend a value closer to that, and it was very visible. The selected value was 160Ω. This value was also used for the normal LED's used in the fulladder since they have similar current needs and voltage drops.
+
+This also corresponds to teh current ratings of teh 2N3906 Transistor we are using, which allows a maximum of 200mA to be drawn, meaning that having all segments on (7 per transistor) results in a total current draw of <70mA.
+
+### 7 Segment Display Multiplexing
+
+For this part of the lab, we first need to use the 7 segment display code from Lab1, where all we have to chnage is the input and how the output is treated. To do this we first connected both PNP transistor's power (Emmiter) to the 3.3v line. Then we connected the Base to the FPGA pins so whenever they are high, the transistor switches. Finally we connected each 7 segment display power to the collector. We also added a pulldown resistor (chose 10k since it is standard and much larger than the 160Ω chosen for the display) to the PNP transistor to remove any excess charge accumulated when switching off. Here is the verilog code used:
+
+```{verilog, code-fold: true}
+/*
+by Carlos Ojeda de Silva, September 10 2025
+cojedadesilva@g.hmc.edu
+This file controls which 7 segment display is used with the corresponding s values. It also outputs the sum of 2 numbers in binary with 5 leds
+*/
+module leds_co(
+	input logic [3:0] s1, s2,
+	output 	logic [1:0] disps,
+	output logic [3:0] sout,
+	output logic [4:0] leds
+);
+
+	logic int_osc;
+	logic pulse; 
+	logic led_state = 0;
+	logic [31:0] counter = 0;
+	
+	// Internal high-speed oscillator 
+	HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+	
+	// Simple clock divider
+	
+	always_ff @(posedge int_osc)
+		begin
+			counter <= counter + 215; //this value works
+			if (counter[21]) sout = s1;
+			if (~counter[21]) sout = s2; //using index 21 makes it around 2.5kHz, which is higher than human eye and slow enough for the transistor.
+			leds = s1 + s2;
+		end
+  assign disps[0] = counter[21];
+  assign disps[1] = ~counter[21];
+endmodule
+```
+
+This code was mainly recycled from the lab1 code also named leds_co.sv, where the logic was changed to select the display with the disps variable. The same addition was chosen as the previous lab, but since 2.4Hz is too slow, we reduced the exponent from 31 to 21 to make it 1048 (2^10) times faster, resulting in 2.5kHz. This is much faster than the human eye being at at most in the hundreds of Hz. 
+
+### 5 Bit Full Adder
+
+To make the full adder, we first need to consider we are adding two 4-bit numbers, meaning that the sum could be 5 bits long, meaning that our output will be of length 5. Then we used the following line of verilog code to assign the leds the sum:
+
+```{verilog, code-fold: true}
+  assign leds = s1+s2;
+```
+
+Finally, the pins are assigned so the LED's order matches one that can be interpreted from left to right.
+
+### Testbench
+
+To test the fpga setup, we have designed a testbench that tests every hex value for each display (0-15 display 1 then stays at 15 while the second one goes from 0-15). 
+
+The test bench was also made by doing small modifications to the code, where we can control the timing (counter[21]) to force it to switch between displays. 
+
+![Top Testbench Trace](images\lab2testbench.png)
+
+![Seven Segment Testbench Trace](images\Lab1tb_sevseg.png)
+
+![Multiplexing/LED logic Testbench Trace](images\Lab2tb_ledlogic.png)
+
+This test bench showed that the system works for any of these inputs, but there are a total of 16x16x2 = 512 possible inputs, so take into consideration that some real world testing may be needed to verify it always works, or expand the testbench.
+
+### AI Prototype
+
+Using ChatGPT, we inputted the folowing prompt:
+
+Write SystemVerilog HDL to time multiplex a single seven segment decoder (that decodes from four bits to a common anode seven segment display) to decode two sets of input bits and drive two sets of seven output bits.
+
+from which we got this code:
+
+```{verilog, code-fold: true}
+module seven_segment_mux (
+    input logic clk,               // Clock input to drive time multiplexing
+    input logic rst_n,             // Active low reset
+    input logic [3:0] digit1,      // First 4-bit input digit (for first 7-segment display)
+    input logic [3:0] digit2,      // Second 4-bit input digit (for second 7-segment display)
+    output logic [6:0] seg1,       // 7-segment display 1 output (active low)
+    output logic [6:0] seg2        // 7-segment display 2 output (active low)
+);
+
+    // Internal signals
+    logic [3:0] current_digit;
+    logic [1:0] display_selector;  // 2-bit selector to multiplex between display 1 and display 2
+
+    // 7-segment decoder for common anode display
+    function [6:0] seg_decoder(input logic [3:0] digit);
+        case (digit)
+            4'b0000: seg_decoder = 7'b1111110; // 0
+            4'b0001: seg_decoder = 7'b0110000; // 1
+            4'b0010: seg_decoder = 7'b1101101; // 2
+            4'b0011: seg_decoder = 7'b1111001; // 3
+            4'b0100: seg_decoder = 7'b0110011; // 4
+            4'b0101: seg_decoder = 7'b1011011; // 5
+            4'b0110: seg_decoder = 7'b1011111; // 6
+            4'b0111: seg_decoder = 7'b1110000; // 7
+            4'b1000: seg_decoder = 7'b1111111; // 8
+            4'b1001: seg_decoder = 7'b1111011; // 9
+            default: seg_decoder = 7'b0000000; // Blank (invalid input)
+        endcase
+    endfunction
+
+    // Time multiplexing logic
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (~rst_n) begin
+            display_selector <= 2'b00; // Start with first display
+        end else begin
+            // Toggle the display selector every clock cycle
+            display_selector <= display_selector + 1;
+        end
+    end
+
+    // Output logic: Multiplex between two sets of 7-segment displays
+    always_comb begin
+        case (display_selector)
+            2'b00: begin
+                current_digit = digit1;    // Drive the first 7-segment display
+                seg1 = seg_decoder(current_digit);
+                seg2 = 7'b1111111; // Turn off second display
+            end
+            2'b01: begin
+                current_digit = digit2;    // Drive the second 7-segment display
+                seg1 = 7'b1111111; // Turn off first display
+                seg2 = seg_decoder(current_digit);
+            end
+            2'b10: begin
+                current_digit = digit1;    // Drive the first 7-segment display
+                seg1 = seg_decoder(current_digit);
+                seg2 = 7'b1111111; // Turn off second display
+            end
+            2'b11: begin
+                current_digit = digit2;    // Drive the second 7-segment display
+                seg1 = 7'b1111111; // Turn off first display
+                seg2 = seg_decoder(current_digit);
+            end
+            default: begin
+                seg1 = 7'b1111111;
+                seg2 = 7'b1111111;
+            end
+        endcase
+    end
+
+endmodule
+
+```
+
+This code actually compiled, but it looks a bit off:
+-only goes from 0-9 it was never specified that it had to be hex to be fair.
+-only does low=high logic for the case(display_selector) but not for the seg_decoder, thsi can be fixed with a simple "~".
+-It wasnts us to use 7 segment outputs, so instead of switching with the transistor by turnig power on and off, it turns the pins on and off. using more pins than needed.
+
+but I still think it was a high quality output since it did make something that compiled and has around 70% of the logic right, while only taking 2 min to make and test.
+
+The only part of the code that looks different to what I usually make is the use of a function. I imagined you always made a new module, but I think I can use it for Lab3 to make a demultiplexer.
+
+I believe if we dumb down the specifics (7 pins for display and 2 for power that switch back and forth) it would work well
+
+### Lab 2 resources:
+
+Lab1 Code:
+<https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab1>
+
+Code:
+<https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab2>
+
+HDSP-521A datasheet:
+<https://docs.broadcom.com/doc/HDSP-521A-523A-Dual-Digit-General-Purpose-7-Segment-Display-DS>
+
+Transistor datasheet:
+<https://www.onsemi.com/pdf/datasheet/2n3906-d.pdf>

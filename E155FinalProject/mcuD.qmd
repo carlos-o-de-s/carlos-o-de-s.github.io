@@ -1,0 +1,27 @@
+---
+title: "MCU DESIGN"
+about:
+    template: jolla
+---
+
+We designed the MCU to be the brains of grabbing data from the SD card. Besides reading the SD card, it also reads X and Y axis values and a click from the Joystick.
+
+# Reading WAV
+
+In order to read the .wav file, we utilize a pre-made library titled FATFS. This easily allowed us to utilize premade function to read the microSD. However, it is not a high level, rather as a mediator for us to use. To put it simply, we still had to write a few functions to properly read the microSD card. Once we were past this, we decided to utilze SPI1 to communicate with the microSD reader. When recieving data, we made a 512 byte buffer to read in chunks. The reason with this is 512 bytes is the smallest size used in MicroSDs when it comes to reading sectors. This allows us to properly extract sectors without missing data and having a faster refresh rate for ADC data. 
+
+# Reading Joystick
+
+The Joystick is staightforward. We decided to use an onboard Anolog Digital Connverter as our new feature in the MCU. This would make it easier to send this data to the FPGA, and allow easy value calibration that would be harder to do using system verilog. With the click, we simply used a GPIO input. 
+
+# Sending Data to FPGA
+
+To send these data, we have a second SPI intialized to send the buffer and joystick data. However, we ran into the problem on how the data is being sent, as it would be difficult for the FPGA to tell when it has recieved wav or joystick data. This made us use 2 different chip selects, where one controls the Audio receiving and the other controls ADC data.
+
+# TIM2
+
+We decided to use TIM2, specifcally its intrrupt to communicate with the FPGA on when the joystick data is being sent. We used a PCM value of 0 since it allows for more frequencies to be made. TIM2 controls all the dataflow of both the MCU and FPGA, where it will trigger at twice the sampling frequency to ensure we can also send a wave at the sampling frequency. We count 512 clock cycles since this corresponds to 256 samples being played, then we read and relay the SD card data, and finally we send DAC values.
+
+# CENTERING AND CALIBRATION
+
+Another issue present is that the data was not neccesarry centered, meaning that values were off when being sent causing the playback speed at the origin to not match the desired 48kSamples/s. Another issue is that a joystick can't get max X and max y at the same time, so we added a 1.5 multiplier (sqrt(2)=1.41 is the minimum we would need for this). To correct this, we simply utilized a function made to clamp the max value read from the joystick on either axis, allowing us to monimize bugds.

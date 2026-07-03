@@ -1,0 +1,84 @@
+## Lab 4: Digital Audio
+
+In this lab, we made a melody player code for a STM32L4 microcontroller where we can control the frequency and timing of musical notes. 
+
+This lab took 24 hours
+
+### Electrical schematic
+
+![Electrical Schematic](images\Lab4schematic.png)
+
+### Design Choices and Math:
+
+We chose TIM2 because it has 32 bits and it is easy to change frequency by alering the ARR and SRC values
+
+Minimum frequency
+
+Since our PSC is 39, and ARR is a 32 bit number, the maximum value it could have is, the maximum possible frequency (tested) is when ARR is 1, or:
+4,000,000/((39+1)(2^32))/2 = 1.164x10^-5 Hz, we divide by 2 because we toggle every cycle.
+
+Maximum frequency
+
+Since our PSC is 39, the maximum possible frequency (tested) is when ARR is 1, or:
+4,000,000/((39+1)(1+1))/2 = 25kHz, we divide by 2 because we toggle every cycle.
+
+Minimum delay
+
+since our maximum frequency is 25kHz, the minimum delay we can do is 1/(2*25,000) or 0.2ms
+
+Maximum delay
+
+since our minimum frequency is 1.164x10^-5 Hz, we get:
+1/(2*1.164x10^-5) = 42950s or 11:55:50 hours (11.93)
+
+Frequency within 1%
+
+Worst case escenario we get an ARR that is at most 0.5 off, so:
+$$
+ARR = \frac{2,000,000}{40*f_d} - 1
+$$ 
+And therefore:
+$$
+f_d = \frac{2,000,000}{40*(ARR+1)} 
+$$ 
+We then calculate the worst case escenario frequency change when changing ARR by 0.5 (it will get rounded, so it can be at most off by 0.5)
+$$
+\frac{df}{dARR} = \frac{-2,000,000}{40*(ARR+1)^2}
+$$ 
+now, we can calculate the percent error by  multiplying by 0.5 and dividing by desired frequency:
+$$
+error = \frac{-2,000,000}{40*f_d*(ARR+1)^2} = \frac{1}{2(ARR+1)}
+$$ 
+for 1% error, the maximum ARR accepted is:
+$$
+0.01 >= \frac{1}{2(ARR+1)}
+$$ 
+ARR >= 49
+
+ARR of 49 corresponds to a frequency of:
+$$
+f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
+$$ 
+
+And since we can get way larger ARR values, the clock does tick within 1% of the frequency in all frequencies between 220 and 1000 Hz
+
+
+
+### AI Prototype
+
+After asking ChatGPT, we got the following response:
+
+![AI Prototype](images\Lab4_AIPrototype.png)
+
+This is similar to what we concluded, where we chose Timer 2 since it seemed easier to use and has the ability to count up to 32 bits, which since we were originally considering using timer overflow to control notes instead of number of clock cycles we used in the end. this also made me understand better the math behind it.
+
+### Resources
+
+Lab 4 code:
+<https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab4>
+
+Audio Amplifier
+<https://www.ti.com/lit/ds/symlink/lm386.pdf>
+
+Math in Desmos:
+<https://www.desmos.com/calculator/p6powqxlh8>

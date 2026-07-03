@@ -1,0 +1,19 @@
+---
+title: "PORTABLE DJ SET"
+about:
+  template: jolla
+  links:
+    # - icon: github
+    #   text: Carlos' Github
+    #   href: https://github.com/cojedadesilva
+    - icon: github
+      text: Maynor's Github
+      href: https://github.com/MaynorB
+    - icon: github
+      text: PROJECT CODE
+      href: https://github.com/MaynorB/E155ProjectCode
+  
+---
+
+We are Carlos (ENGINEERING) and Maynor (COMPUTER SCIENCE), both Junior Mudd Students. For our E155 project, we decided to make a portable DJ set. Using the MCU and FPGA, we were able to apply a high or low pass filter, plus either speed up or slow down the song playing. With a click of the joystick, you can also skip the current song playing to the next one, looping through 16 songs.
+

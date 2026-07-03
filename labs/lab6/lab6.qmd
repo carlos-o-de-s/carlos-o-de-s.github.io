@@ -1,0 +1,38 @@
+## Lab 6: The Internet of Things and Serial Peripheral Interface
+
+In this lab, we made an IOT device that can control an LED and read temperature from an SPI sensor. The IOT website also has the option to change the resolution, which changes the sensor read time and how precise we can get.
+
+Spent a total of 19 hours
+
+### Electrical Schematic
+
+![Electrical Schematic](images\Lab6Schematic.png)
+
+### SPI Transaction Logic Trace
+
+![Lab6 Website](images\Lab6website.png)
+
+![Lab6 Oscilloscope logic analyser](images\Lab6Osctrace.jpeg)
+
+A hex value of 19 is equal to 16 + 9, which is 25C, this matches the value we see in the website.
+
+### AI Prototype
+
+The first prompt gave me a decently looking code for a GUI, but it was not functional, I just appended it at the end:
+
+
+![Lab6 AI Prototype 1](images\Lab6AIPrototype1.png)
+
+
+The second prompt gave me a code that looks similar to ours, but it looks a bit shorter than our definitions, so it may not work.
+
+
+![Lab6 AI Prototype 2](images\Lab6AIPrototype2.png)
+
+
+Overall, AI seems to be useful for frameworks like the HTML visual template that looked way better than the one I made, but it would struggle at extremely documentation heavy tasks like coding firmware.
+
+### Resources
+
+Lab 6 code:
+<https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab6>

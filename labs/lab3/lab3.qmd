@@ -1,0 +1,120 @@
+## Lab 3: Keypad Scanner
+
+In this lab, we were tasked to make a display for a 4x4 keyboard that would show a different hex number after pressing a button, saving two numbers at a time. 
+
+This Lab took around 18 hours to finish.
+
+### Electrical calculations
+
+In the Lab1, we used 5v as the V_in of the 7 segment display, which makes the display bleed a bit of current into every LED when off since 3.3v < 5v. This was fixed by changing the V_in to 3.3v and recalculating the required resistance to be:
+
+For these LED's, we used a 160Ω resistor
+
+Voltage drop of around 0.4V in the transistor, a red LED has a voltage drop of around 1.8v at the current we are driving them at, so:
+
+$$
+0.010 > \frac{3.3-0.4-1.8}{R}
+$$
+$$
+R > 110
+$$
+
+For the transisitor, we need to calculate the resistor that we will connect to the base:
+The desired base current is between 2-3 mA based on the datasheet and our desired output current (up to 70mA) and the voltage drop would be around 0.95Vm, we need to account that the total voltage is 3.3v, so:
+
+$$
+R = \frac{3.3-0.95}{0.005}
+$$
+$$
+R = 470
+$$
+
+In this case, we also chose 10mA for the 7 segment display since the datasheet does recommend a value closer to that, and it was very visible. The selected value was 160Ω. This value was also used for the normal LED's used in the fulladder since they have similar current needs and voltage drops.
+
+This also corresponds to teh current ratings of teh 2N3906 Transistor we are using, which allows a maximum of 200mA to be drawn, meaning that having all segments on (7 per transistor) results in a total current draw of <70mA.
+
+### Block Diagram
+
+![Block Diagram](images\BlockDiagram.png)
+
+### Circuit Diagram
+
+![Circuit Diagram](images\CircuitdiagramLab3.png)
+
+### General Overview of the system/code
+
+The current code made works in an interesting way. We first defined a top module that is in charge of getting the clock and sending the calculated sout (data on specific hex number to display at a given time) to the sevseg module that controls the seven segment display. The oter module it calls is leds_co, which is in charge of managing all the seven segment LED logic, where we have to flip back and forth to only use 9 pins instead of 14 (more on this in lab2 website).
+
+In this case, we need to drive the rows at different times and read the columns, to prevent bouncing in the buttons and drive power to rows, we used the counter, specifically the range [25:23] and [21], where the 21'st bit will save col -> savecol on the rising edge. In order to control the row output, we use the range [25:24], where we use the left shift operator to make the sequence, were this value can be anything from 0 to 3. 
+
+1 << 0 = 0001   
+1 << 1 = 0010   
+1 << 2 = 0100   
+1 << 3 = 1000   
+
+Then it repeats
+
+The 23'rd bit is used in the keypad decoder code where we only act on the rising edge of this bit since this is halfway from a row being assigned and it being unasigned, meaning any start behaviour and end behavior noise we get should not fall in the middle. generally this can be done by adding counters that check the signal a specific time after the row is switched (less robust), or other methods to reduce this noise may include low pass filters (not ideal for digital electronics since voltage in capacitors takes time to rise) or reducing frequency to reduce the percent of time where you have noise (ideally avoided to reduce unnecesary noise)
+
+The debouncer logic (shown below) works in a simple manner, where we start in the ~pressed state, this means we aren't actively pressing the button. when something gets detected, col would not be 0, which is when we set N2 = N1 and N1 = {counter[2:1],coln}, where:
+
+counter[2:1] is the same part of the counter that controls row. Note that this variable inside the keydec module is different from the 32 bit counter.
+coln is defined as the column number, were we use if statements to the opposite to when we assigned rows:
+
+0001 --> 0  
+001x --> 1  
+01xx --> 2  
+1xxx --> 3  
+
+
+In the code, it was chosen to use if statements instead of assuming that x were 0 since if you would press 3 buttons at once and release the first one that was detected, it could default to the first column, which is unpredictable behaviour we like to avoid.
+
+### FSM
+
+![FSM of the debouncer](images\FSMLab3.png)
+
+![FSM transition diagram](images\Lab3TransitionDiag.png)
+
+Note: the FSM changes states on the rising edge of counter[23], not the clock directly.
+
+### Testbenches
+
+![Testbench of the Counter](images\Lab3clocktb.png)
+
+![Testbench of the keyboard decoder](images\Lab3keydectb.png)
+
+![Testbench of the ledlogic module](images\Lab3ledlogictb.png)
+
+![Testbench of the top module](images\Lab3tb.png)
+
+### AI Prototype
+
+Did the All at once:
+
+![Testbench of the top module](images\AI_proj.png)
+
+The AI gave me all the modules at once, but it looks like it ran out of space and gave me a partial top module as seen as the upper error.
+
+After asking the AI to redo teh top module, it got confused of the other module names and got more errors. I have to either probably use option B to try get each module individually, or buy premium AI use (used free access)
+
+Using option B, we get:
+
+![Testbench of the top module](images\AI_proj2.png)
+
+which basically means that the AI messed up some basic syntax. This is probably a quick fix that the AI would be able to fix if we input the errors and it will give us a nicer output. 
+
+Overall, I noticed with both of these solutions that the AI response was way longer than my code, which could mean the AI actually knows how to code, or it is overseeing a lot of easy ways to make a verilog code more compact.
+
+### Resources:
+
+Verilog Code:
+<https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab3>
+
+Lab2 Code:
+<https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab2>
+
+HDSP-521A datasheet:
+<https://docs.broadcom.com/doc/HDSP-521A-523A-Dual-Digit-General-Purpose-7-Segment-Display-DS>
+
+Transistor datasheet:
+<https://www.onsemi.com/pdf/datasheet/2n3906-d.pdf>

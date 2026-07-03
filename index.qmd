@@ -1,0 +1,19 @@
+---
+title: "E155 Portfolio"
+image: images/headshot.png
+about:
+  template: jolla
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/carlos-odes/
+---
+
+Carlos Ojeda de Silva is an Engineering Student at **[Harvey Mudd College](https://hmc.edu)**.
+While currently studying a general engineering degree, he focuses his learning based on projects, mainly in Mechanical Design and Computer Science
+
+## Why I Enjoy Learning from Experimentation?
+
+Over the last of couple years, I have learned that doing projects based on areas of interest is the best way to learn. Setting yourself a challenge in the form of a project idea forces you to learn all the background information needed to complete it. This ensured I understood the topics studied well enough to apply them in the real world.
+
+This is why I like to challenge myself with new projects. I feel that the learning that results from experimenting is better than simply reading it in a textbook. I often enjoy setting up challenges with constraints because it is more challenging and interesting.
