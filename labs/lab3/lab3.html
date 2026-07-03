@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>lab3 – Carlos Ojeda de Silva Portfolio</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Carlos Ojeda de Silva Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-microprocesssor-(e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">MicroProcesssor (E155) Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-microprocesssor-(e155-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/lab1/lab1.html">
+ <span class="dropdown-text">Lab 1 FPGA and MCU Setup and Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab2/lab2.html">
+ <span class="dropdown-text">Lab 2 Multiplexed 7-Segment Display</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab3/lab3.html">
+ <span class="dropdown-text">Lab 3 Keypad Scanner</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab4/lab4.html">
+ <span class="dropdown-text">Lab 4 Digital Audio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab5/lab5.html">
+ <span class="dropdown-text">Lab 5 Interrupts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab6/lab6.html">
+ <span class="dropdown-text">Lab 6 IoT and SPI</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/resources/resources.html">
+ <span class="dropdown-text">E155 Resources</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-final-project-portable-dj-set" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">E155 Final Project Portable DJ Set</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-final-project-portable-dj-set">    
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/index.html">
+ <span class="dropdown-text">Homepage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/bill.html">
+ <span class="dropdown-text">Bill of Materials</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/fpgaD.html">
+ <span class="dropdown-text">FPGA Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/mcuD.html">
+ <span class="dropdown-text">MCU Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/results.html">
+ <span class="dropdown-text">Results</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/reference.html">
+ <span class="dropdown-text">References</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/ai.html">
+ <span class="dropdown-text">AI usage</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-engineering-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Engineering Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-engineering-projects">    
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hybrid-Rocket/index.html">
+ <span class="dropdown-text">Hybrid Rocket</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hybrid-Rocket-Engine/index.html">
+ <span class="dropdown-text">Hybrid Rocket Engine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Liquid-Rocket-Engine/index.html">
+ <span class="dropdown-text">Liquid Rocket Engine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Rocket-Avionics-from-Scratch/index.html">
+ <span class="dropdown-text">Rocket Avionics From Scratch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hardware-Input-Control/index.html">
+ <span class="dropdown-text">Hardware Input Control</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs-math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">CS Math Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs-math-projects">    
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/AI-Image-Depth-Perception/index.html">
+ <span class="dropdown-text">AI Image Depth Perception</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/Best-Route-Using-ML/index.html">
+ <span class="dropdown-text">Best Route Using ML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html">
+ <span class="dropdown-text">Hyperbola Integral Using Rotations</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lab-3-keypad-scanner" id="toc-lab-3-keypad-scanner" class="nav-link active" data-scroll-target="#lab-3-keypad-scanner">Lab 3: Keypad Scanner</a>
+  <ul class="collapse">
+  <li><a href="#electrical-calculations" id="toc-electrical-calculations" class="nav-link" data-scroll-target="#electrical-calculations">Electrical calculations</a></li>
+  <li><a href="#block-diagram" id="toc-block-diagram" class="nav-link" data-scroll-target="#block-diagram">Block Diagram</a></li>
+  <li><a href="#circuit-diagram" id="toc-circuit-diagram" class="nav-link" data-scroll-target="#circuit-diagram">Circuit Diagram</a></li>
+  <li><a href="#general-overview-of-the-systemcode" id="toc-general-overview-of-the-systemcode" class="nav-link" data-scroll-target="#general-overview-of-the-systemcode">General Overview of the system/code</a></li>
+  <li><a href="#fsm" id="toc-fsm" class="nav-link" data-scroll-target="#fsm">FSM</a></li>
+  <li><a href="#testbenches" id="toc-testbenches" class="nav-link" data-scroll-target="#testbenches">Testbenches</a></li>
+  <li><a href="#ai-prototype" id="toc-ai-prototype" class="nav-link" data-scroll-target="#ai-prototype">AI Prototype</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="lab-3-keypad-scanner" class="level2">
+<h2 class="anchored" data-anchor-id="lab-3-keypad-scanner">Lab 3: Keypad Scanner</h2>
+<p>In this lab, we were tasked to make a display for a 4x4 keyboard that would show a different hex number after pressing a button, saving two numbers at a time.</p>
+<p>This Lab took around 18 hours to finish.</p>
+<section id="electrical-calculations" class="level3">
+<h3 class="anchored" data-anchor-id="electrical-calculations">Electrical calculations</h3>
+<p>In the Lab1, we used 5v as the V_in of the 7 segment display, which makes the display bleed a bit of current into every LED when off since 3.3v &lt; 5v. This was fixed by changing the V_in to 3.3v and recalculating the required resistance to be:</p>
+<p>For these LED’s, we used a 160Ω resistor</p>
+<p>Voltage drop of around 0.4V in the transistor, a red LED has a voltage drop of around 1.8v at the current we are driving them at, so:</p>
+<p><span class="math display">\[
+0.010 &gt; \frac{3.3-0.4-1.8}{R}
+\]</span> <span class="math display">\[
+R &gt; 110
+\]</span></p>
+<p>For the transisitor, we need to calculate the resistor that we will connect to the base: The desired base current is between 2-3 mA based on the datasheet and our desired output current (up to 70mA) and the voltage drop would be around 0.95Vm, we need to account that the total voltage is 3.3v, so:</p>
+<p><span class="math display">\[
+R = \frac{3.3-0.95}{0.005}
+\]</span> <span class="math display">\[
+R = 470
+\]</span></p>
+<p>In this case, we also chose 10mA for the 7 segment display since the datasheet does recommend a value closer to that, and it was very visible. The selected value was 160Ω. This value was also used for the normal LED’s used in the fulladder since they have similar current needs and voltage drops.</p>
+<p>This also corresponds to teh current ratings of teh 2N3906 Transistor we are using, which allows a maximum of 200mA to be drawn, meaning that having all segments on (7 per transistor) results in a total current draw of &lt;70mA.</p>
+</section>
+<section id="block-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="block-diagram">Block Diagram</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\BlockDiagram.png" class="img-fluid figure-img"></p>
+<figcaption>Block Diagram</figcaption>
+</figure>
+</div>
+</section>
+<section id="circuit-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="circuit-diagram">Circuit Diagram</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\CircuitdiagramLab3.png" class="img-fluid figure-img"></p>
+<figcaption>Circuit Diagram</figcaption>
+</figure>
+</div>
+</section>
+<section id="general-overview-of-the-systemcode" class="level3">
+<h3 class="anchored" data-anchor-id="general-overview-of-the-systemcode">General Overview of the system/code</h3>
+<p>The current code made works in an interesting way. We first defined a top module that is in charge of getting the clock and sending the calculated sout (data on specific hex number to display at a given time) to the sevseg module that controls the seven segment display. The oter module it calls is leds_co, which is in charge of managing all the seven segment LED logic, where we have to flip back and forth to only use 9 pins instead of 14 (more on this in lab2 website).</p>
+<p>In this case, we need to drive the rows at different times and read the columns, to prevent bouncing in the buttons and drive power to rows, we used the counter, specifically the range [25:23] and [21], where the 21’st bit will save col -&gt; savecol on the rising edge. In order to control the row output, we use the range [25:24], where we use the left shift operator to make the sequence, were this value can be anything from 0 to 3.</p>
+<p>1 &lt;&lt; 0 = 0001<br>
+1 &lt;&lt; 1 = 0010<br>
+1 &lt;&lt; 2 = 0100<br>
+1 &lt;&lt; 3 = 1000</p>
+<p>Then it repeats</p>
+<p>The 23’rd bit is used in the keypad decoder code where we only act on the rising edge of this bit since this is halfway from a row being assigned and it being unasigned, meaning any start behaviour and end behavior noise we get should not fall in the middle. generally this can be done by adding counters that check the signal a specific time after the row is switched (less robust), or other methods to reduce this noise may include low pass filters (not ideal for digital electronics since voltage in capacitors takes time to rise) or reducing frequency to reduce the percent of time where you have noise (ideally avoided to reduce unnecesary noise)</p>
+<p>The debouncer logic (shown below) works in a simple manner, where we start in the ~pressed state, this means we aren’t actively pressing the button. when something gets detected, col would not be 0, which is when we set N2 = N1 and N1 = {counter[2:1],coln}, where:</p>
+<p>counter[2:1] is the same part of the counter that controls row. Note that this variable inside the keydec module is different from the 32 bit counter. coln is defined as the column number, were we use if statements to the opposite to when we assigned rows:</p>
+<p>0001 –&gt; 0<br>
+001x –&gt; 1<br>
+01xx –&gt; 2<br>
+1xxx –&gt; 3</p>
+<p>In the code, it was chosen to use if statements instead of assuming that x were 0 since if you would press 3 buttons at once and release the first one that was detected, it could default to the first column, which is unpredictable behaviour we like to avoid.</p>
+</section>
+<section id="fsm" class="level3">
+<h3 class="anchored" data-anchor-id="fsm">FSM</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\FSMLab3.png" class="img-fluid figure-img"></p>
+<figcaption>FSM of the debouncer</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\Lab3TransitionDiag.png" class="img-fluid figure-img"></p>
+<figcaption>FSM transition diagram</figcaption>
+</figure>
+</div>
+<p>Note: the FSM changes states on the rising edge of counter[23], not the clock directly.</p>
+</section>
+<section id="testbenches" class="level3">
+<h3 class="anchored" data-anchor-id="testbenches">Testbenches</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\Lab3clocktb.png" class="img-fluid figure-img"></p>
+<figcaption>Testbench of the Counter</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\Lab3keydectb.png" class="img-fluid figure-img"></p>
+<figcaption>Testbench of the keyboard decoder</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\Lab3ledlogictb.png" class="img-fluid figure-img"></p>
+<figcaption>Testbench of the ledlogic module</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\Lab3tb.png" class="img-fluid figure-img"></p>
+<figcaption>Testbench of the top module</figcaption>
+</figure>
+</div>
+</section>
+<section id="ai-prototype" class="level3">
+<h3 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h3>
+<p>Did the All at once:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\AI_proj.png" class="img-fluid figure-img"></p>
+<figcaption>Testbench of the top module</figcaption>
+</figure>
+</div>
+<p>The AI gave me all the modules at once, but it looks like it ran out of space and gave me a partial top module as seen as the upper error.</p>
+<p>After asking the AI to redo teh top module, it got confused of the other module names and got more errors. I have to either probably use option B to try get each module individually, or buy premium AI use (used free access)</p>
+<p>Using option B, we get:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\AI_proj2.png" class="img-fluid figure-img"></p>
+<figcaption>Testbench of the top module</figcaption>
+</figure>
+</div>
+<p>which basically means that the AI messed up some basic syntax. This is probably a quick fix that the AI would be able to fix if we input the errors and it will give us a nicer output.</p>
+<p>Overall, I noticed with both of these solutions that the AI response was way longer than my code, which could mean the AI actually knows how to code, or it is overseeing a lot of easy ways to make a verilog code more compact.</p>
+</section>
+<section id="resources" class="level3">
+<h3 class="anchored" data-anchor-id="resources">Resources:</h3>
+<p>Verilog Code: <a href="https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab3" class="uri">https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab3</a></p>
+<p>Lab2 Code: <a href="https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab2" class="uri">https://github.com/cojedadesilva/E155_Labcode_CODS/tree/main/lab2</a></p>
+<p>HDSP-521A datasheet: <a href="https://docs.broadcom.com/doc/HDSP-521A-523A-Dual-Digit-General-Purpose-7-Segment-Display-DS" class="uri">https://docs.broadcom.com/doc/HDSP-521A-523A-Dual-Digit-General-Purpose-7-Segment-Display-DS</a></p>
+<p>Transistor datasheet: <a href="https://www.onsemi.com/pdf/datasheet/2n3906-d.pdf" class="uri">https://www.onsemi.com/pdf/datasheet/2n3906-d.pdf</a></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io\/carlos-o-de-s\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
