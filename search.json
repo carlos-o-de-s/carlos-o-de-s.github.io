@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "Resume/resume.html",
-    "href": "Resume/resume.html",
-    "title": "CV/Resume",
-    "section": "",
-    "text": "You can view my detailed CV/Resume by clicking the link below:\nView my CV/Resume (PDF)"
-  },
-  {
     "objectID": "labs/resources/resources.html",
     "href": "labs/resources/resources.html",
     "title": "E155 Resources",
@@ -282,16 +275,16 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "E155 Portfolio",
+    "title": "Carlos Ojeda de Silva Portfolio",
     "section": "",
     "text": "Carlos Ojeda de Silva is an Engineering Student at Harvey Mudd College. While currently studying a general engineering degree, he focuses his learning based on projects, mainly in Mechanical Design and Computer Science"
   },
   {
-    "objectID": "index.html#why-i-enjoy-learning-from-experimentation",
-    "href": "index.html#why-i-enjoy-learning-from-experimentation",
-    "title": "E155 Portfolio",
-    "section": "Why I Enjoy Learning from Experimentation?",
-    "text": "Why I Enjoy Learning from Experimentation?\nOver the last of couple years, I have learned that doing projects based on areas of interest is the best way to learn. Setting yourself a challenge in the form of a project idea forces you to learn all the background information needed to complete it. This ensured I understood the topics studied well enough to apply them in the real world.\nThis is why I like to challenge myself with new projects. I feel that the learning that results from experimenting is better than simply reading it in a textbook. I often enjoy setting up challenges with constraints because it is more challenging and interesting."
+    "objectID": "index.html#what-is-inside-this-portfolio",
+    "href": "index.html#what-is-inside-this-portfolio",
+    "title": "Carlos Ojeda de Silva Portfolio",
+    "section": "What is inside this Portfolio?",
+    "text": "What is inside this Portfolio?\nOver the last of couple years, I have learned that doing projects based on areas of interest is the best way to learn. Setting yourself a challenge in the form of a project idea forces you to learn all the background information needed to complete it. This ensured I understood the topics studied well enough to apply them in the real world.\nThis is why I like to challenge myself with new projects. I feel that the learning that results from experimenting is better than simply reading it in a textbook. I often enjoy setting up challenges with constraints because it is more challenging and interesting."
   },
   {
     "objectID": "labs/lab2/lab2.html",
