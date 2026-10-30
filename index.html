@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Engineering student at Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 
 <title>Carlos Ojeda de Silva Portfolio</title>
 <style>
@@ -33,10 +34,13 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
@@ -69,9 +73,135 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-engineering .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-engineering'] = new List('listing-engineering', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-cs-math .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-cs-math'] = new List('listing-cs-math', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-labs .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-image','listing-title','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-labs'] = new List('listing-labs', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:description" content="Engineering student at Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
+<meta property="og:image" content="https://carlos-o-de-s.github.io/images/headshot.png">
+<meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:height" content="1920">
+<meta property="og:image:width" content="1920">
+<meta name="twitter:title" content="Carlos Ojeda de Silva Portfolio">
+<meta name="twitter:description" content="Engineering student at Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
+<meta name="twitter:image" content="https://carlos-o-de-s.github.io/images/headshot.png">
+<meta name="twitter:image-height" content="1920">
+<meta name="twitter:image-width" content="1920">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -96,33 +226,33 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-microprocesssor-(e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">MicroProcesssor (E155) Labs</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">E155 Labs</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-microprocesssor-(e155-labs">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-labs">    
         <li>
     <a class="dropdown-item" href="./labs/lab1/lab1.html">
- <span class="dropdown-text">Lab 1 FPGA and MCU Setup and Testing</span></a>
+ <span class="dropdown-text">Lab 1: FPGA &amp; MCU Setup</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./labs/lab2/lab2.html">
- <span class="dropdown-text">Lab 2 Multiplexed 7-Segment Display</span></a>
+ <span class="dropdown-text">Lab 2: Multiplexed 7-Segment Display</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./labs/lab3/lab3.html">
- <span class="dropdown-text">Lab 3 Keypad Scanner</span></a>
+ <span class="dropdown-text">Lab 3: Keypad Scanner</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./labs/lab4/lab4.html">
- <span class="dropdown-text">Lab 4 Digital Audio</span></a>
+ <span class="dropdown-text">Lab 4: Digital Audio</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./labs/lab5/lab5.html">
- <span class="dropdown-text">Lab 5 Interrupts</span></a>
+ <span class="dropdown-text">Lab 5: Interrupts</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./labs/lab6/lab6.html">
- <span class="dropdown-text">Lab 6 IoT and SPI</span></a>
+ <span class="dropdown-text">Lab 6: IoT and SPI</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./labs/resources/resources.html">
@@ -131,13 +261,13 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-final-project-portable-dj-set" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">E155 Final Project Portable DJ Set</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dj-set-(e155-final" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">DJ Set (E155 Final)</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-final-project-portable-dj-set">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dj-set-(e155-final">    
         <li>
     <a class="dropdown-item" href="./E155FinalProject/index.html">
- <span class="dropdown-text">Homepage</span></a>
+ <span class="dropdown-text">Overview</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./E155FinalProject/bill.html">
@@ -161,7 +291,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
         <li>
     <a class="dropdown-item" href="./E155FinalProject/ai.html">
- <span class="dropdown-text">AI usage</span></a>
+ <span class="dropdown-text">AI Usage</span></a>
   </li>  
     </ul>
   </li>
@@ -193,10 +323,10 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs-math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">CS Math Projects</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs--math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">CS &amp; Math Projects</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs-math-projects">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs--math-projects">    
         <li>
     <a class="dropdown-item" href="./CS-Math-Projects/AI-Image-Depth-Perception/index.html">
  <span class="dropdown-text">AI Image Depth Perception</span></a>
@@ -223,53 +353,315 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-  <ul>
-  <li><a href="#what-is-inside-this-portfolio" id="toc-what-is-inside-this-portfolio" class="nav-link active" data-scroll-target="#what-is-inside-this-portfolio">What is inside this Portfolio?</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
-<div class="quarto-about-jolla">
-  <img src="images/headshot.png" class="about-image
-  round " style="height: 15em; width: 15em;">
- <header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Carlos Ojeda de Silva Portfolio</h1>
-</div>
-<div class="quarto-title-meta">
-  </div>
-</header><main class="content" id="quarto-document-content">
-
-<p>Carlos Ojeda de Silva is an Engineering Student at <strong><a href="https://hmc.edu">Harvey Mudd College</a></strong>. While currently studying a general engineering degree, he focuses his learning based on projects, mainly in Mechanical Design and Computer Science</p>
-<section id="what-is-inside-this-portfolio" class="level2">
-<h2 data-anchor-id="what-is-inside-this-portfolio">What is inside this Portfolio?</h2>
-<p>Over the last of couple years, I have learned that doing projects based on areas of interest is the best way to learn. Setting yourself a challenge in the form of a project idea forces you to learn all the background information needed to complete it. This ensured I understood the topics studied well enough to apply them in the real world.</p>
-<p>This is why I like to challenge myself with new projects. I feel that the learning that results from experimenting is better than simply reading it in a textbook. I often enjoy setting up challenges with constraints because it is more challenging and interesting.</p>
+<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
+
+
+<div class="home">
+<div class="hero">
+<p><img src="images/headshot.png" class="hero-photo img-fluid" alt="Headshot of Carlos Ojeda de Silva"></p>
+<section id="carlos-ojeda-de-silva" class="level1 hero-text">
+<h1>Carlos Ojeda de Silva</h1>
+<p>I am an Engineering student at <strong><a href="https://hmc.edu">Harvey Mudd College</a></strong>. While studying a general engineering degree, I focus my learning on projects, mainly in Mechanical Design and Computer Science, from rockets and avionics to FPGAs and machine learning.</p>
+<p><a href="https://www.linkedin.com/in/carlos-odes/" class="btn btn-outline-primary btn-sm"><i class="bi bi-linkedin"></i> LinkedIn</a> <a href="https://github.com/cojedadesilva" class="btn btn-outline-primary btn-sm"><i class="bi bi-github"></i> GitHub</a> <a href="./Resume/resume.html" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf"></i> Resume</a></p>
 </section>
-</main> 
-  <hr class="about-sep">
-   <div class="about-links">
-  <a href="https://www.linkedin.com/in/carlos-odes/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text">LinkedIn</span>
-  </a>
-  <a href="/Resume/Carlos_Ojeda_CV_Resume.pdf" class="about-link" rel="" target="">
-    <i class="bi bi-file-pdf"></i>
-     <span class="about-link-text">Resume</span>
-  </a>
+</div>
+<section id="engineering-projects" class="level2">
+<h2 class="anchored" data-anchor-id="engineering-projects">Engineering Projects</h2>
+<div id="listing-engineering" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1793332069867" data-listing-reading-time-sort="3" data-listing-word-count-sort="565">
+<a href="./Engineering-Projects/Hybrid-Rocket/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="Engineering-Projects/Hybrid-Rocket/images/Hybridrocket4.jpg" class="thumbnail-image card-img" style="height: 220px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hybrid Rocket
+</h5>
+<div class="card-text listing-description delink">
+<p>High school rocketry team: a hybrid rocket launched to 18,994 ft at White Sands Missile Range. I worked mainly on recovery.</p>
 </div>
 </div>
- <!-- /main -->
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1793334964938" data-listing-reading-time-sort="2" data-listing-word-count-sort="251">
+<a href="./Engineering-Projects/Liquid-Rocket-Engine/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="Engineering-Projects/Liquid-Rocket-Engine/images/LRED1.png" class="thumbnail-image card-img" style="height: 220px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Liquid Rocket Engine
+</h5>
+<div class="card-text listing-description delink">
+<p>Student-run HMC engine: machining parts and building electronics for a test at Friends of Amateur Rocketry.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1793334964937" data-listing-reading-time-sort="1" data-listing-word-count-sort="152">
+<a href="./Engineering-Projects/Hybrid-Rocket-Engine/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="Engineering-Projects/Hybrid-Rocket-Engine/images/HRE1.jpeg" class="thumbnail-image card-img" style="height: 220px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hybrid Rocket Engine
+</h5>
+<div class="card-text listing-description delink">
+<p>Designing and building a small hybrid engine with a 3D-printed fuel grain and nitrous oxide.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1793331216327" data-listing-reading-time-sort="2" data-listing-word-count-sort="270">
+<a href="./Engineering-Projects/Rocket-Avionics-from-Scratch/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="Engineering-Projects/Rocket-Avionics-from-Scratch/images/Avionics4.png" class="thumbnail-image card-img" style="height: 220px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Rocket Avionics From Scratch
+</h5>
+<div class="card-text listing-description delink">
+<p>A cheap, customizable flight computer with LoRa telemetry and a handheld tracker.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="4" data-listing-file-modified-sort="1793334964939" data-listing-reading-time-sort="3" data-listing-word-count-sort="496">
+<a href="./Engineering-Projects/Hardware-Input-Control/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="Engineering-Projects/Hardware-Input-Control/images/Press2.png" class="thumbnail-image card-img" style="height: 220px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hardware Input Control
+</h5>
+<div class="card-text listing-description delink">
+<p>Pressing controller and keyboard buttons electronically with an Arduino and transistors.</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="dj-set" class="level2">
+<h2 class="anchored" data-anchor-id="dj-set">Portable DJ Set · E155 Final Project</h2>
+<div class="feature-card">
+<p><a href="./E155FinalProject/index.html"><img src="E155FinalProject/images/dj-cover.jpg" class="img-fluid" alt="The portable DJ set: joystick controller next to speakers"></a></p>
+<section id="portable-dj-set" class="level3 feature-body">
+<h3 class="anchored" data-anchor-id="portable-dj-set"><a href="./E155FinalProject/index.html">Portable DJ Set</a></h3>
+<p>Built with Maynor for HMC’s Microprocessors class: an MCU streams songs from a microSD card to an FPGA, which applies a live high/low-pass filter and changes playback speed, all controlled with a joystick.</p>
+<p><a href="./E155FinalProject/index.html" class="btn btn-primary btn-sm">Overview</a> <a href="./E155FinalProject/fpgaD.html" class="btn btn-outline-secondary btn-sm">FPGA Design</a> <a href="./E155FinalProject/mcuD.html" class="btn btn-outline-secondary btn-sm">MCU Design</a> <a href="./E155FinalProject/results.html" class="btn btn-outline-secondary btn-sm">Results &amp; Demo</a></p>
+</section>
+</div>
+</section>
+<section id="cs-math-projects" class="level2">
+<h2 class="anchored" data-anchor-id="cs-math-projects">CS &amp; Math Projects</h2>
+<div id="listing-cs-math" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1793332114296" data-listing-reading-time-sort="2" data-listing-word-count-sort="207">
+<a href="./CS-Math-Projects/AI-Image-Depth-Perception/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="CS-Math-Projects/AI-Image-Depth-Perception/images/Depth_result.png" class="thumbnail-image card-img" style="height: 200px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+AI Image Depth Perception
+</h5>
+<div class="card-text listing-description delink">
+<p>A small CNN that predicts a depth map from a single photo, trained on the DIODE dataset.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1793331235702" data-listing-reading-time-sort="2" data-listing-word-count-sort="263">
+<a href="./CS-Math-Projects/Best-Route-Using-ML/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="CS-Math-Projects/Best-Route-Using-ML/images/Routes.png" class="thumbnail-image card-img" style="height: 200px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Best Route Using ML
+</h5>
+<div class="card-text listing-description delink">
+<p>Using a Random Forest to approximate the shortest delivery route between points in San Antonio.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1793334964941" data-listing-reading-time-sort="4" data-listing-word-count-sort="642">
+<a href="./CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="CS-Math-Projects/Hyperbola-Integral-Using-Rotations/images/Hyperbola1.png" class="thumbnail-image card-img" style="height: 200px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hyperbola Integral Using Rotations
+</h5>
+<div class="card-text listing-description delink">
+<p>Finding the area under a hyperbola using only the integral of 1/x and a 45° rotation.</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="e155-microprocessor-labs" class="level2">
+<h2 class="anchored" data-anchor-id="e155-microprocessor-labs">E155 Microprocessor Labs</h2>
+<div id="listing-labs" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1793334909667" data-listing-reading-time-sort="6" data-listing-word-count-sort="1170">
+<a href="./labs/lab1/lab1.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="labs/lab1/images/testcaseFPGA.jpeg" class="thumbnail-image card-img" style="height: 180px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Lab 1: FPGA &amp; MCU Setup
+</h5>
+<div class="card-text listing-description delink">
+<p>Soldering the dev board, a 2.4 Hz blinker, and driving a 7-segment display from switches.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1793334909695" data-listing-reading-time-sort="12" data-listing-word-count-sort="2204">
+<a href="./labs/lab2/lab2.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="labs/lab2/images/lab2circuit.jpeg" class="thumbnail-image card-img" style="height: 180px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Lab 2: Multiplexed 7-Segment Display
+</h5>
+<div class="card-text listing-description delink">
+<p>Two displays from one decoder using time multiplexing, plus a 5-bit adder on LEDs.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="2" data-listing-file-modified-sort="1793334909716" data-listing-reading-time-sort="5" data-listing-word-count-sort="988">
+<a href="./labs/lab3/lab3.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="labs/lab3/images/Lab3cover.jpg" class="thumbnail-image card-img" style="height: 180px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Lab 3: Keypad Scanner
+</h5>
+<div class="card-text listing-description delink">
+<p>Scanning and debouncing a 4x4 keypad with a finite state machine on the FPGA.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="3" data-listing-file-modified-sort="1793334909731" data-listing-reading-time-sort="2" data-listing-word-count-sort="367">
+<a href="./labs/lab4/lab4.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="labs/lab4/images/Lab4_Osctrace.jpeg" class="thumbnail-image card-img" style="height: 180px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Lab 4: Digital Audio
+</h5>
+<div class="card-text listing-description delink">
+<p>Playing melodies on an STM32L4, using timers to set note frequency and duration.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="4" data-listing-file-modified-sort="1793334909749" data-listing-reading-time-sort="4" data-listing-word-count-sort="741">
+<a href="./labs/lab5/lab5.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="labs/lab5/images/Osctrace.jpg" class="thumbnail-image card-img" style="height: 180px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Lab 5: Interrupts
+</h5>
+<div class="card-text listing-description delink">
+<p>Measuring motor speed with a quadrature encoder and interrupts instead of polling.</p>
+</div>
+</div>
+</div></a>
+</div>
+<div class="g-col-1" data-index="5" data-listing-file-modified-sort="1793334909764" data-listing-reading-time-sort="4" data-listing-word-count-sort="688">
+<a href="./labs/lab6/lab6.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="labs/lab6/images/Lab6Osctrace.jpeg" class="thumbnail-image card-img" style="height: 180px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Lab 6: IoT and SPI
+</h5>
+<div class="card-text listing-description delink">
+<p>A web page served by the MCU that toggles an LED and reads an SPI temperature sensor.</p>
+</div>
+</div>
+</div></a>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+</section>
+<section id="resume" class="level2">
+<h2 class="anchored" data-anchor-id="resume">Resume</h2>
+<div class="feature-card resume-card">
+<p><a href="./Resume/resume.html"><img src="Resume/resume-preview.png" class="img-fluid" alt="Preview of the first page of Carlos's resume"></a></p>
+<section id="cv-resume" class="level3 feature-body">
+<h3 class="anchored" data-anchor-id="cv-resume">CV / Resume</h3>
+<p>My education, experience, and skills in one page.</p>
+<p><a href="./Resume/resume.html" class="btn btn-primary btn-sm">View Resume</a> <a href="Resume/Carlos_Ojeda_CV_Resume.pdf" class="btn btn-outline-secondary btn-sm" download="Carlos_Ojeda_CV_Resume.pdf">Download PDF</a></p>
+</section>
+</div>
+</section>
+<section id="why-i-enjoy-learning-from-experimentation" class="level2">
+<h2 class="anchored" data-anchor-id="why-i-enjoy-learning-from-experimentation">Why I Enjoy Learning from Experimentation</h2>
+<p>Over the last couple of years, I have learned that doing projects based on areas of interest is the best way to learn. Setting yourself a challenge in the form of a project idea forces you to learn all the background information needed to complete it. This ensured I understood the topics studied well enough to apply them in the real world.</p>
+<p>This is why I like to challenge myself with new projects. I feel that the learning that results from experimenting is better than simply reading it in a textbook. I often enjoy setting up challenges with constraints because it is more challenging and interesting.</p>
+</section>
+</div>
+
+
+
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -334,7 +726,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io\/");
+        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -662,6 +1054,19 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Carlos Ojeda de Silva</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 

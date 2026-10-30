@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>lab4 – Carlos Ojeda de Silva Portfolio</title>
+<title>Lab 4: Digital Audio – Carlos Ojeda de Silva Portfolio</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -43,6 +43,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="../../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,6 +104,18 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Lab 4: Digital Audio – Carlos Ojeda de Silva Portfolio">
+<meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
+<meta property="og:image" content="https://carlos-o-de-s.github.io/labs/lab4/images/Lab4schematic.png">
+<meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:height" content="407">
+<meta property="og:image:width" content="721">
+<meta name="twitter:title" content="Lab 4: Digital Audio – Carlos Ojeda de Silva Portfolio">
+<meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
+<meta name="twitter:image" content="https://carlos-o-de-s.github.io/labs/lab4/images/Lab4schematic.png">
+<meta name="twitter:image-height" content="407">
+<meta name="twitter:image-width" content="721">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -126,33 +140,33 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-microprocesssor-(e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">MicroProcesssor (E155) Labs</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">E155 Labs</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-microprocesssor-(e155-labs">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-labs">    
         <li>
     <a class="dropdown-item" href="../../labs/lab1/lab1.html">
- <span class="dropdown-text">Lab 1 FPGA and MCU Setup and Testing</span></a>
+ <span class="dropdown-text">Lab 1: FPGA &amp; MCU Setup</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/lab2/lab2.html">
- <span class="dropdown-text">Lab 2 Multiplexed 7-Segment Display</span></a>
+ <span class="dropdown-text">Lab 2: Multiplexed 7-Segment Display</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/lab3/lab3.html">
- <span class="dropdown-text">Lab 3 Keypad Scanner</span></a>
+ <span class="dropdown-text">Lab 3: Keypad Scanner</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/lab4/lab4.html">
- <span class="dropdown-text">Lab 4 Digital Audio</span></a>
+ <span class="dropdown-text">Lab 4: Digital Audio</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/lab5/lab5.html">
- <span class="dropdown-text">Lab 5 Interrupts</span></a>
+ <span class="dropdown-text">Lab 5: Interrupts</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/lab6/lab6.html">
- <span class="dropdown-text">Lab 6 IoT and SPI</span></a>
+ <span class="dropdown-text">Lab 6: IoT and SPI</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../labs/resources/resources.html">
@@ -161,13 +175,13 @@ window.Quarto = {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-final-project-portable-dj-set" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">E155 Final Project Portable DJ Set</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dj-set-(e155-final" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">DJ Set (E155 Final)</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-final-project-portable-dj-set">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dj-set-(e155-final">    
         <li>
     <a class="dropdown-item" href="../../E155FinalProject/index.html">
- <span class="dropdown-text">Homepage</span></a>
+ <span class="dropdown-text">Overview</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../E155FinalProject/bill.html">
@@ -191,7 +205,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../E155FinalProject/ai.html">
- <span class="dropdown-text">AI usage</span></a>
+ <span class="dropdown-text">AI Usage</span></a>
   </li>  
     </ul>
   </li>
@@ -223,10 +237,10 @@ window.Quarto = {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs-math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">CS Math Projects</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs--math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">CS &amp; Math Projects</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs-math-projects">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs--math-projects">    
         <li>
     <a class="dropdown-item" href="../../CS-Math-Projects/AI-Image-Depth-Perception/index.html">
  <span class="dropdown-text">AI Image Depth Perception</span></a>
@@ -261,40 +275,57 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lab-4-digital-audio" id="toc-lab-4-digital-audio" class="nav-link active" data-scroll-target="#lab-4-digital-audio">Lab 4: Digital Audio</a>
-  <ul class="collapse">
+  <li><a href="#demo" id="toc-demo" class="nav-link active" data-scroll-target="#demo">Demo</a></li>
   <li><a href="#electrical-schematic" id="toc-electrical-schematic" class="nav-link" data-scroll-target="#electrical-schematic">Electrical schematic</a></li>
   <li><a href="#design-choices-and-math" id="toc-design-choices-and-math" class="nav-link" data-scroll-target="#design-choices-and-math">Design Choices and Math:</a></li>
   <li><a href="#ai-prototype" id="toc-ai-prototype" class="nav-link" data-scroll-target="#ai-prototype">AI Prototype</a></li>
   <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 4: Digital Audio</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="lab-4-digital-audio" class="level2">
-<h2 class="anchored" data-anchor-id="lab-4-digital-audio">Lab 4: Digital Audio</h2>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>In this lab, we made a melody player code for a STM32L4 microcontroller where we can control the frequency and timing of musical notes.</p>
-<p>This lab took 24 hours</p>
+<p>Spent 24 hours</p>
+<section id="demo" class="level3">
+<h3 class="anchored" data-anchor-id="demo">Demo</h3>
+<p>The STM32L4 playing a melody through the LM386 amplifier and speaker.</p>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="images/Lab4Video.mp4"></video></div>
+</section>
 <section id="electrical-schematic" class="level3">
 <h3 class="anchored" data-anchor-id="electrical-schematic">Electrical schematic</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images\Lab4schematic.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab4schematic.png" class="img-fluid figure-img"></p>
 <figcaption>Electrical Schematic</figcaption>
 </figure>
 </div>
 </section>
 <section id="design-choices-and-math" class="level3">
 <h3 class="anchored" data-anchor-id="design-choices-and-math">Design Choices and Math:</h3>
-<p>We chose TIM2 because it has 32 bits and it is easy to change frequency by alering the ARR and SRC values</p>
+<p>We chose TIM2 because it has 32 bits and it is easy to change frequency by altering the ARR and PSC values</p>
 <p>Minimum frequency</p>
-<p>Since our PSC is 39, and ARR is a 32 bit number, the maximum value it could have is, the maximum possible frequency (tested) is when ARR is 1, or: 4,000,000/((39+1)(2^32))/2 = 1.164x10^-5 Hz, we divide by 2 because we toggle every cycle.</p>
+<p>Since our PSC is 39, and ARR is a 32 bit number, the minimum possible frequency is when ARR is at its maximum value (2^32 - 1), or: 4,000,000/((39+1)(2^32))/2 = 1.164x10^-5 Hz, we divide by 2 because we toggle every cycle.</p>
 <p>Maximum frequency</p>
 <p>Since our PSC is 39, the maximum possible frequency (tested) is when ARR is 1, or: 4,000,000/((39+1)(1+1))/2 = 25kHz, we divide by 2 because we toggle every cycle.</p>
 <p>Minimum delay</p>
@@ -302,11 +333,11 @@ window.Quarto = {
 <p>Maximum delay</p>
 <p>since our minimum frequency is 1.164x10^-5 Hz, we get: 1/(2*1.164x10^-5) = 42950s or 11:55:50 hours (11.93)</p>
 <p>Frequency within 1%</p>
-<p>Worst case escenario we get an ARR that is at most 0.5 off, so: <span class="math display">\[
+<p>Worst case scenario we get an ARR that is at most 0.5 off, so: <span class="math display">\[
 ARR = \frac{2,000,000}{40*f_d} - 1
 \]</span> And therefore: <span class="math display">\[
 f_d = \frac{2,000,000}{40*(ARR+1)}
-\]</span> We then calculate the worst case escenario frequency change when changing ARR by 0.5 (it will get rounded, so it can be at most off by 0.5) <span class="math display">\[
+\]</span> We then calculate the worst case scenario frequency change when changing ARR by 0.5 (it will get rounded, so it can be at most off by 0.5) <span class="math display">\[
 \frac{df}{dARR} = \frac{-2,000,000}{40*(ARR+1)^2}
 \]</span> now, we can calculate the percent error by multiplying by 0.5 and dividing by desired frequency: <span class="math display">\[
 error = \frac{-2,000,000}{40*f_d*(ARR+1)^2} = \frac{1}{2(ARR+1)}
@@ -323,7 +354,7 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
 <p>After asking ChatGPT, we got the following response:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images\Lab4_AIPrototype.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab4_AIPrototype.png" class="img-fluid figure-img"></p>
 <figcaption>AI Prototype</figcaption>
 </figure>
 </div>
@@ -336,7 +367,6 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
 <p>Math in Desmos: <a href="https://www.desmos.com/calculator/p6powqxlh8" class="uri">https://www.desmos.com/calculator/p6powqxlh8</a></p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -413,7 +443,7 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io\/");
+        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -741,6 +771,20 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Carlos Ojeda de Silva</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>videojs(video_shortcode_videojs_video1);</script>
 
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>FPGA DESIGN – Carlos Ojeda de Silva Portfolio</title>
+<title>FPGA Design – Carlos Ojeda de Silva Portfolio</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -37,6 +37,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
@@ -101,7 +102,18 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
-<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="FPGA Design – Carlos Ojeda de Silva Portfolio">
+<meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
+<meta property="og:image" content="https://carlos-o-de-s.github.io/E155FinalProject/images/testbench1.png">
+<meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:height" content="402">
+<meta property="og:image:width" content="2732">
+<meta name="twitter:title" content="FPGA Design – Carlos Ojeda de Silva Portfolio">
+<meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
+<meta name="twitter:image" content="https://carlos-o-de-s.github.io/E155FinalProject/images/testbench1.png">
+<meta name="twitter:image-height" content="402">
+<meta name="twitter:image-width" content="2732">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -126,33 +138,33 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-microprocesssor-(e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">MicroProcesssor (E155) Labs</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">E155 Labs</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-microprocesssor-(e155-labs">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-labs">    
         <li>
     <a class="dropdown-item" href="../labs/lab1/lab1.html">
- <span class="dropdown-text">Lab 1 FPGA and MCU Setup and Testing</span></a>
+ <span class="dropdown-text">Lab 1: FPGA &amp; MCU Setup</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../labs/lab2/lab2.html">
- <span class="dropdown-text">Lab 2 Multiplexed 7-Segment Display</span></a>
+ <span class="dropdown-text">Lab 2: Multiplexed 7-Segment Display</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../labs/lab3/lab3.html">
- <span class="dropdown-text">Lab 3 Keypad Scanner</span></a>
+ <span class="dropdown-text">Lab 3: Keypad Scanner</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../labs/lab4/lab4.html">
- <span class="dropdown-text">Lab 4 Digital Audio</span></a>
+ <span class="dropdown-text">Lab 4: Digital Audio</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../labs/lab5/lab5.html">
- <span class="dropdown-text">Lab 5 Interrupts</span></a>
+ <span class="dropdown-text">Lab 5: Interrupts</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../labs/lab6/lab6.html">
- <span class="dropdown-text">Lab 6 IoT and SPI</span></a>
+ <span class="dropdown-text">Lab 6: IoT and SPI</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../labs/resources/resources.html">
@@ -161,13 +173,13 @@ window.Quarto = {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-final-project-portable-dj-set" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">E155 Final Project Portable DJ Set</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dj-set-(e155-final" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">DJ Set (E155 Final)</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-final-project-portable-dj-set">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dj-set-(e155-final">    
         <li>
     <a class="dropdown-item" href="../E155FinalProject/index.html">
- <span class="dropdown-text">Homepage</span></a>
+ <span class="dropdown-text">Overview</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../E155FinalProject/bill.html">
@@ -191,7 +203,7 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../E155FinalProject/ai.html">
- <span class="dropdown-text">AI usage</span></a>
+ <span class="dropdown-text">AI Usage</span></a>
   </li>  
     </ul>
   </li>
@@ -223,10 +235,10 @@ window.Quarto = {
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs-math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">CS Math Projects</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs--math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">CS &amp; Math Projects</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs-math-projects">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs--math-projects">    
         <li>
     <a class="dropdown-item" href="../CS-Math-Projects/AI-Image-Depth-Perception/index.html">
  <span class="dropdown-text">AI Image Depth Perception</span></a>
@@ -259,6 +271,7 @@ window.Quarto = {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
+   
   <ul>
   <li><a href="#receiving-data" id="toc-receiving-data" class="nav-link active" data-scroll-target="#receiving-data">RECEIVING DATA</a></li>
   <li><a href="#filters" id="toc-filters" class="nav-link" data-scroll-target="#filters">FILTERS</a></li>
@@ -277,18 +290,30 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<div class="quarto-about-jolla">
- <header id="title-block-header" class="quarto-title-block default">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">FPGA DESIGN</h1>
+<h1 class="title">FPGA Design</h1>
 </div>
+
+
+
 <div class="quarto-title-meta">
+
+    
+  
+    
   </div>
-</header><main class="content" id="quarto-document-content">
+  
+
+
+</header>
+
 
 <section id="receiving-data" class="level1">
 <h1>RECEIVING DATA</h1>
-<p>First, we start by describing the path data takes. The FPGA will read SPI data from the MCU, where it is sent much faster than it is supposed to be played. This is intentional: the MCU also has to read the data and perform other actions like reading the DAC for the joystick values. This means we store all the data quickly in a FIFO, and then the synchronizer reads it at the rate the MCU wants us to read at. The MCU produces a clock that rises every time we are supposed to play an audio sample, which in a 48 kSamples/s design means 48 kHz.</p>
+<p>First, we start by describing the path data takes. The FPGA will read SPI data from the MCU, where it is sent much faster than it is supposed to be played. This is intentional: the MCU also has to read the data and perform other actions like reading the ADC for the joystick values. This means we store all the data quickly in a FIFO, and then the synchronizer reads it at the rate the MCU wants us to read at. The MCU produces a clock that rises every time we are supposed to play an audio sample, which in a 48 kSamples/s design means 48 kHz.</p>
 </section>
 <section id="filters" class="level1">
 <h1>FILTERS</h1>
@@ -319,45 +344,51 @@ window.Quarto = {
 <section id="testbenches" class="level1">
 <h1>TESTBENCHES</h1>
 <section id="audio-spi-receiver-audio-2-bytes-at-a-time" class="level3">
-<h3 data-anchor-id="audio-spi-receiver-audio-2-bytes-at-a-time">Audio SPI Receiver (audio 2 bytes at a time)</h3>
+<h3 class="anchored" data-anchor-id="audio-spi-receiver-audio-2-bytes-at-a-time">Audio SPI Receiver (audio 2 bytes at a time)</h3>
 <p>We expect to get <code>1010-1010-1011-1011 = aabb</code>, but it is swapped due to endianness (<code>BYTE_SWAP = 1</code>).</p>
 <p><img src="images/testbench1.png" class="img-fluid" style="width:80.0%"></p>
 </section>
 <section id="fifo" class="level3">
-<h3 data-anchor-id="fifo">FIFO</h3>
+<h3 class="anchored" data-anchor-id="fifo">FIFO</h3>
 <p>We can see how <code>1111</code>, <code>2222</code>, and <code>3333</code> are sent (2‑byte samples matching audio sample length) and retrieved using a differently timed clock (read enable is slower than write enable).</p>
 <p><img src="images/testbench2.png" class="img-fluid" style="width:80.0%"></p>
 </section>
 <section id="synchronizer" class="level3">
-<h3 data-anchor-id="synchronizer">Synchronizer</h3>
+<h3 class="anchored" data-anchor-id="synchronizer">Synchronizer</h3>
 <p>The synchronizer reads the FIFO at the MCU‑specified rate (usually 48 kHz, up to ~90 kHz). It converts occasionally noisy FIFO output (like <code>0000</code>) into a continuous, correctly‑timed stream.</p>
 <p><img src="images/testbench3.png" class="img-fluid" style="width:80.0%"></p>
 </section>
 <section id="top-module" class="level3">
-<h3 data-anchor-id="top-module">Top Module</h3>
+<h3 class="anchored" data-anchor-id="top-module">Top Module</h3>
 <p>Anything after the filter will not show data, since it needs 128 samples to function. Everything else operates correctly: SPI reads values into <code>test_val</code> (after byte swap). Data is saved faster than the 48 kHz clock but output at 48 kHz, as intended.</p>
 <p><img src="images/testbench4.png" class="img-fluid" style="width:80.0%"></p>
 </section>
 <section id="i2s-player" class="level3">
-<h3 data-anchor-id="i2s-player">I2S Player</h3>
+<h3 class="anchored" data-anchor-id="i2s-player">I2S Player</h3>
 <p>Given the following:</p>
 <p><img src="images/testbench43.png" class="img-fluid" style="width:80.0%"></p>
-<p>Zooming in, we see that data changes during the <strong>falling</strong> edge of the clock, which is incorrect—data must change on falling and be read on rising by the PCM5102. Another common mistake was starting transmission on the first bit instead of the second.</p>
+<p>Zooming in, we see that data changes during the <strong>falling</strong> edge of the clock, which is correct—data must change on falling and be read on rising by the PCM5102. Another common mistake was starting transmission on the first bit instead of the second.</p>
 <p>Checking sample values (<code>8000</code>, <code>7FFF</code>, etc.), we confirm they match their binary representation.</p>
 <p><img src="images/testbench45.png" class="img-fluid" style="width:80.0%"></p>
 </section>
 <section id="fir-filter" class="level3">
-<h3 data-anchor-id="fir-filter">FIR Filter</h3>
+<h3 class="anchored" data-anchor-id="fir-filter">FIR Filter</h3>
 <p><img src="images/testbench5.png" class="img-fluid" style="width:80.0%"></p>
 
 
 </section>
 </section>
-</main>  
-</div>
- <!-- /main -->
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -422,7 +453,7 @@ window.Quarto = {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io\/");
+        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -750,6 +781,19 @@ window.Quarto = {
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2026 Carlos Ojeda de Silva</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 
