@@ -11,7 +11,7 @@ website:
   open-graph: true
   twitter-card: true
   page-footer:
-    center: "© 2026 Carlos Ojeda de Silva"
+    center: "2026 Carlos Ojeda de Silva"
   navbar:
     left:
       - href: index.qmd
