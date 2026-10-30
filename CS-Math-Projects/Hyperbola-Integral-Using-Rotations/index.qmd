@@ -1,8 +1,7 @@
 ---
-title: Computer Science and Math related projects by Carlos Ojeda de Silva
+title: "Hyperbola Integral Using Rotations"
+subtitle: "Finding the area under a hyperbola using rotations"
 ---
-
-## Finding the area under a hyperbola using rotations.
 
 ![Rotated Hyperbola with Areas](images/Hyperbola1.png)
 
@@ -12,14 +11,14 @@ Hyperbolas are interesting shapes, but it is initially quite hard to know how to
 
 This example uses polar coordinates to rotate a y = 1/x graph 45° or π/4 angle and arriving to y^2 - x^2 = 2
 
-![](images/Hyperbola2.png)
+![Rotating y = 1/x by 45° gives y² − x² = 2](images/Hyperbola2.png)
 
 ::: {.grid}
 ::: {.g-col-6}
 ![Polar Coordinate method](images/Hyperbola3.png)
 :::
 ::: {.g-col-6}
-![Euler's Equation Method](images/Hyperbola4.png) |
+![Euler's Equation Method](images/Hyperbola4.png)
 :::
 :::
 
@@ -33,9 +32,9 @@ A stays constant since it represents a triangle made from an isosceles triangle 
 
 The Area of D is ½P^2 since the triangle has a base and height equal to P.
 
-To get the other two areas, we need to define the line going from 0,0 to the right-most corner of the triangle C as a new axis L. L has the length of the base of the original y=1x graph used, which allows us to get the area of that shape using a natural logarithm. The image below shows the point where L is measured from.
+To get the other two areas, we need to define the line going from 0,0 to the right-most corner of the triangle C as a new axis L. L has the length of the base of the original y=1/x graph used, which allows us to get the area of that shape using a natural logarithm. The image below shows the point where L is measured from.
 
-![Ponit L](images/Hyperbola6.png)
+![Point L](images/Hyperbola6.png)
 
 Based on the image above. Area C, having a base on the x-axis in the original y = 1/x graph, makes it easier to calculate in terms of L for the rotated graph. We know that in the original y = 1/x graph the height of the triangle is y and it was formed by a 45° or π/4 angle, meaning that both lines LM and LN have the same length. Knowing that LN = y,  we can determine the area to be equal to ½(1/L)^2 since both the base and height in the rotated triangle need to be 1/L.
 

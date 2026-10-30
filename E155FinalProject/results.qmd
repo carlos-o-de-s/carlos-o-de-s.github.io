@@ -1,7 +1,5 @@
 ---
-title: "RESULTS DESIGN"
-about:
-    template: jolla
+title: "Results"
 ---
 
 After working in this project for over a hundred hours, we were able to get continuous playback out of the SD card while being able to skip forward to the next song, adjust the filter and speed, and be user friendly. 
@@ -16,7 +14,7 @@ $$
 \frac{48{,}000 \times 0.441}{128} = 165.4\ \text{Hz}
 $$
 
-Another consideration is the maximun and minimum playing speeds, in our case, we chose to use the following value, where the ADC value goes from 0 - 255;
+Another consideration is the maximum and minimum playing speeds, in our case, we chose to use the following value, where the ADC value goes from 0 - 255;
 ![Testbench 1](images/arr.png)
 
 $$

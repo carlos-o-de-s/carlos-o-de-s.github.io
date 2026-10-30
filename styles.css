@@ -1,1 +1,112 @@
 /* css styles */
+
+/* ---- Home page ---- */
+.home {
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.home h2 {
+  margin-top: 2.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.hero p:has(> .hero-photo) {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.hero-photo {
+  width: 210px;
+  height: 210px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.hero-text h1 {
+  margin-top: 0;
+  font-weight: 700;
+}
+
+.hero-text .btn {
+  margin: 0.25rem 0.3rem 0.25rem 0;
+}
+
+/* Listing cards: lift on hover */
+.home .quarto-grid-item.card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.home .quarto-grid-item.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* Wide feature cards (DJ set, resume) */
+.feature-card {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.feature-card > p {
+  flex: 0 0 45%;
+  margin: 0;
+}
+
+.feature-card img {
+  width: 100%;
+  border-radius: 0.375rem;
+  display: block;
+}
+
+.feature-body h3 {
+  margin-top: 0;
+}
+
+.feature-body h3 a {
+  text-decoration: none;
+}
+
+.feature-body .btn {
+  margin: 0.25rem 0.3rem 0.25rem 0;
+}
+
+/* Resume preview shows the top part of the first page */
+.resume-card > p {
+  flex: 0 0 30%;
+}
+
+.resume-card img {
+  height: 300px;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--bs-border-color);
+}
+
+@media (max-width: 768px) {
+  .hero,
+  .feature-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .feature-card > p,
+  .resume-card > p {
+    flex-basis: auto;
+    width: 100%;
+  }
+}

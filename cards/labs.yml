@@ -1,0 +1,30 @@
+# Cards for the "E155 Microprocessor Labs" section of the home page.
+- title: "Lab 1: FPGA & MCU Setup"
+  path: ../labs/lab1/lab1.qmd
+  image: labs/lab1/images/testcaseFPGA.jpeg
+  description: "Soldering the dev board, a 2.4 Hz blinker, and driving a 7-segment display from switches."
+
+- title: "Lab 2: Multiplexed 7-Segment Display"
+  path: ../labs/lab2/lab2.qmd
+  image: labs/lab2/images/lab2circuit.jpeg
+  description: "Two displays from one decoder using time multiplexing, plus a 5-bit adder on LEDs."
+
+- title: "Lab 3: Keypad Scanner"
+  path: ../labs/lab3/lab3.qmd
+  image: labs/lab3/images/Lab3cover.jpg
+  description: "Scanning and debouncing a 4x4 keypad with a finite state machine on the FPGA."
+
+- title: "Lab 4: Digital Audio"
+  path: ../labs/lab4/lab4.qmd
+  image: labs/lab4/images/Lab4_Osctrace.jpeg
+  description: "Playing melodies on an STM32L4, using timers to set note frequency and duration."
+
+- title: "Lab 5: Interrupts"
+  path: ../labs/lab5/lab5.qmd
+  image: labs/lab5/images/Osctrace.jpg
+  description: "Measuring motor speed with a quadrature encoder and interrupts instead of polling."
+
+- title: "Lab 6: IoT and SPI"
+  path: ../labs/lab6/lab6.qmd
+  image: labs/lab6/images/Lab6Osctrace.jpeg
+  description: "A web page served by the MCU that toggles an LED and reads an SPI temperature sensor."

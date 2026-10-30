@@ -1,22 +1,24 @@
-## Lab 2: Multiplexed 7-Segment Display
+---
+title: "Lab 2: Multiplexed 7-Segment Display"
+---
 
-In this Lab, we were tasked to make 2 HEX displays using a single module by multiplexing, and showing the addition of both HEX numbers in a 5 bit binary LED display. This lab uses a code almost identical to last lab, with a few changes. This resulted in a succesful lab2 where we were able to get the two hex numbers displayed with minimal use of pins and showing the sum on LED's.
+In this Lab, we were tasked to make 2 HEX displays using a single module by multiplexing, and showing the addition of both HEX numbers in a 5 bit binary LED display. This lab uses a code almost identical to last lab, with a few changes. This resulted in a successful lab2 where we were able to get the two hex numbers displayed with minimal use of pins and showing the sum on LED's.
 
-This lab took around 10 hours to complete.
+Spent 10 hours
 
 ### Circuits and Diagrams
 
-First, we start by making a circuit that can support using two multiplexed 7 segment displays, thsi was done by controlling the power input of each display with a PNP transistor and outputting the 7 segment signal to the current display we are powering.
+First, we start by making a circuit that can support using two multiplexed 7 segment displays, this was done by controlling the power input of each display with a PNP transistor and outputting the 7 segment signal to the current display we are powering.
 
-![Electrical schematic of teh Lab 2 circuits](images\Lab2top.png)
+![Electrical schematic of the Lab 2 circuits](images/Lab2top.png)
 
 This looks like this after assembly:
 
-![Lab 2 wiring](images\lab2circuit.jpeg)
+![Lab 2 wiring](images/lab2circuit.jpeg)
 
 After wiring the circuit like this, it was configured as follows to be able to control it using verilog code:
 
-![FPGA pin setup](images\lab2pins.png)
+![FPGA pin setup](images/lab2pins.png)
 
 This was then used in our top module, which uses code that was made in Lab1 (lab1_co.sv, which controls the 7 segment display) and the code that controls all the logic and switching between displays.
 
@@ -40,9 +42,9 @@ endmodule
 
 This top module results in a block diagram that looks as follows:
 
-![Top module Block Diagram](images\lab2diagram.png)
+![Top module Block Diagram](images/Lab2diagram.png)
 
-#### Curcuit calculations:
+#### Circuit calculations:
 
 In the previous lab, we used 5v as the V_in of the 7 segment display, which makes the display bleed a bit of current into every LED when off since 3.3v < 5v. This was fixed by changing the V_in to 3.3v and recalculating the required resistance to be:
 
@@ -66,7 +68,7 @@ $$
 R > 110
 $$
 
-For the transisitor, we need to calculate the resistor that we will connect to the base:
+For the transistor, we need to calculate the resistor that we will connect to the base:
 The desired base current is between 2-3 mA based on the datasheet and our desired output current (up to 70mA) and the voltage drop would be around 0.95V:
 
 $$
@@ -78,11 +80,11 @@ $$
 
 In this case, we also chose 10mA for the 7 segment display since the datasheet does recommend a value closer to that, and it was very visible. The selected value was 160Ω. This value was also used for the normal LED's used in the fulladder since they have similar current needs and voltage drops.
 
-This also corresponds to teh current ratings of teh 2N3906 Transistor we are using, which allows a maximum of 200mA to be drawn, meaning that having all segments on (7 per transistor) results in a total current draw of <70mA.
+This also corresponds to the current ratings of the 2N3906 Transistor we are using, which allows a maximum of 200mA to be drawn, meaning that having all segments on (7 per transistor) results in a total current draw of <70mA.
 
 ### 7 Segment Display Multiplexing
 
-For this part of the lab, we first need to use the 7 segment display code from Lab1, where all we have to chnage is the input and how the output is treated. To do this we first connected both PNP transistor's power (Emmiter) to the 3.3v line. Then we connected the Base to the FPGA pins so whenever they are high, the transistor switches. Finally we connected each 7 segment display power to the collector. We also added a pulldown resistor (chose 10k since it is standard and much larger than the 160Ω chosen for the display) to the PNP transistor to remove any excess charge accumulated when switching off. Here is the verilog code used:
+For this part of the lab, we first need to use the 7 segment display code from Lab1, where all we have to change is the input and how the output is treated. To do this we first connected both PNP transistor's power (Emitter) to the 3.3v line. Then we connected the Base to the FPGA pins so whenever they are high, the transistor switches. Finally we connected each 7 segment display power to the collector. We also added a pulldown resistor (chose 10k since it is standard and much larger than the 160Ω chosen for the display) to the PNP transistor to remove any excess charge accumulated when switching off. Here is the verilog code used:
 
 ```{verilog, code-fold: true}
 /*
@@ -119,7 +121,7 @@ module leds_co(
 endmodule
 ```
 
-This code was mainly recycled from the lab1 code also named leds_co.sv, where the logic was changed to select the display with the disps variable. The same addition was chosen as the previous lab, but since 2.4Hz is too slow, we reduced the exponent from 31 to 21 to make it 1048 (2^10) times faster, resulting in 2.5kHz. This is much faster than the human eye being at at most in the hundreds of Hz. 
+This code was mainly recycled from the lab1 code also named leds_co.sv, where the logic was changed to select the display with the disps variable. The same addition was chosen as the previous lab, but since 2.4Hz is too slow, we reduced the exponent from 31 to 21 to make it 1048 (2^10) times faster, resulting in 2.5kHz. This is much faster than the human eye being at most in the hundreds of Hz. 
 
 ### 5 Bit Full Adder
 
@@ -137,17 +139,17 @@ To test the fpga setup, we have designed a testbench that tests every hex value 
 
 The test bench was also made by doing small modifications to the code, where we can control the timing (counter[21]) to force it to switch between displays. 
 
-![Top Testbench Trace](images\lab2testbench.png)
+![Top Testbench Trace](images/lab2testbench.png)
 
-![Seven Segment Testbench Trace](images\Lab1tb_sevseg.png)
+![Seven Segment Testbench Trace](images/Lab1tb_sevseg.png)
 
-![Multiplexing/LED logic Testbench Trace](images\Lab2tb_ledlogic.png)
+![Multiplexing/LED logic Testbench Trace](images/Lab2tb_ledlogic.png)
 
 This test bench showed that the system works for any of these inputs, but there are a total of 16x16x2 = 512 possible inputs, so take into consideration that some real world testing may be needed to verify it always works, or expand the testbench.
 
 ### AI Prototype
 
-Using ChatGPT, we inputted the folowing prompt:
+Using ChatGPT, we inputted the following prompt:
 
 Write SystemVerilog HDL to time multiplex a single seven segment decoder (that decodes from four bits to a common anode seven segment display) to decode two sets of input bits and drive two sets of seven output bits.
 
@@ -229,9 +231,10 @@ endmodule
 ```
 
 This code actually compiled, but it looks a bit off:
--only goes from 0-9 it was never specified that it had to be hex to be fair.
--only does low=high logic for the case(display_selector) but not for the seg_decoder, thsi can be fixed with a simple "~".
--It wasnts us to use 7 segment outputs, so instead of switching with the transistor by turnig power on and off, it turns the pins on and off. using more pins than needed.
+
+- only goes from 0-9 it was never specified that it had to be hex to be fair.
+- only does low=high logic for the case(display_selector) but not for the seg_decoder, this can be fixed with a simple "~".
+- It wants us to use 7 segment outputs, so instead of switching with the transistor by turning power on and off, it turns the pins on and off. using more pins than needed.
 
 but I still think it was a high quality output since it did make something that compiled and has around 70% of the logic right, while only taking 2 min to make and test.
 

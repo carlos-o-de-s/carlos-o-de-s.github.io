@@ -1,14 +1,9 @@
 ---
-title: "FPGA DESIGN"
-about:
-    template: jolla
-format:
-  html:
-    css: styles.css
+title: "FPGA Design"
 ---
 
 # RECEIVING DATA
-First, we start by describing the path data takes. The FPGA will read SPI data from the MCU, where it is sent much faster than it is supposed to be played. This is intentional: the MCU also has to read the data and perform other actions like reading the DAC for the joystick values. This means we store all the data quickly in a FIFO, and then the synchronizer reads it at the rate the MCU wants us to read at. The MCU produces a clock that rises every time we are supposed to play an audio sample, which in a 48 kSamples/s design means 48 kHz.
+First, we start by describing the path data takes. The FPGA will read SPI data from the MCU, where it is sent much faster than it is supposed to be played. This is intentional: the MCU also has to read the data and perform other actions like reading the ADC for the joystick values. This means we store all the data quickly in a FIFO, and then the synchronizer reads it at the rate the MCU wants us to read at. The MCU produces a clock that rises every time we are supposed to play an audio sample, which in a 48 kSamples/s design means 48 kHz.
 
 # FILTERS
 This data then gets relayed to the FIR filter, which has an inbuilt RAM module to store 128 samples. A moving average low-pass filter is then applied. Since an ideal FIR filter needs to "read the future," we delay the "present" sample by 64 samples:
@@ -68,7 +63,7 @@ Given the following:
 
 ![](images/testbench43.png){width="80%"}
 
-Zooming in, we see that data changes during the **falling** edge of the clock, which is incorrect—data must change on falling and be read on rising by the PCM5102. Another common mistake was starting transmission on the first bit instead of the second.
+Zooming in, we see that data changes during the **falling** edge of the clock, which is correct—data must change on falling and be read on rising by the PCM5102. Another common mistake was starting transmission on the first bit instead of the second.
 
 Checking sample values (`8000`, `7FFF`, etc.), we confirm they match their binary representation.
 

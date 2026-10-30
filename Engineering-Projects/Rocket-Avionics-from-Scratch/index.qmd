@@ -1,8 +1,6 @@
 ---
-title: Engineering projects by Carlos Ojeda de Silva
+title: "Rocket Avionics From Scratch"
 ---
-
-## Avionics for rocket
 
 Although commercially available, rocket avionics have one main issue: lack of customization. Sometimes a specific rocket needs to collect different kinds of data and deploy stages based on different conditions other than time, acceleration, altitude, or other common triggers. This project focuses on making a cheap, customizable rocket avionics system that can be easily used and modified for different needs.
 

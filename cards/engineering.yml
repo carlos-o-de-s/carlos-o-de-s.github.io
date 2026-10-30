@@ -1,0 +1,26 @@
+# Cards for the "Engineering Projects" section of the home page.
+# Change `image` to any picture you like; `image` paths are relative to the site root, `path` to this folder.
+- title: Hybrid Rocket
+  path: ../Engineering-Projects/Hybrid-Rocket/index.qmd
+  image: Engineering-Projects/Hybrid-Rocket/images/Hybridrocket4.jpg
+  description: "High school rocketry team: a hybrid rocket launched to 18,994 ft at White Sands Missile Range. I worked mainly on recovery."
+
+- title: Liquid Rocket Engine
+  path: ../Engineering-Projects/Liquid-Rocket-Engine/index.qmd
+  image: Engineering-Projects/Liquid-Rocket-Engine/images/LRED1.png
+  description: "Student-run HMC engine: machining parts and building electronics for a test at Friends of Amateur Rocketry."
+
+- title: Hybrid Rocket Engine
+  path: ../Engineering-Projects/Hybrid-Rocket-Engine/index.qmd
+  image: Engineering-Projects/Hybrid-Rocket-Engine/images/HRE1.jpeg
+  description: "Designing and building a small hybrid engine with a 3D-printed fuel grain and nitrous oxide."
+
+- title: Rocket Avionics From Scratch
+  path: ../Engineering-Projects/Rocket-Avionics-from-Scratch/index.qmd
+  image: Engineering-Projects/Rocket-Avionics-from-Scratch/images/Avionics4.png
+  description: "A cheap, customizable flight computer with LoRa telemetry and a handheld tracker."
+
+- title: Hardware Input Control
+  path: ../Engineering-Projects/Hardware-Input-Control/index.qmd
+  image: Engineering-Projects/Hardware-Input-Control/images/Press2.png
+  description: "Pressing controller and keyboard buttons electronically with an Arduino and transistors."

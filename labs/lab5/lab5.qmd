@@ -1,18 +1,26 @@
-## Lab 5: Interrupts
+---
+title: "Lab 5: Interrupts"
+---
 
 In this lab, we made an encoder to measure and calculate the revolutions per minute a motor goes. This was successful and we know the motor doesn't skip any pulses based on the fact that if it would miss a pulse it would mess up the readings really bad (switch in direction).
 
-Spent a total of 17 hours
+Spent 17 hours
+
+### Demo
+
+The motor running from the bench power supply while the encoder interrupts measure its speed.
+
+{{< video images/Lab5video.mp4 >}}
 
 ### Electrical Schematic
 
-![Electrical Schematic](images\Lab5schematic.png)
+![Electrical Schematic](images/Lab5Schematic.png)
 
-Note, polarity and voltage of power supply is not specified, this affects RPS and dierction
+Note, polarity and voltage of power supply is not specified, this affects RPS and direction
 
 ### Code Flowchart
 
-![Lab5 Flowchart](images\Lab5Flowchart.png)
+![Lab5 Flowchart](images/Lab5Flowchart.png)
 
 ### Design Choices and Math:
 
@@ -20,7 +28,7 @@ For the 1Hz refreshing of data, we used the 1ms Timer 2 clock and made it create
 
 (999+1 pulses) / (1000 pulses/s) = 1second
 
-This is good also because it is asynchronous and will not lag with the Exernal Interrupts.
+This is good also because it is asynchronous and will not lag with the External Interrupts.
 
 The motor has 408 pulses per revolution, which if we have 2 channels and a rising and falling edge, this means we get 408*4 = 1632 counts per revolution. 
 
@@ -35,23 +43,23 @@ When reading at around 12v, we read a RPS value of around 2.7, which is close to
 
 Another test done is that when the voltage is set at a value that will make the RPS we read to be around 1 (closer to 1.007) we counted for 60 steps while having a timer and read a time of 58.90 seconds, which is 60/58.9 = 1.02rps, which is very close to 1.007
 
-### Why interrupts are better than pooling?
+### Why interrupts are better than polling?
 
-![Pulling Example](images\Lab5pullingexaple.png)
+![Pulling Example](images/Lab5pullingexaple.png)
 
 In this code, you can see how it is set up to count how many times it could read a value in a pin per second, but this has a lot of issues. First, we are reading and waiting to read when we get a pulse, which means that we are either at the right point in time, or have to wait and delay. In this example, it sampled around 30k times per second, but this while loop was only ~4 lines of code on average, this means that if we add more sensors or interrupts, the sampling frequency will both drop and be inconsistent, not also considering that we can't fully sample the function if it is above half the sampling frequency, which would also drop if we add more pins to read or a more complicated code. 
 
-![Interrupt Microcontroller output](images\45koutput.jpg)
+![Interrupt Microcontroller output](images/45koutput.jpg)
 
-![Interrupt Example](images\Functiongen.jpg)
+![Interrupt Example](images/Functiongen.jpg)
 
 Interrupts allow us to skip all of this and only run the code when we read something, saving processing power and making the reaction time more "continuous" instead of fitting at a specific discrete point in time.
 
-In this example, the fastest frequency it was able to read was around 45k, but it also looked like the higher the frequency, the slower it printed values, where at 50k, it would not be able to print an output. This is probably because it has so many interrupts it can't run the print statement code. 50k is much more than the maximum theoretical of 16k the pooling can achieve, and note that this has more precision where in the pooling case, measuring something like 15.9kHz may need hundreds of cycles to differenciate from 16kHz (because it is close to sampling rate), but with interrupts it is very precise at all values under 45k.
+In this example, the fastest frequency it was able to read was around 45k, but it also looked like the higher the frequency, the slower it printed values, where at 50k, it would not be able to print an output. This is probably because it has so many interrupts it can't run the print statement code. 50k is much more than the maximum theoretical of 16k the polling can achieve, and note that this has more precision where in the polling case, measuring something like 15.9kHz may need hundreds of cycles to differentiate from 16kHz (because it is close to sampling rate), but with interrupts it is very precise at all values under 45k.
 
 ### AI Prototype
 
-![AI Prototype](images\Lab5AIPrototype.png)
+![AI Prototype](images/Lab5AIPrototype.png)
 
 Based on this code, we can see how a step is defined if a and b are not equal, or when they are equal it makes it in the opposite direction. this is either not checking both the rising and falling edge, or plain wrong since if we follow the pattern of 00, 01, 11, 10 ... the pattern would go back and forth, adding 1 in the 00 and 11, subtracting in 01 and 10. This may work since it uses two different interrupts similar to ours, but it differs that it reads the pulses inside the interrupt. I wanted to avoid doing this to make the interrupts run as fast as possible.
 

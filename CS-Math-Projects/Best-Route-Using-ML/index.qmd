@@ -1,8 +1,7 @@
 ---
-title: Computer Science and Math related projects by Carlos Ojeda de Silva
+title: "Best Route Using ML"
+subtitle: "Finding the best route between several points using AI"
 ---
-
-## Finding the best route between several points using AI
 
 If an Amazon/UPS/FedEx driver wants to deliver goods to 2 homes, how many different routes are possible, and how do you find the best one? Answer: 2 routes determined by trial and error. Having 20 homes increases the possible routes to 2,432,902,008,176,640,000, which is too much to do with trial and error. This is a really important problem to solve because it would massively reduce gasoline usage around the world. It isn’t logical to do trial and error if we have a lot of homes, so I took a different approach: Making an AI model that can predict (or get close to) what would be the best route from the coordinates.
 

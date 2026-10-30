@@ -1,73 +1,78 @@
 project:
   type: website
+  resources:
+    - "Resume/Carlos_Ojeda_CV_Resume.pdf"
 
 website:
   title: "Carlos Ojeda de Silva Portfolio"
+  site-url: https://carlos-o-de-s.github.io
+  description: "Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects."
+  image: images/headshot.png
+  open-graph: true
+  twitter-card: true
+  page-footer:
+    center: "© 2026 Carlos Ojeda de Silva"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      # - href: blog.qmd
-      #   text: Blog
-      - text: MicroProcesssor (E155) Labs
-        menu: 
-        - text: Lab 1 FPGA and MCU Setup and Testing
+      - text: E155 Labs
+        menu:
+        - text: "Lab 1: FPGA & MCU Setup"
           href: labs/lab1/lab1.qmd
-        - text: Lab 2 Multiplexed 7-Segment Display
+        - text: "Lab 2: Multiplexed 7-Segment Display"
           href: labs/lab2/lab2.qmd
-        - text: Lab 3 Keypad Scanner
+        - text: "Lab 3: Keypad Scanner"
           href: labs/lab3/lab3.qmd
-        - text: Lab 4 Digital Audio
+        - text: "Lab 4: Digital Audio"
           href: labs/lab4/lab4.qmd
-        - text: Lab 5 Interrupts
+        - text: "Lab 5: Interrupts"
           href: labs/lab5/lab5.qmd
-        - text: Lab 6 IoT and SPI
+        - text: "Lab 6: IoT and SPI"
           href: labs/lab6/lab6.qmd
         - text: E155 Resources
           href: labs/resources/resources.qmd
-      - text: E155 Final Project Portable DJ Set
-        menu: 
-        - text: Homepage
-          href: E155FinalProject\index.qmd
+      - text: DJ Set (E155 Final)
+        menu:
+        - text: Overview
+          href: E155FinalProject/index.qmd
         - text: Bill of Materials
-          href: E155FinalProject\bill.qmd
+          href: E155FinalProject/bill.qmd
         - text: FPGA Design
-          href: E155FinalProject\fpgaD.qmd
+          href: E155FinalProject/fpgaD.qmd
         - text: MCU Design
-          href: E155FinalProject\mcuD.qmd
+          href: E155FinalProject/mcuD.qmd
         - text: Results
-          href: E155FinalProject\results.qmd
+          href: E155FinalProject/results.qmd
         - text: References
-          href: E155FinalProject\reference.qmd
-        - text: AI usage
-          href: E155FinalProject\ai.qmd
+          href: E155FinalProject/reference.qmd
+        - text: AI Usage
+          href: E155FinalProject/ai.qmd
       - text: Engineering Projects
-        menu: 
+        menu:
         - text: Hybrid Rocket
-          href: Engineering-Projects\Hybrid-Rocket\index.qmd
+          href: Engineering-Projects/Hybrid-Rocket/index.qmd
         - text: Hybrid Rocket Engine
-          href: Engineering-Projects\Hybrid-Rocket-Engine\index.qmd
+          href: Engineering-Projects/Hybrid-Rocket-Engine/index.qmd
         - text: Liquid Rocket Engine
-          href: Engineering-Projects\Liquid-Rocket-Engine\index.qmd
+          href: Engineering-Projects/Liquid-Rocket-Engine/index.qmd
         - text: Rocket Avionics From Scratch
-          href: Engineering-Projects\Rocket-Avionics-from-Scratch\index.qmd
+          href: Engineering-Projects/Rocket-Avionics-from-Scratch/index.qmd
         - text: Hardware Input Control
-          href: Engineering-Projects\Hardware-Input-Control\index.qmd
-      - text: CS Math Projects
-        menu: 
+          href: Engineering-Projects/Hardware-Input-Control/index.qmd
+      - text: CS & Math Projects
+        menu:
         - text: AI Image Depth Perception
-          href: CS-Math-Projects\AI-Image-Depth-Perception\index.qmd
+          href: CS-Math-Projects/AI-Image-Depth-Perception/index.qmd
         - text: Best Route Using ML
-          href: CS-Math-Projects\Best-Route-Using-ML\index.qmd
+          href: CS-Math-Projects/Best-Route-Using-ML/index.qmd
         - text: Hyperbola Integral Using Rotations
-          href: CS-Math-Projects\Hyperbola-Integral-Using-Rotations\index.qmd
-          
+          href: CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.qmd
+      - text: CV/Resume
+        href: Resume/resume.qmd
 
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
-
-
-

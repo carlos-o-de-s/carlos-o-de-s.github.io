@@ -1,7 +1,5 @@
 ---
 title: "References and Acknowledgements"
-about:
-    template: jolla
 ---
 
 ## References
@@ -16,4 +14,4 @@ about:
 
 We would like to thank all other students in the lab who helped us find issues and debug some of our code.
 
-We would like to acknowledge Prof. Spencer for not only teaching the class but for helping us with any question we had, big or small. Providing aid when we need it and giving us advice on how to approch our project. 
+We would like to acknowledge Prof. Spencer for not only teaching the class but for helping us with any question we had, big or small. Providing aid when we need it and giving us advice on how to approach our project. 

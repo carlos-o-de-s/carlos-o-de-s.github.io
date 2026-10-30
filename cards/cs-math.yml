@@ -1,0 +1,15 @@
+# Cards for the "CS & Math Projects" section of the home page.
+- title: AI Image Depth Perception
+  path: ../CS-Math-Projects/AI-Image-Depth-Perception/index.qmd
+  image: CS-Math-Projects/AI-Image-Depth-Perception/images/Depth_result.png
+  description: "A small CNN that predicts a depth map from a single photo, trained on the DIODE dataset."
+
+- title: Best Route Using ML
+  path: ../CS-Math-Projects/Best-Route-Using-ML/index.qmd
+  image: CS-Math-Projects/Best-Route-Using-ML/images/Routes.png
+  description: "Using a Random Forest to approximate the shortest delivery route between points in San Antonio."
+
+- title: Hyperbola Integral Using Rotations
+  path: ../CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.qmd
+  image: CS-Math-Projects/Hyperbola-Integral-Using-Rotations/images/Hyperbola1.png
+  description: "Finding the area under a hyperbola using only the integral of 1/x and a 45° rotation."
