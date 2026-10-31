@@ -1,0 +1,15 @@
+# Cards for the "Systems & Controls Projects" section of the home page.
+- title: Digital Control of an RC Circuit
+  path: ../Systems-Controls-Projects/Digital-PI-Observer-Control/index.qmd
+  image: Systems-Controls-Projects/Digital-PI-Observer-Control/images/observer-experimental.png
+  description: "PI vs. observer-based LQR control of a second-order circuit on an Arduino: 2 s settling with under 1% overshoot on hardware."
+
+- title: Inverted Pendulum on a Cart
+  path: ../Systems-Controls-Projects/Inverted-Pendulum/index.qmd
+  image: Systems-Controls-Projects/Inverted-Pendulum/images/alpha-0.5.png
+  description: "State feedback with integral action and an observer, balancing a nonlinear pendulum under a constant disturbance."
+
+- title: Square Wave to Sine Wave Filtering
+  path: ../Systems-Controls-Projects/Square-to-Sine-Filtering/index.qmd
+  image: Systems-Controls-Projects/Square-to-Sine-Filtering/images/raw-data.png
+  description: "A 4th-order analog Butterworth filter plus an FIR comb filter on an Arduino, removing a square wave's harmonics to the ADC noise floor."

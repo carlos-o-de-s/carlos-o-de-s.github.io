@@ -12,6 +12,13 @@ listing:
     image-height: 220px
     fields: [image, title, description]
     sort: false
+  - id: controls
+    contents: cards/controls.yml
+    type: grid
+    grid-columns: 3
+    image-height: 200px
+    fields: [image, title, description]
+    sort: false
   - id: cs-math
     contents: cards/cs-math.yml
     type: grid
@@ -65,6 +72,11 @@ Built with Maynor for HMC's Microprocessors class: an MCU streams songs from a m
 [MCU Design](E155FinalProject/mcuD.qmd){.btn .btn-outline-secondary .btn-sm}
 [Results & Demo](E155FinalProject/results.qmd){.btn .btn-outline-secondary .btn-sm}
 :::
+:::
+
+## Systems & Controls Projects
+
+::: {#controls}
 :::
 
 ## CS & Math Projects

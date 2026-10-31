@@ -60,6 +60,14 @@ website:
           href: Engineering-Projects/Rocket-Avionics-from-Scratch/index.qmd
         - text: Hardware Input Control
           href: Engineering-Projects/Hardware-Input-Control/index.qmd
+      - text: Systems & Controls
+        menu:
+        - text: Digital Control of an RC Circuit
+          href: Systems-Controls-Projects/Digital-PI-Observer-Control/index.qmd
+        - text: Inverted Pendulum on a Cart
+          href: Systems-Controls-Projects/Inverted-Pendulum/index.qmd
+        - text: Square Wave to Sine Wave Filtering
+          href: Systems-Controls-Projects/Square-to-Sine-Filtering/index.qmd
       - text: CS & Math Projects
         menu:
         - text: AI Image Depth Perception
@@ -76,3 +84,4 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    include-after-body: mobile-nav.html
