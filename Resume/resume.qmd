@@ -3,6 +3,13 @@ title: "CV/Resume"
 toc: false
 ---
 
-[Download PDF](Carlos_Ojeda_CV_Resume.pdf){.btn .btn-primary download="Carlos_Ojeda_CV_Resume.pdf"}
+<!-- Bump v= whenever the PDF changes so browsers don't show a cached copy -->
 
-<iframe src="Carlos_Ojeda_CV_Resume.pdf" width="100%" height="800px" style="border: none;"></iframe>
+<a href="Carlos_Ojeda_CV_Resume.pdf?v=2026-10-30" class="btn btn-primary" download="Carlos_Ojeda_CV_Resume.pdf">Download PDF</a>
+
+<iframe class="resume-embed" src="Carlos_Ojeda_CV_Resume.pdf?v=2026-10-30" width="100%" height="800px" style="border: none;"></iframe>
+
+<a class="resume-mobile" href="Carlos_Ojeda_CV_Resume.pdf?v=2026-10-30">
+  <img src="resume-preview.png?v=2026-10-30" alt="First page of Carlos's resume. Tap to open the full PDF.">
+  <span>Tap to open the full PDF</span>
+</a>
