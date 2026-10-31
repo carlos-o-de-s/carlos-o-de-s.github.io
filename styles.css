@@ -213,3 +213,33 @@ mjx-container[display="true"] {
   overflow-x: auto;
   overflow-y: hidden;
 }
+
+/* Resume page: phones get the preview image instead of an embedded PDF */
+.resume-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .resume-embed {
+    display: none;
+  }
+
+  .resume-mobile {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .resume-mobile img {
+    width: 100%;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+  }
+
+  .resume-mobile span {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
