@@ -208,6 +208,25 @@ ul.task-list li input[type="checkbox"] {
     </ul>
   </li>
   <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-systems--controls" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Systems &amp; Controls</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-systems--controls">    
+        <li>
+    <a class="dropdown-item" href="../Systems-Controls-Projects/Digital-PI-Observer-Control/index.html">
+ <span class="dropdown-text">Digital Control of an RC Circuit</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Systems-Controls-Projects/Inverted-Pendulum/index.html">
+ <span class="dropdown-text">Inverted Pendulum on a Cart</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Systems-Controls-Projects/Square-to-Sine-Filtering/index.html">
+ <span class="dropdown-text">Square Wave to Sine Wave Filtering</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs--math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">CS &amp; Math Projects</span>
     </a>
@@ -343,6 +362,104 @@ ul.task-list li input[type="checkbox"] {
 </section>
 
 </main> <!-- /main -->
+<!-- Bottom tab bar for phones; hidden on wide screens (see styles.css). Links are relative to the site root. -->
+<div class="mobile-sheet-backdrop" hidden=""></div>
+
+<div class="mobile-sheet" id="sheet-projects" hidden="">
+  <div class="mobile-sheet-group">Engineering</div>
+  <a data-href="Engineering-Projects/Hybrid-Rocket/index.html">Hybrid Rocket</a>
+  <a data-href="Engineering-Projects/Hybrid-Rocket-Engine/index.html">Hybrid Rocket Engine</a>
+  <a data-href="Engineering-Projects/Liquid-Rocket-Engine/index.html">Liquid Rocket Engine</a>
+  <a data-href="Engineering-Projects/Rocket-Avionics-from-Scratch/index.html">Rocket Avionics From Scratch</a>
+  <a data-href="Engineering-Projects/Hardware-Input-Control/index.html">Hardware Input Control</a>
+  <div class="mobile-sheet-group">Systems &amp; Controls</div>
+  <a data-href="Systems-Controls-Projects/Digital-PI-Observer-Control/index.html">Digital Control of an RC Circuit</a>
+  <a data-href="Systems-Controls-Projects/Inverted-Pendulum/index.html">Inverted Pendulum on a Cart</a>
+  <a data-href="Systems-Controls-Projects/Square-to-Sine-Filtering/index.html">Square Wave to Sine Wave Filtering</a>
+  <div class="mobile-sheet-group">CS &amp; Math</div>
+  <a data-href="CS-Math-Projects/AI-Image-Depth-Perception/index.html">AI Image Depth Perception</a>
+  <a data-href="CS-Math-Projects/Best-Route-Using-ML/index.html">Best Route Using ML</a>
+  <a data-href="CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html">Hyperbola Integral Using Rotations</a>
+</div>
+
+<div class="mobile-sheet" id="sheet-labs" hidden="">
+  <div class="mobile-sheet-group">DJ Set (E155 Final)</div>
+  <a data-href="E155FinalProject/index.html">Overview</a>
+  <a data-href="E155FinalProject/fpgaD.html">FPGA Design</a>
+  <a data-href="E155FinalProject/mcuD.html">MCU Design</a>
+  <a data-href="E155FinalProject/results.html">Results</a>
+  <div class="mobile-sheet-group">E155 Labs</div>
+  <a data-href="labs/lab1/lab1.html">Lab 1: FPGA &amp; MCU Setup</a>
+  <a data-href="labs/lab2/lab2.html">Lab 2: Multiplexed 7-Segment Display</a>
+  <a data-href="labs/lab3/lab3.html">Lab 3: Keypad Scanner</a>
+  <a data-href="labs/lab4/lab4.html">Lab 4: Digital Audio</a>
+  <a data-href="labs/lab5/lab5.html">Lab 5: Interrupts</a>
+  <a data-href="labs/lab6/lab6.html">Lab 6: IoT and SPI</a>
+  <a data-href="labs/resources/resources.html">E155 Resources</a>
+</div>
+
+<nav class="mobile-tabbar" aria-label="Site sections">
+  <a class="mobile-tab" data-href="index.html" data-section="home">
+    <i class="bi bi-house"></i><span>Home</span>
+  </a>
+  <button class="mobile-tab" type="button" data-sheet="sheet-projects" data-section="projects">
+    <i class="bi bi-grid"></i><span>Projects</span>
+  </button>
+  <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
+    <i class="bi bi-cpu"></i><span>E155</span>
+  </button>
+  <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
+    <i class="bi bi-file-earmark-person"></i><span>Resume</span>
+  </a>
+</nav>
+
+<script>
+(function () {
+  // Quarto loads site_libs with a path relative to the current page; reuse it to find the site root.
+  var lib = document.querySelector('script[src*="site_libs/"]');
+  var root = lib ? lib.getAttribute('src').split('site_libs/')[0] : '';
+  document.querySelectorAll('[data-href]').forEach(function (a) {
+    a.setAttribute('href', root + a.getAttribute('data-href'));
+  });
+
+  // Highlight the tab for the current section
+  var path = location.pathname;
+  var section = /Engineering-Projects|Systems-Controls-Projects|CS-Math-Projects/.test(path) ? 'projects'
+    : /E155FinalProject|\/labs\//.test(path) ? 'labs'
+    : /\/Resume\//.test(path) ? 'resume'
+    : 'home';
+  var active = document.querySelector('.mobile-tab[data-section="' + section + '"]');
+  if (active) active.classList.add('active');
+
+  var backdrop = document.querySelector('.mobile-sheet-backdrop');
+  var openSheet = null;
+
+  function close() {
+    if (!openSheet) return;
+    openSheet.hidden = true;
+    backdrop.hidden = true;
+    document.querySelector('[data-sheet="' + openSheet.id + '"]').setAttribute('aria-expanded', 'false');
+    openSheet = null;
+  }
+
+  document.querySelectorAll('[data-sheet]').forEach(function (btn) {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', function () {
+      var sheet = document.getElementById(btn.getAttribute('data-sheet'));
+      var wasOpen = openSheet === sheet;
+      close();
+      if (wasOpen) return;
+      sheet.hidden = false;
+      backdrop.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      openSheet = sheet;
+    });
+  });
+
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
