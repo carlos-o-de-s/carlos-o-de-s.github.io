@@ -355,11 +355,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>A finite state machine</strong> replaces the single-cycle decoder and sequences each instruction.</li>
 </ul>
 <p>The processor implements a subset of RV32I: <code>lw</code>, <code>sw</code>, <code>add</code>, <code>sub</code>, <code>and</code>, <code>or</code>, <code>slt</code>, <code>addi</code>, <code>andi</code>, <code>ori</code>, <code>slti</code>, <code>beq</code>, and <code>jal</code>. It ran the full test program correctly in simulation, finishing with the expected value of 71 written to address 84.</p>
-<p><em>Developed for Harvey Mudd’s Digital Electronics and Computer Engineering course (E85). The starting single-cycle code, the testbench, and the test program come from Harris &amp; Harris, Digital Design and Computer Architecture: RISC-V Edition. I wrote the multicycle datapath changes and the controller FSM.</em></p>
+<p><em>Developed for Harvey Mudd’s Digital Electronics and Computer Engineering course (E85). The course provided the testbench, the test program, and the starting single-cycle code, which comes from Harris &amp; Harris, Digital Design and Computer Architecture: RISC-V Edition. I wrote the multicycle datapath changes, and I reused the controller FSM I built in the previous lab.</em></p>
 </section>
 <section id="from-single-cycle-to-multicycle" class="level2">
 <h2 class="anchored" data-anchor-id="from-single-cycle-to-multicycle">From single-cycle to multicycle</h2>
-<p>The processor keeps the textbook’s split between a datapath and a controller. The biggest visible change is that the controller now needs a clock and reset, because it has state. It also drives a new set of enables and selects, and only one address now goes to memory.</p>
+<p>The processor keeps the textbook’s split between a datapath and a controller, wrapped together in a <code>multicycle</code> module (the “RISCV multi” box below). The biggest change is that the controller now needs a clock and reset, because it has state, although the diagram only draws them going to the datapath. The controller also drives a new set of enables and selects, and only one address now goes to memory.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="images/block-diagram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Block hierarchy and the signals between the controller, datapath, and memory"><img src="images/block-diagram.png" class="img-fluid figure-img" style="width:75.0%" alt="Block hierarchy and the signals between the controller, datapath, and memory"></a></p>
@@ -380,33 +380,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>Combined instruction and data memory (<code>dimem</code>)</td>
-<td>The address now comes from a mux (<code>AdrSrc</code>), which picks the PC during fetch and the ALU’s result during a load or store.</td>
+<td>The address now comes from a mux (<code>AdrSrc</code>), which picks the PC during fetch and the saved <code>ALUOut</code> during a load or store.</td>
 </tr>
 <tr class="even">
+<td><code>PC</code> register with enable <code>PCWrite</code></td>
+<td>The PC has to hold its value through the later steps of an instruction, instead of updating on every clock edge.</td>
+</tr>
+<tr class="odd">
 <td><code>Instr</code> register with enable <code>IRWrite</code></td>
 <td>The memory output changes when the address changes, so the instruction has to be saved for the rest of its steps.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>OldPC</code> register</td>
 <td>The PC is updated during fetch, but branches and jumps are relative to the original instruction’s address.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>Data</code> register</td>
 <td>Holds the value read from memory for the following cycle, when it is written to the register file.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>A</code> and <code>WriteData</code> registers</td>
 <td>Hold the two register file outputs between decode and execute.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>ALUOut</code> register</td>
 <td>Holds the ALU’s result for the next cycle, so the ALU is free to do something else.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>mux3</code> on both ALU inputs (<code>ALUSrcA</code>, <code>ALUSrcB</code>)</td>
 <td>The single ALU now takes the PC, <code>OldPC</code>, or <code>A</code> on one side and <code>WriteData</code>, the immediate, or the constant 4 on the other.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>FSM controller</td>
 <td>Control signals now depend on the current step, not only on the instruction.</td>
 </tr>
@@ -421,7 +425,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>           <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] WriteData, DataAdr,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>           <span class="kw">output</span> <span class="kw">logic</span>        MemWrite);</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] Instr, ReadData;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] ReadData;</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// instantiate processor and memories</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  multicycle multicycle(clk, reset, DataAdr, MemWrite,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                        WriteData, ReadData);</span>
@@ -487,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="controller" class="level2">
 <h2 class="anchored" data-anchor-id="controller">Controller</h2>
-<p>The controller replaces the single-cycle decoder with an 11-state FSM. Every instruction shares the first two states, then branches on its opcode.</p>
+<p>The controller replaces the single-cycle main decoder with an 11-state FSM, while the ALU decoding logic carries over unchanged. Every instruction shares the first two states, then branches on its opcode.</p>
 <div class="cell" data-layout-align="default">
 <div class="cell-output-display">
 <div>
@@ -798,7 +802,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="verification" class="level2">
 <h2 class="anchored" data-anchor-id="verification">Verification</h2>
-<p>I tested the processor in simulation with Questa, using the textbook’s test program. It exercises every instruction type, including one branch that is taken and one that is not. Two <code>addi</code> instructions should never run, and if the program goes wrong, the final value changes. The testbench passes only if 71 is written to address 84.</p>
+<p>I tested the processor in simulation with Questa, using the course’s test program. It exercises every instruction format (R, I, S, B, and J), including one branch that is taken and one that is not. It does not run <code>andi</code>, <code>ori</code>, or <code>slti</code>, so those three are implemented but were not tested directly. Two <code>addi</code> instructions should never run, and if the program goes wrong, the final value changes. The testbench passes only if 71 is written to address 84, and it fails on a write to any address other than 80 or 84.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>memfile.asm</strong></pre>
@@ -825,7 +829,7 @@ end:    add  x2, x2, x3         # x2 = 7 + 64 = 71      44   00310133
 </div>
 <section id="tracing-the-first-three-instructions" class="level3">
 <h3 class="anchored" data-anchor-id="tracing-the-first-three-instructions">Tracing the first three instructions</h3>
-<p>All three are <code>addi</code>, so each one takes the same four states: Fetch, Decode, ExecuteI, and ALUWB. <code>PC</code> changes at the end of Fetch, so it already reads the next address during Decode.</p>
+<p>All three are <code>addi</code>, so each one takes the same four states: Fetch, Decode, ExecuteI, and ALUWB. <code>PC</code> and <code>Instr</code> both change at the end of Fetch, so during Decode <code>PC</code> already reads the next address and <code>Instr</code> holds the new instruction. Cycle 1 is the first cycle after two clock cycles of reset, and it begins at 20 ns.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -947,7 +951,7 @@ end:    add  x2, x2, x3         # x2 = 7 + 64 = 71      44   00310133
 </section>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
-<p>The waveform below shows the whole program. <code>ALUSrcA</code> and <code>ALUSrcB</code> step through their patterns for each instruction type, <code>IRWrite</code> pulses once at each fetch, and <code>Adr</code> switches away from the PC only for memory accesses.</p>
+<p>The waveform below shows the whole program. <code>ALUSrcA</code> and <code>ALUSrcB</code> step through their patterns for each instruction type, <code>IRWrite</code> pulses once at each fetch, and <code>Adr</code> switches away from the PC only for memory accesses. The red sections are unknown (X) values, which appear when the hardware reads a register or memory word that has not been written yet. They do no harm, because those cycles do not use the value.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="images/waveform.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Simulation of the full test program, from reset to the final write. Select the image to enlarge it."><img src="images/waveform.png" class="img-fluid figure-img" alt="Simulation of the full test program, from reset to the final write. Select the image to enlarge it."></a></p>
@@ -961,7 +965,7 @@ end:    add  x2, x2, x3         # x2 = 7 + 64 = 71      44   00310133
 <figcaption>Simulator output showing “Simulation succeeded”</figcaption>
 </figure>
 </div>
-<p>The program ran <strong>17 instructions in 67 clock cycles</strong>, an average of about <strong>3.94 cycles per instruction</strong>. This matches the state counts above: with the 10 ns clock in the testbench, the 67th cycle reaches its falling edge, where the testbench checks the write, at exactly 685 ns.</p>
+<p>The program ran <strong>17 instructions in 67 clock cycles</strong>, an average of about <strong>3.94 cycles per instruction</strong>. This matches the state counts above: the testbench has a 10 ns clock and cycle 1 begins at 20 ns, so the 67th cycle reaches its falling edge, where the testbench checks the write, at exactly 685 ns.</p>
 </section>
 </section>
 <section id="takeaways" class="level2">
@@ -969,7 +973,7 @@ end:    add  x2, x2, x3         # x2 = 7 + 64 = 71      44   00310133
 <ul>
 <li>Most of the design is deciding what has to be saved between cycles. Almost every register I added exists because a value would otherwise change or be lost before the next step needs it.</li>
 <li>Reusing hardware moves complexity into control. The datapath is smaller in functional units, but the controller grew from a decoder into an FSM, and each state has to set its muxes correctly.</li>
-<li>Multicycle is not automatically faster. A single-cycle processor would run the same 17 instructions in 17 cycles, so this design only matches it if its clock is about 3.9 times faster. Its clear advantage here is needing less hardware.</li>
+<li>Multicycle is not automatically faster. A single-cycle processor would run the same 17 instructions in 17 cycles, so this design only matches it if its clock is about 3.9 times faster. Its clear advantage here is sharing: one memory and one ALU replace two memories, an ALU, and two adders, at the cost of the extra registers and muxes.</li>
 </ul>
 
 
