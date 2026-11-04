@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Zipline Speed Optimization – Carlos Ojeda de Silva Portfolio</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Zipline Speed Optimization – Carlos Ojeda de Silva Portfolio">
+<meta property="og:description" content="Choosing the drop and tension of a 500 m zipline so every rider finishes safely and a 70 kg rider goes as fast as possible">
+<meta property="og:image" content="https://carlos-o-de-s.github.io/Systems-Controls-Projects/Zipline-Speed-Optimization/images/velocity-profiles.png">
+<meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:height" content="818">
+<meta property="og:image:width" content="1318">
+<meta name="twitter:title" content="Zipline Speed Optimization – Carlos Ojeda de Silva Portfolio">
+<meta name="twitter:description" content="Choosing the drop and tension of a 500 m zipline so every rider finishes safely and a 70 kg rider goes as fast as possible">
+<meta name="twitter:image" content="https://carlos-o-de-s.github.io/Systems-Controls-Projects/Zipline-Speed-Optimization/images/velocity-profiles.png">
+<meta name="twitter:image-height" content="818">
+<meta name="twitter:image-width" content="1318">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Carlos Ojeda de Silva Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">E155 Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/lab1/lab1.html">
+ <span class="dropdown-text">Lab 1: FPGA &amp; MCU Setup</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab2/lab2.html">
+ <span class="dropdown-text">Lab 2: Multiplexed 7-Segment Display</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab3/lab3.html">
+ <span class="dropdown-text">Lab 3: Keypad Scanner</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab4/lab4.html">
+ <span class="dropdown-text">Lab 4: Digital Audio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab5/lab5.html">
+ <span class="dropdown-text">Lab 5: Interrupts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab6/lab6.html">
+ <span class="dropdown-text">Lab 6: IoT and SPI</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/resources/resources.html">
+ <span class="dropdown-text">E155 Resources</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dj-set-(e155-final" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">DJ Set (E155 Final)</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dj-set-(e155-final">    
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/bill.html">
+ <span class="dropdown-text">BOM, Schematics &amp; Block Diagrams</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/fpgaD.html">
+ <span class="dropdown-text">FPGA Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/mcuD.html">
+ <span class="dropdown-text">MCU Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/results.html">
+ <span class="dropdown-text">Results</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/reference.html">
+ <span class="dropdown-text">References</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/ai.html">
+ <span class="dropdown-text">AI Usage</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-engineering-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Engineering Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-engineering-projects">    
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hybrid-Rocket/index.html">
+ <span class="dropdown-text">Hybrid Rocket</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hybrid-Rocket-Engine/index.html">
+ <span class="dropdown-text">Hybrid Rocket Engine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Liquid-Rocket-Engine/index.html">
+ <span class="dropdown-text">Liquid Rocket Engine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Rocket-Avionics-from-Scratch/index.html">
+ <span class="dropdown-text">Rocket Avionics From Scratch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hardware-Input-Control/index.html">
+ <span class="dropdown-text">Hardware Input Control</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-systems-controls--digital-design" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Systems, Controls &amp; Digital Design</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-systems-controls--digital-design">    
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Digital-PI-Observer-Control/index.html">
+ <span class="dropdown-text">Digital Control of an RC Circuit</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Inverted-Pendulum/index.html">
+ <span class="dropdown-text">Inverted Pendulum on a Cart</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Square-to-Sine-Filtering/index.html">
+ <span class="dropdown-text">Square Wave to Sine Wave Filtering</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.html">
+ <span class="dropdown-text">Multicycle RISC-V Processor</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Zipline-Speed-Optimization/index.html">
+ <span class="dropdown-text">Zipline Speed Optimization</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs--math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">CS &amp; Math Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs--math-projects">    
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/AI-Image-Depth-Perception/index.html">
+ <span class="dropdown-text">AI Image Depth Perception</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/Best-Route-Using-ML/index.html">
+ <span class="dropdown-text">Best Route Using ML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html">
+ <span class="dropdown-text">Hyperbola Integral Using Rotations</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../Resume/resume.html"> 
+<span class="menu-text">CV/Resume</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#model" id="toc-model" class="nav-link" data-scroll-target="#model">Model</a>
+  <ul class="collapse">
+  <li><a href="#line-shape" id="toc-line-shape" class="nav-link" data-scroll-target="#line-shape">Line shape</a></li>
+  <li><a href="#rider-speed" id="toc-rider-speed" class="nav-link" data-scroll-target="#rider-speed">Rider speed</a></li>
+  </ul></li>
+  <li><a href="#optimization" id="toc-optimization" class="nav-link" data-scroll-target="#optimization">Optimization</a>
+  <ul class="collapse">
+  <li><a href="#solving-for-the-line-shape" id="toc-solving-for-the-line-shape" class="nav-link" data-scroll-target="#solving-for-the-line-shape">Solving for the line shape</a></li>
+  <li><a href="#building-the-riders-path" id="toc-building-the-riders-path" class="nav-link" data-scroll-target="#building-the-riders-path">Building the rider’s path</a></li>
+  <li><a href="#searching-the-design" id="toc-searching-the-design" class="nav-link" data-scroll-target="#searching-the-design">Searching the design</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+  <ul class="collapse">
+  <li><a href="#checking-the-optimum" id="toc-checking-the-optimum" class="nav-link" data-scroll-target="#checking-the-optimum">Checking the optimum</a></li>
+  </ul></li>
+  <li><a href="#adding-friction-and-a-safety-margin" id="toc-adding-friction-and-a-safety-margin" class="nav-link" data-scroll-target="#adding-friction-and-a-safety-margin">Adding friction and a safety margin</a></li>
+  <li><a href="#assumptions-and-limits" id="toc-assumptions-and-limits" class="nav-link" data-scroll-target="#assumptions-and-limits">Assumptions and limits</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways">Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Zipline Speed Optimization</h1>
+<p class="subtitle lead">Choosing the drop and tension of a 500 m zipline so every rider finishes safely and a 70 kg rider goes as fast as possible</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>A zipline has two settings that are fixed before anyone rides it: the vertical drop between its supports and the tension in its wire rope. A slack line is fast, but light riders may stop short of the end. A tight line gets everyone there, but it is slower at the top and heavier riders may arrive too quickly.</p>
+<p>In this project I modeled the ride numerically and optimized both settings for a 500 m line with no wind. The goal was to make a 70 kg rider’s peak speed as high as possible, while meeting these constraints:</p>
+<ul>
+<li><strong>Every rider finishes.</strong> Riders of 30 kg, 70 kg, and 140 kg must all reach the end from a standing start.</li>
+<li><strong>Exit speed stays safe.</strong> No rider can leave the line faster than 5 m/s.</li>
+<li><strong>The design stays in range.</strong> The drop must be 10 to 40 m, and the tension can be at most 50 kN.</li>
+</ul>
+<p>The best design uses the full <strong>40 m drop</strong> with <strong>39.6 kN of tension</strong>, which gives the 70 kg rider a peak speed of <strong>12.9 m/s</strong>. The limit is set by the 30 kg rider, who only just reaches the end at this tension.</p>
+<p><em>Developed for Harvey Mudd’s Engineering Math course (E72). The equations for the rider’s path come from a paper provided by the course.</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/velocity-profiles.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Speed along the line at the optimal design. The lightest rider sets the limit by barely reaching the end.</figcaption>
+</figure>
+</div>
+</section>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<section id="line-shape" class="level3">
+<h3 class="anchored" data-anchor-id="line-shape">Line shape</h3>
+<p>With no rider, the wire rope hangs as a catenary. Its shape depends on two parameters, <span class="math inline">\(a_0\)</span> and <span class="math inline">\(b_0\)</span>, where <span class="math inline">\(a_0\)</span> is the slope at the top and <span class="math inline">\(b_0\)</span> is the change in slope along the line. Together with the rope length <span class="math inline">\(L\)</span>, they follow from three conditions: the line must span <span class="math inline">\(X = 500\)</span> m horizontally, it must drop by <span class="math inline">\(Y\)</span>, and the top tension <span class="math inline">\(T_0\)</span> must balance the rope’s weight, <span class="math inline">\(w = 15\)</span> N/m:</p>
+<p><span class="math display">\[
+\frac{X}{L} = \frac{1}{b_0}\ln\frac{a_0 + \sqrt{1 + a_0^2}}{a_0 - b_0 + \sqrt{1 + (a_0 - b_0)^2}},
+\qquad
+\frac{Y}{L} = \frac{\sqrt{1 + a_0^2} - \sqrt{1 + (a_0 - b_0)^2}}{b_0},
+\qquad
+T_0\cos\theta_0 = \frac{wL}{b_0}
+\]</span></p>
+<p>where <span class="math inline">\(\tan\theta_0 = a_0\)</span>. A rider adds a point load, which puts a kink in the line and changes its whole shape. So the path a rider follows is not the shape of the line at any single moment. For each rider I solved for the loaded shape’s own parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> at 101 positions along the rope, then fit a spline through the rider’s location at each one to get the path <span class="math inline">\(y(x)\)</span>.</p>
+<p>Rider speed is much lower than the speed of waves in the cable, so the two problems can be separated. The rider’s position sets the line’s shape, but the rider’s acceleration does not noticeably affect it.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/rider-paths.png" class="img-fluid figure-img"></p>
+<figcaption>Left: the path of each rider at the optimal design. Right: the same paths measured from the unloaded cable.</figcaption>
+</figure>
+</div>
+<p>All of the paths dip below the end of the line, reaching their lowest point around <span class="math inline">\(x = 445\)</span> m. That means the last stretch of every ride is uphill, by 0.6 m for the 30 kg rider and 1.4 m for the 140 kg rider.</p>
+</section>
+<section id="rider-speed" class="level3">
+<h3 class="anchored" data-anchor-id="rider-speed">Rider speed</h3>
+<p>The forces along the line are gravity and air drag. With <span class="math inline">\(\alpha = \tan^{-1}(dy/dx)\)</span>, the equation of motion is</p>
+<p><span class="math display">\[
+m\frac{dv}{dt} = mg\sin(-\alpha) - \frac{1}{2}\rho C_d A v^2
+\]</span></p>
+<p>where <span class="math inline">\(\rho = 1.2\)</span> kg/m³, <span class="math inline">\(C_d = 1\)</span>, and the frontal area of a seated rider is <span class="math inline">\(A = 0.05\,m^{2/3}\)</span> m². The path is known as a function of <span class="math inline">\(x\)</span>, not <span class="math inline">\(t\)</span>, so I rewrote this in terms of position. Using <span class="math inline">\(v^2\)</span> as the variable makes the drag term linear and removes the square root from the state:</p>
+<p><span class="math display">\[
+\frac{d(v^2)}{dx} = 2\left(g\sin(-\alpha) - \frac{\rho C_d A}{2m}v^2\right)\sqrt{1 + \left(\frac{dy}{dx}\right)^2}
+\]</span></p>
+<p>In the code, the state <code>v</code> holds <span class="math inline">\(v^2\)</span>, and <code>dydxeval</code> is the derivative of the path spline:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>equation of motion</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="equation of motion"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">oscillatingdiffeq</span><span class="op">=@</span>(<span class="va">x</span><span class="op">,</span><span class="va">v</span>) [<span class="fl">2</span><span class="op">*</span>(<span class="va">g</span><span class="op">*</span><span class="va">sin</span>(<span class="op">-</span><span class="va">atan</span>(<span class="va">dydxeval</span>(<span class="va">x</span>)))<span class="op">-</span>(<span class="fl">0.5</span><span class="op">*</span><span class="va">A</span>(<span class="va">suspect</span>)<span class="op">*</span><span class="va">pair</span><span class="op">.*</span><span class="va">v</span>)<span class="op">/</span><span class="va">masses</span>(<span class="va">suspect</span>))<span class="op">*</span><span class="va">sqrt</span>(<span class="fl">1</span><span class="op">+</span>(<span class="va">dydxeval</span>(<span class="va">x</span>))<span class="op">.^</span><span class="fl">2</span>) ]<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="va">oscillatingsol</span><span class="op">=</span><span class="va">ode45</span>(<span class="va">oscillatingdiffeq</span><span class="op">,</span>[<span class="fl">0</span><span class="op">,</span><span class="va">xfinal</span>]<span class="op">,</span><span class="va">initdata</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="optimization" class="level2">
+<h2 class="anchored" data-anchor-id="optimization">Optimization</h2>
+<p>Each candidate drop and tension goes through the same steps:</p>
+<ol type="1">
+<li>Solve the three equations above for the unloaded line with <code>fsolve</code>.</li>
+<li>Solve for the loaded shape at each of the 101 rider positions, starting each solve from the previous answer.</li>
+<li>Fit the rider’s path with a spline and differentiate it.</li>
+<li>Integrate the speed equation along the line with <code>ode45</code>.</li>
+</ol>
+<section id="solving-for-the-line-shape" class="level3">
+<h3 class="anchored" data-anchor-id="solving-for-the-line-shape">Solving for the line shape</h3>
+<p>The unloaded line comes first. Here <code>bigxt</code> and <code>bigyt</code> are the <span class="math inline">\(X/L\)</span> and <span class="math inline">\(Y/L\)</span> expressions from the model, and the unknowns are <code>v = [a0, b0, L]</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>unloaded line</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="unloaded line"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="va">fvect</span> <span class="op">=</span> <span class="op">@</span>(<span class="va">v</span>) [<span class="va">bigxt</span>(<span class="va">v</span>(<span class="fl">1</span>)<span class="op">,</span><span class="va">v</span>(<span class="fl">2</span>)) <span class="op">-</span> <span class="va">X</span><span class="op">/</span><span class="va">v</span>(<span class="fl">3</span>)<span class="op">,</span><span class="va">bigyt</span>(<span class="va">v</span>(<span class="fl">1</span>)<span class="op">,</span><span class="va">v</span>(<span class="fl">2</span>)) <span class="op">-</span> <span class="va">Y</span><span class="op">/</span><span class="va">v</span>(<span class="fl">3</span>)<span class="op">,</span><span class="va">T0</span><span class="op">*</span><span class="va">cos</span>(<span class="va">atan</span>(<span class="va">v</span>(<span class="fl">1</span>)))<span class="op">-</span><span class="va">v</span>(<span class="fl">3</span>)<span class="op">*</span><span class="va">pz</span><span class="op">/</span><span class="va">v</span>(<span class="fl">2</span>)]<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">x</span> <span class="op">=</span> <span class="va">fsolve</span>(<span class="va">fvect</span><span class="op">,</span>[<span class="fl">0.2</span><span class="op">,</span><span class="fl">0.2</span><span class="op">,</span><span class="fl">500</span>]<span class="op">,</span><span class="va">optimset</span>(<span class="ss">'Display'</span><span class="op">,</span> <span class="ss">'Off'</span>))<span class="op">;</span><span class="co">%solve for a0, b0, and L</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>With a rider on the line, the rope before and after the rider must still span the same <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> together. <code>f</code> is the fraction of the rope the rider has passed, and <code>gamma</code> is the rider’s weight divided by the rope’s. The shape changes only a little from one position to the next, so each solve starts from the previous answer:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>loaded line</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="loaded line"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">gammaa</span> <span class="op">=</span> <span class="va">masses</span><span class="op">.*</span><span class="va">g</span><span class="op">/</span>(<span class="va">x</span>(<span class="fl">3</span>)<span class="op">*</span><span class="va">pz</span>)<span class="op">;</span><span class="co">% make gamma arrays</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">a0</span> <span class="op">=</span> <span class="va">x</span>(<span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">b0</span> <span class="op">=</span> <span class="va">x</span>(<span class="fl">2</span>)<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">%find local a and b for zipline [a,b]:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">prevab</span> <span class="op">=</span> [<span class="va">a0</span><span class="op">,</span><span class="va">b0</span>]<span class="op">;</span><span class="co">% predict a and b originally to be a0 and b0</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">fvals</span> <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">0.01</span><span class="op">:</span><span class="fl">1</span><span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">for</span> <span class="va">i</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">length</span>(<span class="va">fvals</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">gamma</span> <span class="op">=</span> <span class="va">gammaa</span>(<span class="va">suspect</span>)<span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">f</span> <span class="op">=</span> (<span class="va">i</span><span class="op">-</span><span class="fl">1</span>)<span class="op">/</span><span class="fl">100</span><span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="va">abvect</span> <span class="op">=</span> <span class="op">@</span>(<span class="va">v</span>) [<span class="va">sxt</span>(<span class="va">v</span>(<span class="fl">1</span>)<span class="op">,</span><span class="va">v</span>(<span class="fl">2</span>)<span class="op">,</span><span class="va">f</span>)<span class="op">+</span><span class="va">sxtp</span>(<span class="va">v</span>(<span class="fl">1</span>)<span class="op">,</span><span class="va">v</span>(<span class="fl">2</span>)<span class="op">,</span><span class="va">f</span><span class="op">,</span><span class="va">gamma</span>)<span class="op">-</span><span class="va">bigxt</span>(<span class="va">a0</span><span class="op">,</span><span class="va">b0</span>)<span class="op">,</span><span class="va">syt</span>(<span class="va">v</span>(<span class="fl">1</span>)<span class="op">,</span><span class="va">v</span>(<span class="fl">2</span>)<span class="op">,</span><span class="va">f</span>)<span class="op">+</span><span class="va">sytp</span>(<span class="va">v</span>(<span class="fl">1</span>)<span class="op">,</span><span class="va">v</span>(<span class="fl">2</span>)<span class="op">,</span><span class="va">f</span><span class="op">,</span><span class="va">gamma</span>)<span class="op">-</span><span class="va">bigyt</span>(<span class="va">a0</span><span class="op">,</span><span class="va">b0</span>)]<span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="va">ab</span> <span class="op">=</span> <span class="va">fsolve</span>(<span class="va">abvect</span><span class="op">,</span><span class="va">prevab</span><span class="op">,</span><span class="va">optimset</span>(<span class="ss">'Display'</span><span class="op">,</span> <span class="ss">'Off'</span>))<span class="op">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="va">asols</span>(<span class="va">i</span>) <span class="op">=</span> <span class="va">ab</span>(<span class="fl">1</span>)<span class="op">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="va">bsols</span>(<span class="va">i</span>) <span class="op">=</span> <span class="va">ab</span>(<span class="fl">2</span>)<span class="op">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">prevab</span> <span class="op">=</span> <span class="va">ab</span><span class="op">;</span> <span class="co">%use last a and b values as the prediction for the next ones</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="building-the-riders-path" class="level3">
+<h3 class="anchored" data-anchor-id="building-the-riders-path">Building the rider’s path</h3>
+<p>Each solved shape gives one point on the rider’s path. The speed equation needs <span class="math inline">\(dy/dx\)</span> at any <span class="math inline">\(x\)</span> that <code>ode45</code> asks for, not only at these 101 points, so I fit a spline through them and differentiate the spline:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>path spline</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="path spline"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">for</span> <span class="va">i</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">length</span>(<span class="va">fvals</span>) <span class="co">%finding x and y values that match in time</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">xvals</span>(<span class="va">i</span>) <span class="op">=</span> <span class="va">x</span>(<span class="fl">3</span>)<span class="op">*</span><span class="va">sxt</span>(<span class="va">asols</span>(<span class="va">i</span>)<span class="op">,</span><span class="va">bsols</span>(<span class="va">i</span>)<span class="op">,</span><span class="va">fvals</span>(<span class="va">i</span>))<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">yvals</span>(<span class="va">i</span>) <span class="op">=</span> <span class="op">-</span><span class="va">x</span>(<span class="fl">3</span>)<span class="op">*</span><span class="va">syt</span>(<span class="va">asols</span>(<span class="va">i</span>)<span class="op">,</span><span class="va">bsols</span>(<span class="va">i</span>)<span class="op">,</span><span class="va">fvals</span>(<span class="va">i</span>))<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="va">xytspline</span> <span class="op">=</span> <span class="va">spline</span>(<span class="va">xvals</span><span class="op">,</span><span class="va">yvals</span>)<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="va">dxytspline</span> <span class="op">=</span> <span class="va">fnder</span>(<span class="va">xytspline</span><span class="op">,</span> <span class="fl">1</span>)<span class="op">;</span> <span class="co">%find dy/dx(x)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="va">dydxeval</span> <span class="op">=</span> <span class="op">@</span>(<span class="va">x</span>) <span class="va">ppval</span>(<span class="va">dxytspline</span><span class="op">,</span> <span class="va">x</span>)<span class="op">;</span> <span class="co">%define the spline like this to access it later</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="searching-the-design" class="level3">
+<h3 class="anchored" data-anchor-id="searching-the-design">Searching the design</h3>
+<p><code>fmincon</code> searches over the drop and tension, starting from 39 m and 39 kN and staying inside the allowed ranges:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>optimizer</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="optimizer"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">opts</span> <span class="op">=</span> <span class="va">optimset</span>(<span class="ss">'Algorithm'</span><span class="op">,</span><span class="ss">'interior-point'</span><span class="op">,</span><span class="ss">'DiffMinChange'</span><span class="op">,</span><span class="fl">1e-0</span>)<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="va">anzguer</span> <span class="op">=</span> <span class="va">fmincon</span>(<span class="op">@</span><span class="va">zipline</span><span class="op">,</span>[<span class="fl">39</span><span class="op">,</span><span class="fl">39000</span>]<span class="op">,</span>[]<span class="op">,</span>[]<span class="op">,</span>[]<span class="op">,</span>[]<span class="op">,</span>[<span class="fl">10</span><span class="op">,</span><span class="fl">0</span>]<span class="op">,</span>[<span class="fl">40</span><span class="op">,</span><span class="fl">50000</span>]<span class="op">,</span>[]<span class="op">,</span><span class="va">opts</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The objective is the negative of the 70 kg rider’s peak <span class="math inline">\(v^2\)</span>, so minimizing it maximizes speed. It returns a large penalty if an exit constraint fails:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>constraint penalties</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="constraint penalties"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> (<span class="va">velocities</span>(<span class="fl">2001</span>)<span class="op">&lt;</span><span class="fl">0</span>)    <span class="co">% v^2 at the exit: rider did not arrive</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">output</span> <span class="op">=</span> <span class="fl">100</span><span class="op">-</span><span class="fl">10</span><span class="op">*</span><span class="va">velocities</span>(<span class="fl">2001</span>)<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">loop</span> <span class="op">=</span> <span class="fl">5</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> (<span class="va">velocities</span>(<span class="fl">2001</span>)<span class="op">&gt;</span><span class="fl">25</span>)   <span class="co">% exit speed above 5 m/s</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="va">output</span> <span class="op">=</span> <span class="fl">100</span><span class="op">+</span><span class="fl">10</span><span class="op">*</span><span class="va">velocities</span>(<span class="fl">2001</span>)<span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">loop</span> <span class="op">=</span> <span class="fl">5</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Each rider takes about a hundred solves, so the code checks the riders in order of how likely they are to fail: 30 kg first, then 140 kg, then 70 kg. A design that fails an exit check stops immediately, without the work of solving for the other riders:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>rider order</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="rider order"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">switch</span> <span class="va">loop</span> <span class="co">%This gives the priority on which person we check, first the 30kg, then 140kg then 70kg.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> <span class="fl">2</span><span class="op">;</span> <span class="va">output</span> <span class="op">=</span> <span class="op">-</span><span class="va">max</span>(<span class="va">velocities</span>)<span class="op">;</span> <span class="va">loop</span> <span class="op">=</span> <span class="fl">5</span><span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> <span class="fl">3</span><span class="op">;</span> <span class="va">loop</span> <span class="op">=</span> <span class="fl">2</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">case</span> <span class="fl">1</span><span class="op">;</span> <span class="va">loop</span> <span class="op">=</span> <span class="fl">3</span><span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">otherwise</span><span class="op">;</span> <span class="va">loop</span> <span class="op">=</span> <span class="fl">5</span><span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span><span class="co">% this switch case minimizes the number of times we solve differential equations and fsolves</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<table class="caption-top table">
+<caption>Results for the optimal design, a 40 m drop with <span class="math inline">\(T_0\)</span> = 39.57 kN</caption>
+<thead>
+<tr class="header">
+<th>Rider</th>
+<th>Peak speed</th>
+<th>Peak location</th>
+<th>Exit speed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>30 kg</td>
+<td>11.53 m/s</td>
+<td><span class="math inline">\(x\)</span> = 114 m</td>
+<td>0.02 m/s</td>
+</tr>
+<tr class="even">
+<td>70 kg</td>
+<td><strong>12.89 m/s</strong></td>
+<td><span class="math inline">\(x\)</span> = 131 m</td>
+<td>2.18 m/s</td>
+</tr>
+<tr class="odd">
+<td>140 kg</td>
+<td>14.04 m/s</td>
+<td><span class="math inline">\(x\)</span> = 145 m</td>
+<td>3.38 m/s</td>
+</tr>
+</tbody>
+</table>
+<p>Drag dominates the ride. Without it, a 40 m drop could give a rider up to 28 m/s, but the 70 kg rider peaks at less than half of that and leaves with about 0.6 % of the energy released by the drop.</p>
+<p>The 30 kg rider sets the limit because drag matters more for lighter riders. Frontal area grows more slowly than mass, so the drag deceleration at a given speed scales with <span class="math inline">\(m^{-1/3}\)</span>. At the same speed, a 30 kg rider slows down about 1.7 times as fast as a 140 kg rider, and reaches the final uphill stretch with the least energy.</p>
+<section id="checking-the-optimum" class="level3">
+<h3 class="anchored" data-anchor-id="checking-the-optimum">Checking the optimum</h3>
+<p><code>fmincon</code> is a local optimizer, and the penalties make this objective jump at the edges of the allowed region, so I checked the result with separate sweeps of tension and drop. With the drop fixed at 40 m, tension trades peak speed against exit speed:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tension-sweep.png" class="img-fluid figure-img"></p>
+<figcaption>Sweeping tension at a 40 m drop. The shaded band is the range of tensions that meets every constraint.</figcaption>
+</figure>
+</div>
+<p>The allowed range runs from 39.57 kN, where the 30 kg rider first reaches the end, to 44.37 kN, where the 140 kg rider reaches the 5 m/s limit. Peak speed falls steadily with tension, from 12.89 to 12.57 m/s across this range. The best design is therefore the lowest tension that still works, which puts it right on the 30 kg rider’s constraint.</p>
+<p>The optimizer also pushed the drop to its 40 m limit. To see why, I found the lowest working tension at each drop:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Drop</th>
+<th>Lowest working tension</th>
+<th>70 kg peak speed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>32.5 m</td>
+<td>48.41 kN</td>
+<td>11.63 m/s</td>
+</tr>
+<tr class="even">
+<td>35 m</td>
+<td>45.03 kN</td>
+<td>12.06 m/s</td>
+</tr>
+<tr class="odd">
+<td>37.5 m</td>
+<td>42.12 kN</td>
+<td>12.48 m/s</td>
+</tr>
+<tr class="even">
+<td>40 m</td>
+<td>39.57 kN</td>
+<td>12.89 m/s</td>
+</tr>
+</tbody>
+</table>
+<p>A larger drop helps twice: it gives riders more potential energy, and it lets the line run at a lower tension. Peak speed rises at every step, so the optimum sits at the 40 m limit. At drops of 30 m or less, the 30 kg rider cannot finish at any tension up to 50 kN.</p>
+</section>
+</section>
+<section id="adding-friction-and-a-safety-margin" class="level2">
+<h2 class="anchored" data-anchor-id="adding-friction-and-a-safety-margin">Adding friction and a safety margin</h2>
+<p>The optimum has a weakness. The 30 kg rider exits at only 0.02 m/s, and the result is very sensitive to tension: at 39,700 N the exit speed is 0.52 m/s, while at 39,570 N the rider stops short of the end. A real line also has friction, which the model above ignores.</p>
+<p>To make the design more realistic, I added friction with coefficient <span class="math inline">\(\mu\)</span> and required an exit speed of at least 1 m/s. The friction force uses the normal force from the rider’s weight, ignoring the smaller term from the line’s curvature:</p>
+<p><span class="math display">\[
+\frac{dv}{dt} = g\sin(-\alpha) - \mu g\cos\alpha - \frac{\rho C_d A}{2m}v^2
+\]</span></p>
+<p>In the code, this adds one term to the equation of motion, shown here for <span class="math inline">\(\mu = 0.015\)</span>. The exit check also changes from <span class="math inline">\(v^2 &lt; 0\)</span> to <span class="math inline">\(v^2 &lt; 1\)</span>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>equation of motion with friction</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="equation of motion with friction"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">oscillatingdiffeq</span><span class="op">=@</span>(<span class="va">x</span><span class="op">,</span><span class="va">v</span>) [<span class="fl">2</span><span class="op">*</span>(<span class="op">-</span><span class="fl">0.015</span><span class="op">*</span><span class="va">g</span><span class="op">*</span><span class="va">cos</span>(<span class="op">-</span><span class="va">atan</span>(<span class="va">dydxeval</span>(<span class="va">x</span>)))<span class="op">+</span><span class="va">g</span><span class="op">*</span><span class="va">sin</span>(<span class="op">-</span><span class="va">atan</span>(<span class="va">dydxeval</span>(<span class="va">x</span>)))<span class="op">-</span>(<span class="fl">0.5</span><span class="op">*</span><span class="va">A</span>(<span class="va">suspect</span>)<span class="op">*</span><span class="va">pair</span><span class="op">.*</span><span class="va">v</span>)<span class="op">/</span><span class="va">masses</span>(<span class="va">suspect</span>))<span class="op">*</span><span class="va">sqrt</span>(<span class="fl">1</span><span class="op">+</span>(<span class="va">dydxeval</span>(<span class="va">x</span>))<span class="op">.^</span><span class="fl">2</span>) ]<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\mu\)</span></th>
+<th><span class="math inline">\(T_0\)</span></th>
+<th>Peak speed (30 / 70 / 140 kg)</th>
+<th>Exit speed (30 / 70 / 140 kg)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 (no margin)</td>
+<td>39.57 kN</td>
+<td>11.53 / 12.89 / 14.04 m/s</td>
+<td>0.02 / 2.18 / 3.38 m/s</td>
+</tr>
+<tr class="even">
+<td>0.01</td>
+<td>45.77 kN</td>
+<td>10.76 / 12.02 / 13.09 m/s</td>
+<td>1.00 / 2.33 / 3.39 m/s</td>
+</tr>
+<tr class="odd">
+<td>0.015</td>
+<td>49.29 kN</td>
+<td>10.36 / 11.58 / 12.62 m/s</td>
+<td>1.00 / 2.27 / 3.29 m/s</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/friction-profiles.png" class="img-fluid figure-img"></p>
+<figcaption>Speed along the line with friction, at the optimal tension for each friction coefficient</figcaption>
+</figure>
+</div>
+<p>The pattern stays the same. The optimum still uses the full 40 m drop and the lowest tension that gets the 30 kg rider to the end at the required speed. Friction just raises that tension. At the 50 kN limit, the 1 m/s margin can only be met up to about <span class="math inline">\(\mu = 0.016\)</span>. Beyond that, no allowed tension gets the lightest rider to the end at that speed.</p>
+</section>
+<section id="assumptions-and-limits" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions-and-limits">Assumptions and limits</h2>
+<ul>
+<li>The cable does not stretch, its weight is uniform, and its supports do not move.</li>
+<li>There is no wind, and air density, gravity, <span class="math inline">\(C_d\)</span>, and <span class="math inline">\(A\)</span> are constant.</li>
+<li>Every rider starts from rest.</li>
+<li>There is no friction, except in the friction study above.</li>
+<li>The 50 kN limit applies to <span class="math inline">\(T_0\)</span>, the top tension with no rider on the line.</li>
+</ul>
+<p>The last assumption matters. Adding a rider raises the tension. Using the model’s loaded shapes, a 140 kg rider brings the top tension to about 50.7 kN in the base design and 63.2 kN in the <span class="math inline">\(\mu = 0.015\)</span> design. A cable that cannot stretch likely overstates this, and these values are far below the line’s breaking strength of five times the limit, but a real design should apply the limit under load.</p>
+</section>
+<section id="takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="takeaways">Takeaways</h2>
+<ul>
+<li>The best design sits on a constraint, not at a smooth peak. Peak speed keeps rising as tension falls, right up until the lightest rider stops arriving.</li>
+<li>An optimum on a constraint leaves no margin. A change of a few newtons decided whether the 30 kg rider finished, so the 1 m/s requirement made the design much more usable.</li>
+<li>A local optimizer’s answer is worth checking. The sweeps confirmed the result and also showed why it was the answer, which a single number from <code>fmincon</code> could not.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- Bottom tab bar for phones; hidden on wide screens (see styles.css). Links are relative to the site root. -->
+<div class="mobile-sheet-backdrop" hidden=""></div>
+
+<div class="mobile-sheet" id="sheet-projects" hidden="">
+  <div class="mobile-sheet-group">Engineering</div>
+  <a data-href="Engineering-Projects/Hybrid-Rocket/index.html">Hybrid Rocket</a>
+  <a data-href="Engineering-Projects/Hybrid-Rocket-Engine/index.html">Hybrid Rocket Engine</a>
+  <a data-href="Engineering-Projects/Liquid-Rocket-Engine/index.html">Liquid Rocket Engine</a>
+  <a data-href="Engineering-Projects/Rocket-Avionics-from-Scratch/index.html">Rocket Avionics From Scratch</a>
+  <a data-href="Engineering-Projects/Hardware-Input-Control/index.html">Hardware Input Control</a>
+  <div class="mobile-sheet-group">Systems, Controls &amp; Digital Design</div>
+  <a data-href="Systems-Controls-Projects/Digital-PI-Observer-Control/index.html">Digital Control of an RC Circuit</a>
+  <a data-href="Systems-Controls-Projects/Inverted-Pendulum/index.html">Inverted Pendulum on a Cart</a>
+  <a data-href="Systems-Controls-Projects/Square-to-Sine-Filtering/index.html">Square Wave to Sine Wave Filtering</a>
+  <a data-href="Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.html">Multicycle RISC-V Processor</a>
+  <a data-href="Systems-Controls-Projects/Zipline-Speed-Optimization/index.html">Zipline Speed Optimization</a>
+  <div class="mobile-sheet-group">CS &amp; Math</div>
+  <a data-href="CS-Math-Projects/AI-Image-Depth-Perception/index.html">AI Image Depth Perception</a>
+  <a data-href="CS-Math-Projects/Best-Route-Using-ML/index.html">Best Route Using ML</a>
+  <a data-href="CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html">Hyperbola Integral Using Rotations</a>
+</div>
+
+<div class="mobile-sheet" id="sheet-labs" hidden="">
+  <div class="mobile-sheet-group">DJ Set (E155 Final)</div>
+  <a data-href="E155FinalProject/index.html">Overview</a>
+  <a data-href="E155FinalProject/bill.html">BOM, Schematics &amp; Block Diagrams</a>
+  <a data-href="E155FinalProject/fpgaD.html">FPGA Design</a>
+  <a data-href="E155FinalProject/mcuD.html">MCU Design</a>
+  <a data-href="E155FinalProject/results.html">Results</a>
+  <div class="mobile-sheet-group">E155 Labs</div>
+  <a data-href="labs/lab1/lab1.html">Lab 1: FPGA &amp; MCU Setup</a>
+  <a data-href="labs/lab2/lab2.html">Lab 2: Multiplexed 7-Segment Display</a>
+  <a data-href="labs/lab3/lab3.html">Lab 3: Keypad Scanner</a>
+  <a data-href="labs/lab4/lab4.html">Lab 4: Digital Audio</a>
+  <a data-href="labs/lab5/lab5.html">Lab 5: Interrupts</a>
+  <a data-href="labs/lab6/lab6.html">Lab 6: IoT and SPI</a>
+  <a data-href="labs/resources/resources.html">E155 Resources</a>
+</div>
+
+<nav class="mobile-tabbar" aria-label="Site sections">
+  <a class="mobile-tab" data-href="index.html" data-section="home">
+    <i class="bi bi-house"></i><span>Home</span>
+  </a>
+  <button class="mobile-tab" type="button" data-sheet="sheet-projects" data-section="projects">
+    <i class="bi bi-grid"></i><span>Projects</span>
+  </button>
+  <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
+    <i class="bi bi-cpu"></i><span>E155</span>
+  </button>
+  <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
+    <i class="bi bi-file-earmark-person"></i><span>Resume</span>
+  </a>
+</nav>
+
+<script>
+(function () {
+  // Quarto loads site_libs with a path relative to the current page; reuse it to find the site root.
+  var lib = document.querySelector('script[src*="site_libs/"]');
+  var root = lib ? lib.getAttribute('src').split('site_libs/')[0] : '';
+  document.querySelectorAll('[data-href]').forEach(function (a) {
+    a.setAttribute('href', root + a.getAttribute('data-href'));
+  });
+
+  // Highlight the tab for the current section
+  var path = location.pathname;
+  var section = /Engineering-Projects|Systems-Controls-Projects|CS-Math-Projects/.test(path) ? 'projects'
+    : /E155FinalProject|\/labs\//.test(path) ? 'labs'
+    : /\/Resume\//.test(path) ? 'resume'
+    : 'home';
+  var active = document.querySelector('.mobile-tab[data-section="' + section + '"]');
+  if (active) active.classList.add('active');
+
+  var backdrop = document.querySelector('.mobile-sheet-backdrop');
+  var openSheet = null;
+
+  function close() {
+    if (!openSheet) return;
+    openSheet.hidden = true;
+    backdrop.hidden = true;
+    document.querySelector('[data-sheet="' + openSheet.id + '"]').setAttribute('aria-expanded', 'false');
+    openSheet = null;
+  }
+
+  document.querySelectorAll('[data-sheet]').forEach(function (btn) {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', function () {
+      var sheet = document.getElementById(btn.getAttribute('data-sheet'));
+      var wasOpen = openSheet === sheet;
+      close();
+      if (wasOpen) return;
+      sheet.hidden = false;
+      backdrop.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      openSheet = sheet;
+    });
+  });
+
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>2026 Carlos Ojeda de Silva</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
