@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Multicycle RISC-V Processor – Carlos Ojeda de Silva Portfolio</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Multicycle RISC-V Processor – Carlos Ojeda de Silva Portfolio">
+<meta property="og:description" content="Extending a single-cycle RV32I processor in SystemVerilog so one memory and one ALU can do the work of several">
+<meta property="og:image" content="https://carlos-o-de-s.github.io/Systems-Controls-Projects/Multicycle-RISC-V-Processor/images/block-diagram.png">
+<meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:height" content="1172">
+<meta property="og:image:width" content="1996">
+<meta name="twitter:title" content="Multicycle RISC-V Processor – Carlos Ojeda de Silva Portfolio">
+<meta name="twitter:description" content="Extending a single-cycle RV32I processor in SystemVerilog so one memory and one ALU can do the work of several">
+<meta name="twitter:image" content="https://carlos-o-de-s.github.io/Systems-Controls-Projects/Multicycle-RISC-V-Processor/images/block-diagram.png">
+<meta name="twitter:image-height" content="1172">
+<meta name="twitter:image-width" content="1996">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-xl " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Carlos Ojeda de Silva Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-e155-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">E155 Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-e155-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/lab1/lab1.html">
+ <span class="dropdown-text">Lab 1: FPGA &amp; MCU Setup</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab2/lab2.html">
+ <span class="dropdown-text">Lab 2: Multiplexed 7-Segment Display</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab3/lab3.html">
+ <span class="dropdown-text">Lab 3: Keypad Scanner</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab4/lab4.html">
+ <span class="dropdown-text">Lab 4: Digital Audio</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab5/lab5.html">
+ <span class="dropdown-text">Lab 5: Interrupts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab6/lab6.html">
+ <span class="dropdown-text">Lab 6: IoT and SPI</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/resources/resources.html">
+ <span class="dropdown-text">E155 Resources</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-dj-set-(e155-final" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">DJ Set (E155 Final)</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-dj-set-(e155-final">    
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/bill.html">
+ <span class="dropdown-text">BOM, Schematics &amp; Block Diagrams</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/fpgaD.html">
+ <span class="dropdown-text">FPGA Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/mcuD.html">
+ <span class="dropdown-text">MCU Design</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/results.html">
+ <span class="dropdown-text">Results</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/reference.html">
+ <span class="dropdown-text">References</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../E155FinalProject/ai.html">
+ <span class="dropdown-text">AI Usage</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-engineering-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Engineering Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-engineering-projects">    
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hybrid-Rocket/index.html">
+ <span class="dropdown-text">Hybrid Rocket</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hybrid-Rocket-Engine/index.html">
+ <span class="dropdown-text">Hybrid Rocket Engine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Liquid-Rocket-Engine/index.html">
+ <span class="dropdown-text">Liquid Rocket Engine</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Rocket-Avionics-from-Scratch/index.html">
+ <span class="dropdown-text">Rocket Avionics From Scratch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Engineering-Projects/Hardware-Input-Control/index.html">
+ <span class="dropdown-text">Hardware Input Control</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-systems-controls--digital-design" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Systems, Controls &amp; Digital Design</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-systems-controls--digital-design">    
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Digital-PI-Observer-Control/index.html">
+ <span class="dropdown-text">Digital Control of an RC Circuit</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Inverted-Pendulum/index.html">
+ <span class="dropdown-text">Inverted Pendulum on a Cart</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Square-to-Sine-Filtering/index.html">
+ <span class="dropdown-text">Square Wave to Sine Wave Filtering</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.html">
+ <span class="dropdown-text">Multicycle RISC-V Processor</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-cs--math-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">CS &amp; Math Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-cs--math-projects">    
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/AI-Image-Depth-Perception/index.html">
+ <span class="dropdown-text">AI Image Depth Perception</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/Best-Route-Using-ML/index.html">
+ <span class="dropdown-text">Best Route Using ML</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html">
+ <span class="dropdown-text">Hyperbola Integral Using Rotations</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../../Resume/resume.html"> 
+<span class="menu-text">CV/Resume</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#from-single-cycle-to-multicycle" id="toc-from-single-cycle-to-multicycle" class="nav-link" data-scroll-target="#from-single-cycle-to-multicycle">From single-cycle to multicycle</a></li>
+  <li><a href="#datapath" id="toc-datapath" class="nav-link" data-scroll-target="#datapath">Datapath</a></li>
+  <li><a href="#controller" id="toc-controller" class="nav-link" data-scroll-target="#controller">Controller</a></li>
+  <li><a href="#verification" id="toc-verification" class="nav-link" data-scroll-target="#verification">Verification</a>
+  <ul class="collapse">
+  <li><a href="#tracing-the-first-three-instructions" id="toc-tracing-the-first-three-instructions" class="nav-link" data-scroll-target="#tracing-the-first-three-instructions">Tracing the first three instructions</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  </ul></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways">Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multicycle RISC-V Processor</h1>
+<p class="subtitle lead">Extending a single-cycle RV32I processor in SystemVerilog so one memory and one ALU can do the work of several</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>A single-cycle processor finishes every instruction in one long clock cycle. That forces it to have separate instruction and data memories and extra adders, because everything an instruction needs has to happen at the same time.</p>
+<p>In this project I extended a single-cycle RISC-V processor to work as a <strong>multicycle</strong> processor, which splits each instruction into shorter steps. Because the steps happen in different cycles, the hardware can be shared:</p>
+<ul>
+<li><strong>One memory</strong> holds both instructions and data.</li>
+<li><strong>One ALU</strong> computes PC + 4, branch targets, memory addresses, and arithmetic results.</li>
+<li><strong>Registers</strong> between the steps hold values from one cycle to the next.</li>
+<li><strong>A finite state machine</strong> replaces the single-cycle decoder and sequences each instruction.</li>
+</ul>
+<p>The processor implements a subset of RV32I: <code>lw</code>, <code>sw</code>, <code>add</code>, <code>sub</code>, <code>and</code>, <code>or</code>, <code>slt</code>, <code>addi</code>, <code>andi</code>, <code>ori</code>, <code>slti</code>, <code>beq</code>, and <code>jal</code>. It ran the full test program correctly in simulation, finishing with the expected value of 71 written to address 84.</p>
+<p><em>Developed for Harvey Mudd’s Digital Electronics and Computer Engineering course (E85). The starting single-cycle code, the testbench, and the test program come from Harris &amp; Harris, Digital Design and Computer Architecture: RISC-V Edition. I wrote the multicycle datapath changes and the controller FSM.</em></p>
+</section>
+<section id="from-single-cycle-to-multicycle" class="level2">
+<h2 class="anchored" data-anchor-id="from-single-cycle-to-multicycle">From single-cycle to multicycle</h2>
+<p>The processor keeps the textbook’s split between a datapath and a controller. The biggest visible change is that the controller now needs a clock and reset, because it has state. It also drives a new set of enables and selects, and only one address now goes to memory.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/block-diagram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Block hierarchy and the signals between the controller, datapath, and memory"><img src="images/block-diagram.png" class="img-fluid figure-img" style="width:75.0%" alt="Block hierarchy and the signals between the controller, datapath, and memory"></a></p>
+<figcaption>Block hierarchy and the signals between the controller, datapath, and memory</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Change</th>
+<th>Why it is needed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Combined instruction and data memory (<code>dimem</code>)</td>
+<td>The address now comes from a mux (<code>AdrSrc</code>), which picks the PC during fetch and the ALU’s result during a load or store.</td>
+</tr>
+<tr class="even">
+<td><code>Instr</code> register with enable <code>IRWrite</code></td>
+<td>The memory output changes when the address changes, so the instruction has to be saved for the rest of its steps.</td>
+</tr>
+<tr class="odd">
+<td><code>OldPC</code> register</td>
+<td>The PC is updated during fetch, but branches and jumps are relative to the original instruction’s address.</td>
+</tr>
+<tr class="even">
+<td><code>Data</code> register</td>
+<td>Holds the value read from memory for the following cycle, when it is written to the register file.</td>
+</tr>
+<tr class="odd">
+<td><code>A</code> and <code>WriteData</code> registers</td>
+<td>Hold the two register file outputs between decode and execute.</td>
+</tr>
+<tr class="even">
+<td><code>ALUOut</code> register</td>
+<td>Holds the ALU’s result for the next cycle, so the ALU is free to do something else.</td>
+</tr>
+<tr class="odd">
+<td><code>mux3</code> on both ALU inputs (<code>ALUSrcA</code>, <code>ALUSrcB</code>)</td>
+<td>The single ALU now takes the PC, <code>OldPC</code>, or <code>A</code> on one side and <code>WriteData</code>, the immediate, or the constant 4 on the other.</td>
+</tr>
+<tr class="even">
+<td>FSM controller</td>
+<td>Control signals now depend on the current step, not only on the instruction.</td>
+</tr>
+</tbody>
+</table>
+<p>The top level shows the shared memory: there is a single <code>DataAdr</code> for both instruction fetches and data accesses.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>top.sv</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="top.sv"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top(<span class="kw">input</span>  <span class="kw">logic</span>        clk, reset,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>           <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] WriteData, DataAdr,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>           <span class="kw">output</span> <span class="kw">logic</span>        MemWrite);</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] Instr, ReadData;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// instantiate processor and memories</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  multicycle multicycle(clk, reset, DataAdr, MemWrite,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                        WriteData, ReadData);</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  dimem dimem(clk, MemWrite, DataAdr, WriteData, ReadData);</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> dimem(<span class="kw">input</span>  <span class="kw">logic</span>        clk, WE,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>             <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] A, WD,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>             <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] RD);</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] RAM[<span class="dv">63</span>:<span class="dv">0</span>];</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">assign</span> RD = RAM[A[<span class="dv">31</span>:<span class="dv">2</span>]]; <span class="co">// word aligned</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">initial</span> <span class="kw">$readmemh</span>(<span class="st">"memfile.dat"</span>, RAM);</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_ff</span> @(<span class="kw">posedge</span> clk)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> (WE) RAM[A[<span class="dv">31</span>:<span class="dv">2</span>]] &lt;= WD;</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="datapath" class="level2">
+<h2 class="anchored" data-anchor-id="datapath">Datapath</h2>
+<p>The datapath is where the sharing happens. There is no separate adder for the next PC or for branch targets. Instead, every path into or out of the ALU goes through a mux, and the controller chooses the path for each cycle.</p>
+<p>The <code>Result</code> bus is the key signal. It drives the PC, the memory address mux, and the register file’s write port, so a single 3-input mux (<code>ResultSrc</code>) picks between the saved <code>ALUOut</code>, the saved memory <code>Data</code>, and the live <code>ALUResult</code>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>datapath</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="datapath"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> datapath(<span class="kw">input</span>  <span class="kw">logic</span>        clk, reset,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>]  ResultSrc, ALUSrcA, ALUSrcB,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="kw">input</span>  <span class="kw">logic</span>        AdrSrc, IRWrite, PCWrite,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                <span class="kw">input</span>  <span class="kw">logic</span>        RegWrite,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>]  ImmSrc,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">2</span>:<span class="dv">0</span>]  ALUControl,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                <span class="kw">output</span> <span class="kw">logic</span>        Zero,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] Adr,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] Instr, <span class="co">//now output</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] WriteData, <span class="co">//no ALUResult</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                <span class="kw">input</span>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] ReadData);</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] PC, ALUResult, ALUOut, Data, OldPC;</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] ImmExt, A, Out1, Out2;</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] SrcA, SrcB;</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> [<span class="dv">31</span>:<span class="dv">0</span>] Result;</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// next PC logic</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  flopre #(<span class="dv">32</span>) pcreg(clk, reset, Result, PCWrite, PC);</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  mux2 #(<span class="dv">32</span>)  adrmux(PC, Result, AdrSrc, Adr);</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  flopre #(<span class="dv">32</span>) insreg(clk, reset, ReadData, IRWrite, Instr);</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  flopre #(<span class="dv">32</span>) opcreg(clk, reset, PC, IRWrite, OldPC);</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  flopr #(<span class="dv">32</span>) datareg(clk, reset, ReadData, Data);</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// register file logic</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  RegFile     RF(clk, RegWrite, Instr[<span class="dv">19</span>:<span class="dv">15</span>], Instr[<span class="dv">24</span>:<span class="dv">20</span>],</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                 Instr[<span class="dv">11</span>:<span class="dv">7</span>], Result, Out1, Out2);</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  Extend      Ext(Instr[<span class="dv">31</span>:<span class="dv">7</span>], ImmSrc, ImmExt);</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  flopr #(<span class="dv">32</span>) Areg(clk, reset, Out1, A);</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  flopr #(<span class="dv">32</span>) Breg(clk, reset, Out2, WriteData);</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ALU logic</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  mux3 #(<span class="dv">32</span>)  SrcAmux(PC, OldPC, A, ALUSrcA, SrcA);</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  mux3 #(<span class="dv">32</span>)  SrcBmux(WriteData, ImmExt, <span class="bn">32'b00000000000000000000000000000100</span>, ALUSrcB, SrcB);</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  alu         ALU(SrcA, SrcB, ALUControl, ALUResult, Zero);</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  flopr #(<span class="dv">32</span>) Resreg(clk, reset, ALUResult, ALUOut);</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  mux3 #(<span class="dv">32</span>)  Resultmux(ALUOut, Data, ALUResult, ResultSrc, Result);</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="controller" class="level2">
+<h2 class="anchored" data-anchor-id="controller">Controller</h2>
+<p>The controller replaces the single-cycle decoder with an 11-state FSM. Every instruction shares the first two states, then branches on its opcode.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+  S0["S0 Fetch"] --&gt; S1["S1 Decode"]
+  S1 -- "lw, sw" --&gt; S2["S2 MemAdr"]
+  S1 -- "R-type" --&gt; S6["S6 ExecuteR"]
+  S1 -- "I-type ALU" --&gt; S8["S8 ExecuteI"]
+  S1 -- "jal" --&gt; S9["S9 JAL"]
+  S1 -- "beq" --&gt; S10["S10 BEQ"]
+  S2 -- "lw" --&gt; S3["S3 MemRead"]
+  S2 -- "sw" --&gt; S5["S5 MemWrite"]
+  S3 --&gt; S4["S4 MemWB"]
+  S6 --&gt; S7["S7 ALUWB"]
+  S8 --&gt; S7
+  S9 --&gt; S7
+  S4 --&gt; S0
+  S5 --&gt; S0
+  S7 --&gt; S0
+  S10 --&gt; S0
+</pre>
+</div>
+<p></p><figcaption> Controller state transitions. Unrecognized opcodes return from S1 to S0.</figcaption> </figure><p></p>
+</div>
+</div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 14%">
+<col style="width: 76%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>State</th>
+<th>Name</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>S0</td>
+<td>Fetch</td>
+<td>Reads the instruction at <code>PC</code> into <code>Instr</code>, saves <code>OldPC</code>, and updates <code>PC</code> to PC + 4.</td>
+</tr>
+<tr class="even">
+<td>S1</td>
+<td>Decode</td>
+<td>Reads the registers and computes <code>OldPC</code> + immediate, which is the target for <code>beq</code> and <code>jal</code>.</td>
+</tr>
+<tr class="odd">
+<td>S2</td>
+<td>MemAdr</td>
+<td>Computes <code>A</code> + immediate, the load or store address.</td>
+</tr>
+<tr class="even">
+<td>S3</td>
+<td>MemRead</td>
+<td>Sends <code>ALUOut</code> to memory as the address.</td>
+</tr>
+<tr class="odd">
+<td>S4</td>
+<td>MemWB</td>
+<td>Writes <code>Data</code> to the register file.</td>
+</tr>
+<tr class="even">
+<td>S5</td>
+<td>MemWrite</td>
+<td>Sends <code>ALUOut</code> to memory as the address and writes <code>WriteData</code>.</td>
+</tr>
+<tr class="odd">
+<td>S6</td>
+<td>ExecuteR</td>
+<td>Runs the ALU on <code>A</code> and <code>WriteData</code>.</td>
+</tr>
+<tr class="even">
+<td>S7</td>
+<td>ALUWB</td>
+<td>Writes <code>ALUOut</code> to the register file.</td>
+</tr>
+<tr class="odd">
+<td>S8</td>
+<td>ExecuteI</td>
+<td>Runs the ALU on <code>A</code> and the immediate.</td>
+</tr>
+<tr class="even">
+<td>S9</td>
+<td>JAL</td>
+<td>Loads the target from <code>ALUOut</code> into <code>PC</code>, and computes <code>OldPC</code> + 4 for the link register.</td>
+</tr>
+<tr class="odd">
+<td>S10</td>
+<td>BEQ</td>
+<td>Subtracts <code>A</code> and <code>WriteData</code>. If <code>Zero</code> is set, loads the target from <code>ALUOut</code> into <code>PC</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>The number of cycles depends on the instruction: 3 for <code>beq</code>, 4 for <code>sw</code>, <code>jal</code>, and the R-type and I-type ALU instructions, and 5 for <code>lw</code>.</p>
+<p><code>S0</code> is the clearest example of how the shared hardware works. The ALU adds 4 to the PC, and that result goes straight through <code>ResultSrc</code> to the PC register without waiting for <code>ALUOut</code>. On the same clock edge, the instruction is captured.</p>
+<p><code>jal</code> is the most interesting path because it needs two separate values from one ALU. <code>S1</code> already put the jump target in <code>ALUOut</code>, so <code>S9</code> loads the PC from there while the ALU computes the return address. <code>S7</code> then writes that return address to <code>rd</code>, reusing the same write-back state as the arithmetic instructions.</p>
+<p>PC updates come from two sources: unconditional updates in <code>S0</code> and <code>S9</code>, and conditional updates in <code>S10</code> that depend on the ALU’s <code>Zero</code> flag.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>controller (excerpt)</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="controller (excerpt)"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">assign</span> pcwrite = ((branch &amp;&amp; zero) || PCUpdate);</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">case</span> (<span class="ot">state</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  S0: <span class="kw">begin</span>                      <span class="co">// Fetch: PC &lt;- PC + 4</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    nextstate = S1;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    irwrite = <span class="bn">1'b1</span>;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    alusrca = <span class="bn">2'b00</span>;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    alusrcb = <span class="bn">2'b10</span>;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    resultsrc = <span class="bn">2'b10</span>;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    PCUpdate = <span class="bn">1'b1</span>;</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  S1: <span class="kw">begin</span>                      <span class="co">// Decode: ALUOut &lt;- OldPC + imm</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    alusrca = <span class="bn">2'b01</span>;</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    alusrcb = <span class="bn">2'b01</span>;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">case</span> (op)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b0000011</span>: nextstate = S2;</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b0100011</span>: nextstate = S2;</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b0110011</span>: nextstate = S6;</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b0010011</span>: nextstate = S8;</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b1101111</span>: nextstate = S9;</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b1100011</span>: nextstate = S10;</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>      <span class="kw">default</span>: nextstate = S0;</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">endcase</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Full controller
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>controller</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="controller"><pre class="sourceCode systemverilog code-with-copy"><code class="sourceCode systemverilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> controller(<span class="kw">input</span> <span class="kw">logic</span> clk,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span> <span class="kw">logic</span> reset,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span> <span class="kw">logic</span> [<span class="dv">6</span>:<span class="dv">0</span>] op,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span> <span class="kw">logic</span> [<span class="dv">2</span>:<span class="dv">0</span>] funct3,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span> <span class="kw">logic</span> funct7b5,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">input</span> <span class="kw">logic</span> zero,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] immsrc,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] alusrca, alusrcb,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">1</span>:<span class="dv">0</span>] resultsrc,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> adrsrc,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> [<span class="dv">2</span>:<span class="dv">0</span>] alucontrol,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> irwrite, pcwrite,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">output</span> <span class="kw">logic</span> regwrite, memwrite);</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span>[<span class="dv">1</span>:<span class="dv">0</span>] ALUOp;</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">logic</span> PCUpdate, branch;</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">assign</span> pcwrite = ((branch &amp;&amp; zero) || PCUpdate);</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">typedef</span> <span class="kw">enum</span> <span class="kw">logic</span> [<span class="dv">3</span>:<span class="dv">0</span>] {S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S10} statetype;</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  statetype <span class="ot">state</span>, nextstate;</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_ff</span> @(<span class="kw">posedge</span> clk, <span class="kw">posedge</span> reset) <span class="kw">begin</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> (reset) <span class="ot">state</span> &lt;= S0;</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">else</span> <span class="ot">state</span> &lt;= nextstate;</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">//Immsrc</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_comb</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">case</span> (op)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b0100011</span>: immsrc = <span class="bn">2'b01</span>;</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b1100011</span>: immsrc = <span class="bn">2'b10</span>;</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>      <span class="bn">7'b1101111</span>: immsrc = <span class="bn">2'b11</span>;</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>      <span class="kw">default</span>: immsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">endcase</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="co">//ALUControl</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_comb</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">case</span>(ALUOp)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      <span class="bn">2'b00</span>: alucontrol &lt;= <span class="bn">3'b000</span>; <span class="co">// add</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      <span class="bn">2'b01</span>: alucontrol &lt;= <span class="bn">3'b001</span>; <span class="co">// sub</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>      <span class="kw">default</span>: <span class="kw">case</span>({funct7b5 &amp; op[<span class="dv">5</span>], funct3}) <span class="co">// R- or I-type</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="bn">4'b0000</span>: alucontrol &lt;= <span class="bn">3'b000</span>; <span class="co">// ADD</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        <span class="bn">4'b1000</span>: alucontrol &lt;= <span class="bn">3'b001</span>; <span class="co">// SUB</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>        <span class="bn">4'b0111</span>: alucontrol &lt;= <span class="bn">3'b010</span>; <span class="co">// AND</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="bn">4'b0110</span>: alucontrol &lt;= <span class="bn">3'b011</span>; <span class="co">// OR</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="bn">4'b0010</span>: alucontrol &lt;= <span class="bn">3'b101</span>; <span class="co">// SLT</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        <span class="kw">default</span>: alucontrol &lt;= <span class="bn">3'bxxx</span>; <span class="co">// ???</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>      <span class="kw">endcase</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">endcase</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  <span class="co">//MainFSM</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">always_comb</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="kw">begin</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    irwrite = <span class="bn">1'b0</span>;</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    alusrca = <span class="bn">2'b00</span>;</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    alusrcb = <span class="bn">2'b00</span>;</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    adrsrc = <span class="bn">1'b0</span>;</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    regwrite = <span class="bn">1'b0</span>;</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    memwrite = <span class="bn">1'b0</span>;</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    PCUpdate = <span class="bn">1'b0</span>;</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    branch = <span class="bn">1'b0</span>;</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">case</span> (<span class="ot">state</span>)</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>      S0: <span class="kw">begin</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        nextstate = S1;</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>        irwrite = <span class="bn">1'b1</span>;</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b00</span>;</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b10</span>;</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b10</span>;</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        PCUpdate = <span class="bn">1'b1</span>;</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>      S1: <span class="kw">begin</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b01</span>;</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b01</span>;</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>        <span class="kw">case</span> (op)</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>          <span class="bn">7'b0000011</span>: nextstate = S2;</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>          <span class="bn">7'b0100011</span>: nextstate = S2;</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>          <span class="bn">7'b0110011</span>: nextstate = S6;</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>          <span class="bn">7'b0010011</span>: nextstate = S8;</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>          <span class="bn">7'b1101111</span>: nextstate = S9;</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>          <span class="bn">7'b1100011</span>: nextstate = S10;</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>          <span class="kw">default</span>: nextstate = S0;</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>        <span class="kw">endcase</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>      S2: <span class="kw">begin</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b10</span>;</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b01</span>;</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> (op == <span class="bn">7'b0000011</span>) nextstate = S3;</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>        <span class="kw">else</span> nextstate = S5;</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>      S3: <span class="kw">begin</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>        adrsrc = <span class="bn">1'b1</span>;</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>        nextstate = S4;</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>      S4: <span class="kw">begin</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b01</span>;</span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>        regwrite = <span class="bn">1'b1</span>;</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>        nextstate = S0;</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>      S5: <span class="kw">begin</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>        adrsrc = <span class="bn">1'b1</span>;</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>        memwrite = <span class="bn">1'b1</span>;</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>        nextstate = S0;</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>      S6: <span class="kw">begin</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b10</span>;</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b00</span>;</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b10</span>;</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>        nextstate = S7;</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>      S7: <span class="kw">begin</span></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>        regwrite = <span class="bn">1'b1</span>;</span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>        nextstate = S0;</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>      S8: <span class="kw">begin</span></span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b10</span>;</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b01</span>;</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b10</span>;</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>        nextstate = S7;</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>      S9: <span class="kw">begin</span></span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b01</span>;</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b10</span>;</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>        PCUpdate = <span class="bn">1'b1</span>;</span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>        nextstate = S7;</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>      S10: <span class="kw">begin</span></span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b10</span>;</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b00</span>;</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b01</span>;</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>        branch = <span class="bn">1'b1</span>;</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>        nextstate = S0;</span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>      <span class="kw">default</span>: <span class="kw">begin</span></span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a>        nextstate = S0;</span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>        irwrite = <span class="bn">1'b0</span>;</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>        alusrca = <span class="bn">2'b00</span>;</span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>        alusrcb = <span class="bn">2'b00</span>;</span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>        ALUOp = <span class="bn">2'b00</span>;</span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>        resultsrc = <span class="bn">2'b00</span>;</span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>        adrsrc = <span class="bn">1'b0</span>;</span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>        regwrite = <span class="bn">1'b0</span>;</span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>        memwrite = <span class="bn">1'b0</span>;</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>        PCUpdate = <span class="bn">1'b0</span>;</span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a>        branch = <span class="bn">1'b0</span>;</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>      <span class="kw">end</span></span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a>    <span class="kw">endcase</span></span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a>  <span class="kw">end</span></span>
+<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="verification" class="level2">
+<h2 class="anchored" data-anchor-id="verification">Verification</h2>
+<p>I tested the processor in simulation with Questa, using the textbook’s test program. It exercises every instruction type, including one branch that is taken and one that is not. Two <code>addi</code> instructions should never run, and if the program goes wrong, the final value changes. The testbench passes only if 71 is written to address 84.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>memfile.asm</strong></pre>
+</div>
+<pre class="riscv" data-filename="memfile.asm"><code>main:   addi x2, x0, 5          # initialize x2 = 5     0    00500113
+        addi x3, x0, 12         # initialize x3 = 12    4    00c00193
+        addi x7, x3, -9         # initialize x7 = 3     8    ff718393
+        or   x4, x7, x2         # x4 = (3 OR 5) = 7     C    0023e233
+        and  x5, x3, x4         # x5 = (12 AND 7) = 4   10   0041f2b3
+        add  x5, x5, x4         # x5 = 4 + 7 = 11       14   004282b3
+        beq  x5, x7, end        # shouldn't be taken    18   02728663
+        slt  x4, x3, x4         # x4 = (12 &lt; 7) = 0     1C   0041a233
+        beq  x4, x0, around     # should be taken       20   00020463
+        addi x5, x0, 0          # shouldn't happen      24   00000293
+around: slt  x4, x7, x2         # x4 = (3 &lt; 5) = 1      28   0023a233
+        add  x7, x4, x5         # x7 = 1 + 11 = 12      2C   005203b3
+        sub  x7, x7, x2         # x7 = 12 - 5 = 7       30   402383b3
+        sw   x7, 68(x3)         # [80] = 7              34   0471a223
+        lw   x2, 80(x0)         # x2 = [80] = 7         38   05002103
+        jal  x3, end            # jump to end, x3 = 64  3C   008001ef
+        addi x2, x0, 1          # shouldn't happen      40   00100113
+end:    add  x2, x2, x3         # x2 = 7 + 64 = 71      44   00310133
+        sw   x2, 84(x0)         # write mem[84] = 71    48   04202a23</code></pre>
+</div>
+<section id="tracing-the-first-three-instructions" class="level3">
+<h3 class="anchored" data-anchor-id="tracing-the-first-three-instructions">Tracing the first three instructions</h3>
+<p>All three are <code>addi</code>, so each one takes the same four states: Fetch, Decode, ExecuteI, and ALUWB. <code>PC</code> changes at the end of Fetch, so it already reads the next address during Decode.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Cycle</th>
+<th>State</th>
+<th>PC</th>
+<th>Instr</th>
+<th>Result</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>S0</td>
+<td>00</td>
+<td></td>
+<td>4</td>
+<td>PC + 4</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>S1</td>
+<td>04</td>
+<td>00500113</td>
+<td></td>
+<td>ALU computes OldPC + immediate</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>S8</td>
+<td>04</td>
+<td></td>
+<td></td>
+<td>ALUResult = x0 (0) + 5 = 5</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>S7</td>
+<td>04</td>
+<td></td>
+<td>5</td>
+<td>Result = ALUOut, written to x2</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>S0</td>
+<td>04</td>
+<td></td>
+<td>8</td>
+<td>PC + 4</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>S1</td>
+<td>08</td>
+<td>00c00193</td>
+<td></td>
+<td>ALU computes OldPC + immediate</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>S8</td>
+<td>08</td>
+<td></td>
+<td></td>
+<td>ALUResult = x0 (0) + 12 = 12</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>S7</td>
+<td>08</td>
+<td></td>
+<td>12</td>
+<td>Result = ALUOut, written to x3</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>S0</td>
+<td>08</td>
+<td></td>
+<td>12</td>
+<td>PC + 4</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>S1</td>
+<td>0c</td>
+<td>ff718393</td>
+<td></td>
+<td>ALU computes OldPC + immediate</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>S8</td>
+<td>0c</td>
+<td></td>
+<td></td>
+<td>ALUResult = x3 (12) + (−9) = 3</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>S7</td>
+<td>0c</td>
+<td></td>
+<td>3</td>
+<td>Result = ALUOut, written to x7</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>S0</td>
+<td>0c</td>
+<td></td>
+<td>16</td>
+<td>PC + 4</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>The waveform below shows the whole program. <code>ALUSrcA</code> and <code>ALUSrcB</code> step through their patterns for each instruction type, <code>IRWrite</code> pulses once at each fetch, and <code>Adr</code> switches away from the PC only for memory accesses.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/waveform.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Simulation of the full test program, from reset to the final write. Select the image to enlarge it."><img src="images/waveform.png" class="img-fluid figure-img" alt="Simulation of the full test program, from reset to the final write. Select the image to enlarge it."></a></p>
+<figcaption>Simulation of the full test program, from reset to the final write. Select the image to enlarge it.</figcaption>
+</figure>
+</div>
+<p>The simulation stopped at 685 ns on the successful write of 71 to address 84:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="images/transcript.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Simulator output showing “Simulation succeeded”"><img src="images/transcript.png" class="img-fluid figure-img" style="width:75.0%" alt="Simulator output showing “Simulation succeeded”"></a></p>
+<figcaption>Simulator output showing “Simulation succeeded”</figcaption>
+</figure>
+</div>
+<p>The program ran <strong>17 instructions in 67 clock cycles</strong>, an average of about <strong>3.94 cycles per instruction</strong>. This matches the state counts above: with the 10 ns clock in the testbench, the 67th cycle reaches its falling edge, where the testbench checks the write, at exactly 685 ns.</p>
+</section>
+</section>
+<section id="takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="takeaways">Takeaways</h2>
+<ul>
+<li>Most of the design is deciding what has to be saved between cycles. Almost every register I added exists because a value would otherwise change or be lost before the next step needs it.</li>
+<li>Reusing hardware moves complexity into control. The datapath is smaller in functional units, but the controller grew from a decoder into an FSM, and each state has to set its muxes correctly.</li>
+<li>Multicycle is not automatically faster. A single-cycle processor would run the same 17 instructions in 17 cycles, so this design only matches it if its clock is about 3.9 times faster. Its clear advantage here is needing less hardware.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<!-- Bottom tab bar for phones; hidden on wide screens (see styles.css). Links are relative to the site root. -->
+<div class="mobile-sheet-backdrop" hidden=""></div>
+
+<div class="mobile-sheet" id="sheet-projects" hidden="">
+  <div class="mobile-sheet-group">Engineering</div>
+  <a data-href="Engineering-Projects/Hybrid-Rocket/index.html">Hybrid Rocket</a>
+  <a data-href="Engineering-Projects/Hybrid-Rocket-Engine/index.html">Hybrid Rocket Engine</a>
+  <a data-href="Engineering-Projects/Liquid-Rocket-Engine/index.html">Liquid Rocket Engine</a>
+  <a data-href="Engineering-Projects/Rocket-Avionics-from-Scratch/index.html">Rocket Avionics From Scratch</a>
+  <a data-href="Engineering-Projects/Hardware-Input-Control/index.html">Hardware Input Control</a>
+  <div class="mobile-sheet-group">Systems, Controls &amp; Digital Design</div>
+  <a data-href="Systems-Controls-Projects/Digital-PI-Observer-Control/index.html">Digital Control of an RC Circuit</a>
+  <a data-href="Systems-Controls-Projects/Inverted-Pendulum/index.html">Inverted Pendulum on a Cart</a>
+  <a data-href="Systems-Controls-Projects/Square-to-Sine-Filtering/index.html">Square Wave to Sine Wave Filtering</a>
+  <a data-href="Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.html">Multicycle RISC-V Processor</a>
+  <div class="mobile-sheet-group">CS &amp; Math</div>
+  <a data-href="CS-Math-Projects/AI-Image-Depth-Perception/index.html">AI Image Depth Perception</a>
+  <a data-href="CS-Math-Projects/Best-Route-Using-ML/index.html">Best Route Using ML</a>
+  <a data-href="CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.html">Hyperbola Integral Using Rotations</a>
+</div>
+
+<div class="mobile-sheet" id="sheet-labs" hidden="">
+  <div class="mobile-sheet-group">DJ Set (E155 Final)</div>
+  <a data-href="E155FinalProject/index.html">Overview</a>
+  <a data-href="E155FinalProject/bill.html">BOM, Schematics &amp; Block Diagrams</a>
+  <a data-href="E155FinalProject/fpgaD.html">FPGA Design</a>
+  <a data-href="E155FinalProject/mcuD.html">MCU Design</a>
+  <a data-href="E155FinalProject/results.html">Results</a>
+  <div class="mobile-sheet-group">E155 Labs</div>
+  <a data-href="labs/lab1/lab1.html">Lab 1: FPGA &amp; MCU Setup</a>
+  <a data-href="labs/lab2/lab2.html">Lab 2: Multiplexed 7-Segment Display</a>
+  <a data-href="labs/lab3/lab3.html">Lab 3: Keypad Scanner</a>
+  <a data-href="labs/lab4/lab4.html">Lab 4: Digital Audio</a>
+  <a data-href="labs/lab5/lab5.html">Lab 5: Interrupts</a>
+  <a data-href="labs/lab6/lab6.html">Lab 6: IoT and SPI</a>
+  <a data-href="labs/resources/resources.html">E155 Resources</a>
+</div>
+
+<nav class="mobile-tabbar" aria-label="Site sections">
+  <a class="mobile-tab" data-href="index.html" data-section="home">
+    <i class="bi bi-house"></i><span>Home</span>
+  </a>
+  <button class="mobile-tab" type="button" data-sheet="sheet-projects" data-section="projects">
+    <i class="bi bi-grid"></i><span>Projects</span>
+  </button>
+  <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
+    <i class="bi bi-cpu"></i><span>E155</span>
+  </button>
+  <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
+    <i class="bi bi-file-earmark-person"></i><span>Resume</span>
+  </a>
+</nav>
+
+<script>
+(function () {
+  // Quarto loads site_libs with a path relative to the current page; reuse it to find the site root.
+  var lib = document.querySelector('script[src*="site_libs/"]');
+  var root = lib ? lib.getAttribute('src').split('site_libs/')[0] : '';
+  document.querySelectorAll('[data-href]').forEach(function (a) {
+    a.setAttribute('href', root + a.getAttribute('data-href'));
+  });
+
+  // Highlight the tab for the current section
+  var path = location.pathname;
+  var section = /Engineering-Projects|Systems-Controls-Projects|CS-Math-Projects/.test(path) ? 'projects'
+    : /E155FinalProject|\/labs\//.test(path) ? 'labs'
+    : /\/Resume\//.test(path) ? 'resume'
+    : 'home';
+  var active = document.querySelector('.mobile-tab[data-section="' + section + '"]');
+  if (active) active.classList.add('active');
+
+  var backdrop = document.querySelector('.mobile-sheet-backdrop');
+  var openSheet = null;
+
+  function close() {
+    if (!openSheet) return;
+    openSheet.hidden = true;
+    backdrop.hidden = true;
+    document.querySelector('[data-sheet="' + openSheet.id + '"]').setAttribute('aria-expanded', 'false');
+    openSheet = null;
+  }
+
+  document.querySelectorAll('[data-sheet]').forEach(function (btn) {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.addEventListener('click', function () {
+      var sheet = document.getElementById(btn.getAttribute('data-sheet'));
+      var wasOpen = openSheet === sheet;
+      close();
+      if (wasOpen) return;
+      sheet.hidden = false;
+      backdrop.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      openSheet = sheet;
+    });
+  });
+
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/carlos-o-de-s\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>2026 Carlos Ojeda de Silva</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
