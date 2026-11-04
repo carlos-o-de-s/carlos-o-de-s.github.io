@@ -71,6 +71,8 @@ website:
           href: Systems-Controls-Projects/Square-to-Sine-Filtering/index.qmd
         - text: Multicycle RISC-V Processor
           href: Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.qmd
+        - text: Zipline Speed Optimization
+          href: Systems-Controls-Projects/Zipline-Speed-Optimization/index.qmd
       - text: CS & Math Projects
         menu:
         - text: AI Image Depth Perception

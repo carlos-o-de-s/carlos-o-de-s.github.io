@@ -18,17 +18,18 @@ In this project I extended a single-cycle RISC-V processor to work as a **multic
 
 The processor implements a subset of RV32I: `lw`, `sw`, `add`, `sub`, `and`, `or`, `slt`, `addi`, `andi`, `ori`, `slti`, `beq`, and `jal`. It ran the full test program correctly in simulation, finishing with the expected value of 71 written to address 84.
 
-*Developed for Harvey Mudd's Digital Electronics and Computer Engineering course (E85). The starting single-cycle code, the testbench, and the test program come from Harris & Harris, Digital Design and Computer Architecture: RISC-V Edition. I wrote the multicycle datapath changes and the controller FSM.*
+*Developed for Harvey Mudd's Digital Electronics and Computer Engineering course (E85). The course provided the testbench, the test program, and the starting single-cycle code, which comes from Harris & Harris, Digital Design and Computer Architecture: RISC-V Edition. I wrote the multicycle datapath changes, and I reused the controller FSM I built in the previous lab.*
 
 ## From single-cycle to multicycle
 
-The processor keeps the textbook's split between a datapath and a controller. The biggest visible change is that the controller now needs a clock and reset, because it has state. It also drives a new set of enables and selects, and only one address now goes to memory.
+The processor keeps the textbook's split between a datapath and a controller, wrapped together in a `multicycle` module (the "RISCV multi" box below). The biggest change is that the controller now needs a clock and reset, because it has state, although the diagram only draws them going to the datapath. The controller also drives a new set of enables and selects, and only one address now goes to memory.
 
 ![Block hierarchy and the signals between the controller, datapath, and memory](images/block-diagram.png){width=75%}
 
 | Change | Why it is needed |
 |---|---|
-| Combined instruction and data memory (`dimem`) | The address now comes from a mux (`AdrSrc`), which picks the PC during fetch and the ALU's result during a load or store. |
+| Combined instruction and data memory (`dimem`) | The address now comes from a mux (`AdrSrc`), which picks the PC during fetch and the saved `ALUOut` during a load or store. |
+| `PC` register with enable `PCWrite` | The PC has to hold its value through the later steps of an instruction, instead of updating on every clock edge. |
 | `Instr` register with enable `IRWrite` | The memory output changes when the address changes, so the instruction has to be saved for the rest of its steps. |
 | `OldPC` register | The PC is updated during fetch, but branches and jumps are relative to the original instruction's address. |
 | `Data` register | Holds the value read from memory for the following cycle, when it is written to the register file. |
@@ -44,7 +45,7 @@ module top(input  logic        clk, reset,
            output logic [31:0] WriteData, DataAdr,
            output logic        MemWrite);
 
-  logic [31:0] Instr, ReadData;
+  logic [31:0] ReadData;
   // instantiate processor and memories
   multicycle multicycle(clk, reset, DataAdr, MemWrite,
                         WriteData, ReadData);
@@ -109,7 +110,7 @@ endmodule
 
 ## Controller
 
-The controller replaces the single-cycle decoder with an 11-state FSM. Every instruction shares the first two states, then branches on its opcode.
+The controller replaces the single-cycle main decoder with an 11-state FSM, while the ALU decoding logic carries over unchanged. Every instruction shares the first two states, then branches on its opcode.
 
 ```{mermaid}
 %%| fig-cap: "Controller state transitions. Unrecognized opcodes return from S1 to S0."
@@ -345,7 +346,7 @@ endmodule
 
 ## Verification
 
-I tested the processor in simulation with Questa, using the textbook's test program. It exercises every instruction type, including one branch that is taken and one that is not. Two `addi` instructions should never run, and if the program goes wrong, the final value changes. The testbench passes only if 71 is written to address 84.
+I tested the processor in simulation with Questa, using the course's test program. It exercises every instruction format (R, I, S, B, and J), including one branch that is taken and one that is not. It does not run `andi`, `ori`, or `slti`, so those three are implemented but were not tested directly. Two `addi` instructions should never run, and if the program goes wrong, the final value changes. The testbench passes only if 71 is written to address 84, and it fails on a write to any address other than 80 or 84.
 
 ```{.riscv filename="memfile.asm"}
 main:   addi x2, x0, 5          # initialize x2 = 5     0    00500113
@@ -371,7 +372,7 @@ end:    add  x2, x2, x3         # x2 = 7 + 64 = 71      44   00310133
 
 ### Tracing the first three instructions
 
-All three are `addi`, so each one takes the same four states: Fetch, Decode, ExecuteI, and ALUWB. `PC` changes at the end of Fetch, so it already reads the next address during Decode.
+All three are `addi`, so each one takes the same four states: Fetch, Decode, ExecuteI, and ALUWB. `PC` and `Instr` both change at the end of Fetch, so during Decode `PC` already reads the next address and `Instr` holds the new instruction. Cycle 1 is the first cycle after two clock cycles of reset, and it begins at 20 ns.
 
 | Cycle | State | PC | Instr | Result | Notes |
 |---|---|---|---|---|---|
@@ -391,7 +392,7 @@ All three are `addi`, so each one takes the same four states: Fetch, Decode, Exe
 
 ### Results
 
-The waveform below shows the whole program. `ALUSrcA` and `ALUSrcB` step through their patterns for each instruction type, `IRWrite` pulses once at each fetch, and `Adr` switches away from the PC only for memory accesses.
+The waveform below shows the whole program. `ALUSrcA` and `ALUSrcB` step through their patterns for each instruction type, `IRWrite` pulses once at each fetch, and `Adr` switches away from the PC only for memory accesses. The red sections are unknown (X) values, which appear when the hardware reads a register or memory word that has not been written yet. They do no harm, because those cycles do not use the value.
 
 ![Simulation of the full test program, from reset to the final write. Select the image to enlarge it.](images/waveform.png)
 
@@ -399,10 +400,10 @@ The simulation stopped at 685 ns on the successful write of 71 to address 84:
 
 ![Simulator output showing "Simulation succeeded"](images/transcript.png){width=75%}
 
-The program ran **17 instructions in 67 clock cycles**, an average of about **3.94 cycles per instruction**. This matches the state counts above: with the 10 ns clock in the testbench, the 67th cycle reaches its falling edge, where the testbench checks the write, at exactly 685 ns.
+The program ran **17 instructions in 67 clock cycles**, an average of about **3.94 cycles per instruction**. This matches the state counts above: the testbench has a 10 ns clock and cycle 1 begins at 20 ns, so the 67th cycle reaches its falling edge, where the testbench checks the write, at exactly 685 ns.
 
 ## Takeaways
 
 - Most of the design is deciding what has to be saved between cycles. Almost every register I added exists because a value would otherwise change or be lost before the next step needs it.
 - Reusing hardware moves complexity into control. The datapath is smaller in functional units, but the controller grew from a decoder into an FSM, and each state has to set its muxes correctly.
-- Multicycle is not automatically faster. A single-cycle processor would run the same 17 instructions in 17 cycles, so this design only matches it if its clock is about 3.9 times faster. Its clear advantage here is needing less hardware.
+- Multicycle is not automatically faster. A single-cycle processor would run the same 17 instructions in 17 cycles, so this design only matches it if its clock is about 3.9 times faster. Its clear advantage here is sharing: one memory and one ALU replace two memories, an ALU, and two adders, at the cost of the extra registers and muxes.

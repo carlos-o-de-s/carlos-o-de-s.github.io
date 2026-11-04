@@ -18,3 +18,8 @@
   path: ../Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.qmd
   image: Systems-Controls-Projects/Multicycle-RISC-V-Processor/images/block-diagram.png
   description: "Extending a single-cycle RV32I processor in SystemVerilog to share one memory and one ALU, sequenced by an 11-state FSM controller."
+
+- title: Zipline Speed Optimization
+  path: ../Systems-Controls-Projects/Zipline-Speed-Optimization/index.qmd
+  image: Systems-Controls-Projects/Zipline-Speed-Optimization/images/velocity-profiles.png
+  description: "Optimizing the drop and tension of a 500 m zipline with cable modeling and numerical ODEs, so riders from 30 to 140 kg all finish safely."
