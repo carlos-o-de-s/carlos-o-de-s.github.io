@@ -1,4 +1,4 @@
-# Cards for the "Systems & Controls Projects" section of the home page.
+# Cards for the "Systems, Controls & Digital Design Projects" section of the home page.
 - title: Digital Control of an RC Circuit
   path: ../Systems-Controls-Projects/Digital-PI-Observer-Control/index.qmd
   image: Systems-Controls-Projects/Digital-PI-Observer-Control/images/observer-experimental.png
@@ -13,3 +13,8 @@
   path: ../Systems-Controls-Projects/Square-to-Sine-Filtering/index.qmd
   image: Systems-Controls-Projects/Square-to-Sine-Filtering/images/raw-data.png
   description: "A 4th-order analog Butterworth filter plus an FIR comb filter on an Arduino, removing a square wave's harmonics to the ADC noise floor."
+
+- title: Multicycle RISC-V Processor
+  path: ../Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.qmd
+  image: Systems-Controls-Projects/Multicycle-RISC-V-Processor/images/block-diagram.png
+  description: "Extending a single-cycle RV32I processor in SystemVerilog to share one memory and one ALU, sequenced by an 11-state FSM controller."

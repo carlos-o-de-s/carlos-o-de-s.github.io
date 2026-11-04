@@ -74,7 +74,7 @@ Built with Maynor for HMC's Microprocessors class: an MCU streams songs from a m
 :::
 :::
 
-## Systems & Controls Projects
+## Systems, Controls & Digital Design Projects
 
 ::: {#controls}
 :::

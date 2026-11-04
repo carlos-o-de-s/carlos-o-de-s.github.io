@@ -13,6 +13,7 @@ website:
   page-footer:
     center: "2026 Carlos Ojeda de Silva"
   navbar:
+    collapse-below: xl
     left:
       - href: index.qmd
         text: Home
@@ -36,7 +37,7 @@ website:
         menu:
         - text: Overview
           href: E155FinalProject/index.qmd
-        - text: Bill of Materials
+        - text: BOM, Schematics & Block Diagrams
           href: E155FinalProject/bill.qmd
         - text: FPGA Design
           href: E155FinalProject/fpgaD.qmd
@@ -60,7 +61,7 @@ website:
           href: Engineering-Projects/Rocket-Avionics-from-Scratch/index.qmd
         - text: Hardware Input Control
           href: Engineering-Projects/Hardware-Input-Control/index.qmd
-      - text: Systems & Controls
+      - text: Systems, Controls & Digital Design
         menu:
         - text: Digital Control of an RC Circuit
           href: Systems-Controls-Projects/Digital-PI-Observer-Control/index.qmd
@@ -68,6 +69,8 @@ website:
           href: Systems-Controls-Projects/Inverted-Pendulum/index.qmd
         - text: Square Wave to Sine Wave Filtering
           href: Systems-Controls-Projects/Square-to-Sine-Filtering/index.qmd
+        - text: Multicycle RISC-V Processor
+          href: Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.qmd
       - text: CS & Math Projects
         menu:
         - text: AI Image Depth Perception
