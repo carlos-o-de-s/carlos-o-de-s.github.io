@@ -2,6 +2,8 @@ project:
   type: website
   resources:
     - "Resume/Carlos_Ojeda_CV_Resume.pdf"
+  post-render:
+    - scripts/strip-empty-listing-text.ts
 
 website:
   title: "Carlos Ojeda de Silva Portfolio"
@@ -10,8 +12,12 @@ website:
   image: images/headshot.png
   open-graph: true
   twitter-card: true
+  search:
+    location: navbar
+    type: textbox
+    limit: 50
   page-footer:
-    center: "2026 Carlos Ojeda de Silva"
+    center: "2026 Carlos Ojeda de Silva · [Contact: cojedadesilva@g.hmc.edu](mailto:cojedadesilva@g.hmc.edu)"
   navbar:
     collapse-below: xl
     left:
@@ -84,9 +90,14 @@ website:
       - text: CV/Resume
         href: Resume/resume.qmd
 
+language:
+  search-text-placeholder: "Search all pages"
+
 format:
   html:
     theme: cosmo
     css: styles.css
     toc: true
     include-after-body: mobile-nav.html
+    filters:
+      - filters/caption-alt.lua

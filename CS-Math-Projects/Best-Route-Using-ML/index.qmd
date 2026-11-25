@@ -7,8 +7,8 @@ If an Amazon/UPS/FedEx driver wants to deliver goods to 2 homes, how many differ
 
 This was done on a small scale since it would take a long time for my computer to generate a dataset to train the AI with many homes. The data was made by plugging random coordinates (in San Antonio Texas as a small-scale test) into a Python program called Open Street Maps that generates travel times for a route between 2 points in the map, this was done with 4 points (12 times in total since the order was ignored: 4!/2). 
 
-![Dataset used](images/Routes_dataset.png)
+![Dataset used](images/Routes_dataset.png){fig-alt="Table of the generated dataset: latitude and longitude for four points, the travel time for each visiting order, and the best route label"}
 
 The tests done on the data were convincing since a Random Forest AI model was able to correctly guess approximately 40% of the routes, and on average, was 10% longer than the perfect route (compared to 40% longer for random routes). This test was able to show that AI can be used to approximate a generally close answer in problems that would otherwise require a lot of computing.
 
-![Results of AI algorithm](images/Routes.png)
+![Results of AI algorithm](images/Routes.png){fig-alt="Four candidate delivery routes on a San Antonio street map, labeled with travel times from 230.6 to 236.4 seconds"}

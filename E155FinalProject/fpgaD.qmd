@@ -41,34 +41,34 @@ The mixer output is relayed to the I2S module, which needs to sample the sound a
 ### Audio SPI Receiver (audio 2 bytes at a time)
 We expect to get `1010-1010-1011-1011 = aabb`, but it is swapped due to endianness (`BYTE_SWAP = 1`).
 
-![](images/testbench1.png){width="80%"}
+![](images/testbench1.png){fig-alt="Simulation waveform of the audio SPI receiver testbench, showing the received 16-bit sample byte-swapped as expected" width="80%"}
 
 ### FIFO
 We can see how `1111`, `2222`, and `3333` are sent (2‑byte samples matching audio sample length) and retrieved using a differently timed clock (read enable is slower than write enable).
 
-![](images/testbench2.png){width="80%"}
+![](images/testbench2.png){fig-alt="Simulation waveform of the FIFO testbench: samples 1111, 2222, and 3333 are written and then read back on a slower read clock" width="80%"}
 
 ### Synchronizer
 The synchronizer reads the FIFO at the MCU‑specified rate (usually 48 kHz, up to ~90 kHz). It converts occasionally noisy FIFO output (like `0000`) into a continuous, correctly‑timed stream.
 
-![](images/testbench3.png){width="80%"}
+![](images/testbench3.png){fig-alt="Simulation waveform of the synchronizer testbench turning the FIFO output into an evenly timed sample stream" width="80%"}
 
 ### Top Module
 Anything after the filter will not show data, since it needs 128 samples to function. Everything else operates correctly: SPI reads values into `test_val` (after byte swap). Data is saved faster than the 48 kHz clock but output at 48 kHz, as intended.
 
-![](images/testbench4.png){width="80%"}
+![](images/testbench4.png){fig-alt="Simulation waveform of the top-level FPGA testbench: SPI data is stored quickly and output at 48 kHz" width="80%"}
 
 ### I2S Player
 Given the following:
 
-![](images/testbench43.png){width="80%"}
+![](images/testbench43.png){fig-alt="Simulation waveform of the I2S player testbench showing the bit clock, left/right clock, and data line" width="80%"}
 
 Zooming in, we see that data changes during the **falling** edge of the clock, which is correct—data must change on falling and be read on rising by the PCM5102. Another common mistake was starting transmission on the first bit instead of the second.
 
 Checking sample values (`8000`, `7FFF`, etc.), we confirm they match their binary representation.
 
-![](images/testbench45.png){width="80%"}
+![](images/testbench45.png){fig-alt="Zoomed I2S waveform where data changes on the falling clock edge and sample values such as 8000 and 7FFF match their binary bits" width="80%"}
 
 ### FIR Filter {#fir-filter}
-![](images/testbench5.png){width="80%"}
+![](images/testbench5.png){fig-alt="Simulation waveform of the FIR filter testbench" width="80%"}
 

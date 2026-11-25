@@ -3,7 +3,7 @@ title: "Hyperbola Integral Using Rotations"
 subtitle: "Finding the area under a hyperbola using rotations"
 ---
 
-![Rotated Hyperbola with Areas](images/Hyperbola1.png)
+![Rotated Hyperbola with Areas](images/Hyperbola1.png){fig-alt="Four Desmos graphs of the rotated hyperbola split into colored regions A, B, C, and D that add up to the area under the curve"}
 
 By only knowing that the integral of 1/x is ln|x| and how to use polar equations (or Euler’s formula), it is possible to find the integral of a hyperbola. This isn’t normally seen up until Calculus II. The Integral (Area under the curve) of y^2 - x^2 = 2 was calculated through the 45° rotation of a y=1/x graph and finding the areas composing it on the graph. This approach clearly shows why the area under a hyperbola depends on a natural logarithm and other properties it has. **[Here is an interactive representation of this process](https://www.desmos.com/calculator/0qavllu7bp)**
 
@@ -15,10 +15,10 @@ This example uses polar coordinates to rotate a y = 1/x graph 45° or π/4 angle
 
 ::: {.grid}
 ::: {.g-col-6}
-![Polar Coordinate method](images/Hyperbola3.png)
+![Polar Coordinate method](images/Hyperbola3.png){fig-alt="Derivation with polar coordinates showing that rotating y = 1/x by 45 degrees gives y squared minus x squared equals 2"}
 :::
 ::: {.g-col-6}
-![Euler's Equation Method](images/Hyperbola4.png)
+![Euler's Equation Method](images/Hyperbola4.png){fig-alt="Derivation with Euler's formula showing that rotating y = 1/x by 45 degrees gives y squared minus x squared equals 2"}
 :::
 :::
 
@@ -26,7 +26,7 @@ This example uses polar coordinates to rotate a y = 1/x graph 45° or π/4 angle
 
 From the figure below, we can see two lines: one passing through y=x and another one labeled P.  There are four areas labeled A, B, C, and D, these areas can be calculated through different equations. First, let's solve the easiest ones: A and D.
 
-![Labeled Areas](images/Hyperbola5.png)
+![Labeled Areas](images/Hyperbola5.png){fig-alt="Graph of the hyperbola with the line y = x and a vertical line P, dividing the area under the curve into regions A, B, C, and D"}
 
 A stays constant since it represents a triangle made from an isosceles triangle with a base and height of 1, which doesn’t depend on the position of line P.
 
@@ -34,14 +34,24 @@ The Area of D is ½P^2 since the triangle has a base and height equal to P.
 
 To get the other two areas, we need to define the line going from 0,0 to the right-most corner of the triangle C as a new axis L. L has the length of the base of the original y=1/x graph used, which allows us to get the area of that shape using a natural logarithm. The image below shows the point where L is measured from.
 
-![Point L](images/Hyperbola6.png)
+![Point L](images/Hyperbola6.png){fig-alt="Two close-ups of region C, in the rotated graph and in the original y = 1/x graph, marking points M, N, and L used to measure the new axis L"}
 
 Based on the image above. Area C, having a base on the x-axis in the original y = 1/x graph, makes it easier to calculate in terms of L for the rotated graph. We know that in the original y = 1/x graph the height of the triangle is y and it was formed by a 45° or π/4 angle, meaning that both lines LM and LN have the same length. Knowing that LN = y,  we can determine the area to be equal to ½(1/L)^2 since both the base and height in the rotated triangle need to be 1/L.
 
 We also need to consider that L doesn’t lie exactly on P, meaning that we need to remove the segment LM from length L to get length P. Thankfully, we already know what LM is, meaning that we can create a formula to calculate P based on L. Using the quadratic formula, we can solve for L, giving us the last step in finding the integral of the hyperbola. We are using the positive variation in the quadratic formula since we will not account for the negative y-values on the graph.
 
-![Calculating Area B](images/Hyperbola7.png)
+![Calculating Area B](images/Hyperbola7.png){fig-alt="Algebra for area C as 1 over 2L squared, area B as ln L minus area C, and solving for L in terms of P with the quadratic formula"}
 
 After getting all of the formulas needed, it is now just adding them together. Note that the formula we are using is y = √(x^2+2), this was done because y^2 - x^2 = 2 is not a function, but it does graph the same curve for positive y values.
 
-![Final simplification](images/Hyperbola8.png)
+![Final simplification](images/Hyperbola8.png){fig-alt="Step-by-step algebra adding areas A, B, and D and simplifying to the final closed-form integral"}
+
+**Conclusion:**
+
+Adding the four areas and simplifying gives the area under the hyperbola from 0 to any point P:
+
+$$
+\int_0^P \sqrt{x^2+2}\,dx = \ln\left(P+\sqrt{P^2+2}\right) + \frac{P\sqrt{P^2+2}}{2} - \ln\sqrt{2}
+$$
+
+This matches the standard formula for $\int \sqrt{x^2+a^2}\,dx$ with $a^2 = 2$, which is usually derived with hyperbolic trig substitution. Here it comes out of nothing more than the integral of 1/x, a 45° rotation, and triangle areas. It also shows why a natural logarithm appears: the log term is exactly the area under the original y = 1/x curve (region B + C), and the remaining term is just triangles.

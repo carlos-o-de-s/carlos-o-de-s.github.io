@@ -7,7 +7,7 @@ Have you ever wondered if robots can know the shape of the world around them fro
 
 This project used an open source dataset named **[Diode Dataset](https://diode-dataset.org/)** where there are depth maps associated with images. 
 
-![Original Dataset](images/Depth_dataset.png)
+![Original Dataset](images/Depth_dataset.png){fig-alt="Table of the DIODE dataset splits (train, validation, and test, indoors and outdoors, with scene, scan, and image counts) and the laser scanner's specifications"}
 For this project based on computing limitations, only the validation and test images were used.
 
 Some pre-processing was done, which is described below:
@@ -20,5 +20,5 @@ Some pre-processing was done, which is described below:
 
 For this project, a Convolutional Neural Network with less than 500,000 parameters was used, this was with the purpose to widen the application scopes of this model. Although the algorithm was able to predict general shapes at its best, more work is needed in order to apply it as a solution for computer vision.
 
-![Results of AI algorithm](images/Depth_result.png)
+![Results of AI algorithm](images/Depth_result.png){fig-alt="Three panels: an indoor photo, its true depth map, and the depth map predicted by the network, which captures the general shape"}
 Although this specific example had a good prediction of shape, most images produced noisier predictions.

@@ -2,25 +2,31 @@
 title: "Lab 1: FPGA and MCU Setup and Testing"
 ---
 
-During this lab, we are tasked to make a 2.4Hz square wave, an AND gate operation, an XOR gate operation and a translator from binary introduced from switches into a hex number in a 7 segment display. These different tasks explore different types of skill when working with FPGA's.
+::: {.callout-tip appearance="simple" icon=false title="At a glance"}
+**Goal:** Solder and bring up the E155 development board, then program the UPduino FPGA to blink an LED at 2.4 Hz, run AND/XOR logic on switch inputs, and show the 4-bit switch value as a hex digit on a 7-segment display.
 
-Spent 12 hours
+**My work (individual lab):** Soldered the board (including surface-mount parts), designed the display circuit and sized its resistors, wrote the SystemVerilog, and verified it with testbenches and an oscilloscope.
+
+**Result:** The oscilloscope measured the blinker at 2.44 Hz, all 16 switch combinations passed in simulation with zero errors, and the display showed the correct digit on hardware. Time spent: 12 hours.
+:::
+
+In this individual lab, I was tasked to make a 2.4Hz square wave, an AND gate operation, an XOR gate operation and a translator from binary introduced from switches into a hex number in a 7 segment display. These different tasks explore different types of skill when working with FPGA's.
 
 ### PCB soldering and circuits
 
-First, we have to make sure the FPGA setup will be adequate for the E155 course, where we need to include all the components and verify the connections and board all work properly. This helped me develop skills mainly in surface mounted devices, since it is a type of soldering I am not very familiar with.
+First, I had to make sure the FPGA setup will be adequate for the E155 course, which meant soldering all the components and verify the connections and board all work properly. This helped me develop skills mainly in surface mounted devices, since it is a type of soldering I am not very familiar with.
 
-![Board after Soldering](images/testcaseFPGA.jpeg)
+![Board after Soldering](images/testcaseFPGA.jpeg){fig-alt="Soldered E155 development board with the UPduino FPGA and STM32 board, connected by a ribbon cable to a breadboard with a lit red 7-segment display"}
 
-After getting the board set up, we started to work into making the circuit for the following parts of the lab. This required some amount of calculations and design choices that are gone more in depth later in this page. 
+After getting the board set up, I started working on the circuit for the following parts of the lab. This required some amount of calculations and design choices that are gone more in depth later in this page. 
 
-![Block Diagram](images/Lab1diagram.png)
+![Block Diagram](images/Lab1diagram.png){fig-alt="Block diagram of the Lab 1 top module: switch inputs s[3:0] on pins 32, 35, 31 and 37 feed a leds_co module that drives the blinker and two LEDs, and a sevseg module with the HSOSC oscillator that drives the seven segment outputs"}
 
-![Circuit Diagram](images/Lab1top.png)
+![Circuit Diagram](images/Lab1top.png){fig-alt="Circuit diagram: UPduino 3.1 outputs drive three LEDs and the seven segments of an HDSP-511A display, each through a 1 kilohm resistor"}
 
-It is also important to note that we had to program which pins are which in the FPGA setup:
+It is also important to note that I had to program which pins are which in the FPGA setup:
 
-![FPGA pin setup](images/fpgapins.png)
+![FPGA pin setup](images/fpgapins.png){fig-alt="Lattice Radiant pin assignment table listing the FPGA pin for each switch input and each LED and segment output"}
 
 ### and/xor gate operations
 
@@ -60,19 +66,19 @@ This would result in a code that looks like this:
   assign fpga_blink_out = counter[31];
 ```
 
-After getting this code working, we tested the signal generated using an oscilloscope and verified it was at 2.4Hz.
+After getting this code working, I tested the signal generated using an oscilloscope and verified it was at 2.4Hz.
 
-![Oscilloscope trace](images/Oscprint.png)
+![Oscilloscope trace](images/Oscprint.png){fig-alt="Rigol oscilloscope showing the FPGA square wave with a measured period of 410 ms and a frequency of 2.44 Hz"}
 
 ### 7 segment display
 
-To make the 7 segment display to work by being controlled by the UPduino board, we first need to consider that the 7 segment display we are using (HDSP-511A) works by grounding the pins to turn on the desired segment. This means that whenever we are making the logic on which segments turn on and off, we have to consider that 0 is on and 1 is off. This was made in System Verilog and tested using a testbench, where we made a test case for each of the possible combinations of 4 switches (16 tests). 
+To make the 7 segment display to work by being controlled by the UPduino board, we first need to consider that the 7 segment display we are using (HDSP-511A) works by grounding the pins to turn on the desired segment. This means that whenever we are making the logic on which segments turn on and off, we have to consider that 0 is on and 1 is off. This was made in System Verilog and tested using a testbench, where I made a test case for each of the possible combinations of 4 switches (16 tests). 
 
-![Top Testbench Trace](images/Testbench.png)
+![Top Testbench Trace](images/Testbench.png){fig-alt="ModelSim waveform of the top-level testbench stepping the switch input from f down to 0, with the errors signal staying at zero"}
 
-![LED Logic Testbench Trace](images/Lab1tb_ledlogic.png)
+![LED Logic Testbench Trace](images/Lab1tb_ledlogic.png){fig-alt="ModelSim waveform of the LED logic testbench across all 16 switch values, with the errors signal staying at zero"}
 
-![Seven Segment Testbench Trace](images/Lab1tb_sevseg.png)
+![Seven Segment Testbench Trace](images/Lab1tb_sevseg.png){fig-alt="ModelSim waveform of the seven segment testbench: the decoded output matches the expected value for all 16 inputs and errors stays at zero"}
 
 Having the error vector always in 0's tells us that the testbench was successful. This better confirms that we will get a working FPGA programming.
 
@@ -85,19 +91,19 @@ $$
 R > 580
 $$
 
-In this case, we chose to use 1k resistors since they were visible and available.
+In this case, I chose 1k resistors since they were visible and available.
 
-![Test with 9 in binary (1001) showing the right output](images/testcaseFPGA.jpeg)
+![Test with 9 in binary (1001) showing the right output](images/testcaseFPGA.jpeg){fig-alt="Hardware test with the switches set to 1001: the 7-segment display shows 9"}
 
 From this expected output image, we can see how the XOR LED is on and the AND led is off. This is expected since both modules work at the same time.
 
 ### AI Prototype
 
-Using ChatGPT, we inputted the following prompt:
+Using ChatGPT, I entered the following prompt:
 
 Write SystemVerilog HDL to leverage the internal high speed oscillator in the Lattice UP5K FPGA and blink an LED at 2 Hz. Take full advantage of SystemVerilog syntax, for example, using logic instead of wire and reg.
 
-from which we got this code:
+from which I got this code:
 
 ```{verilog, code-fold: true}
 module led_blinker_2hz (
@@ -134,7 +140,7 @@ module led_blinker_2hz (
 endmodule
 ```
 
-After testing this code, we realized that it didn't work, we copied the error message and tried the new code.
+After testing this code, I realized that it didn't work, so I copied the error message and tried the new code.
 
 ```{verilog, code-fold: true}
 module led_blinker_2hz (

@@ -49,6 +49,7 @@ While studying a general engineering degree, I focus my learning on projects, ma
 [<i class="bi bi-linkedin"></i> LinkedIn](https://www.linkedin.com/in/carlos-odes/){.btn .btn-outline-primary .btn-sm}
 [<i class="bi bi-github"></i> GitHub](https://github.com/cojedadesilva){.btn .btn-outline-primary .btn-sm}
 [<i class="bi bi-file-earmark-pdf"></i> Resume](Resume/resume.qmd){.btn .btn-outline-primary .btn-sm}
+[<i class="bi bi-envelope"></i> Email me](mailto:cojedadesilva@g.hmc.edu){.btn .btn-primary .btn-sm aria-label="Email Carlos at cojedadesilva@g.hmc.edu"}
 :::
 :::
 
@@ -66,6 +67,8 @@ While studying a general engineering degree, I focus my learning on projects, ma
 ### [Portable DJ Set](E155FinalProject/index.qmd)
 
 Built with Maynor for HMC's Microprocessors class: an MCU streams songs from a microSD card to an FPGA, which applies a live high/low-pass filter and changes playback speed, all controlled with a joystick.
+
+**My part:** everything outside the microcontroller (the FPGA design, the audio DSP for the filters and speed control, and all of the wiring), plus the joystick input code on the MCU. Maynor wrote the rest of the STM32 MCU firmware.
 
 [Overview](E155FinalProject/index.qmd){.btn .btn-primary .btn-sm}
 [FPGA Design](E155FinalProject/fpgaD.qmd){.btn .btn-outline-secondary .btn-sm}

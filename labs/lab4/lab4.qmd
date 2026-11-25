@@ -2,23 +2,29 @@
 title: "Lab 4: Digital Audio"
 ---
 
-In this lab, we made a melody player code for a STM32L4 microcontroller where we can control the frequency and timing of musical notes. 
+::: {.callout-tip appearance="simple" icon=false title="At a glance"}
+**Goal:** Play melodies on an STM32L4 microcontroller, using a hardware timer to set each note's frequency and duration and driving a speaker through an LM386 amplifier.
 
-Spent 24 hours
+**My work (individual lab):** Chose and configured TIM2, worked out the prescaler and ARR math for the timer's frequency and delay limits, wrote the firmware, and built the amplifier circuit.
+
+**Result:** The board plays melodies through the speaker (see the demo video), and every note from 220 to 1000 Hz is generated within 1% of its target frequency. Time spent: 24 hours.
+:::
+
+In this individual lab, I wrote melody player code for a STM32L4 microcontroller where we can control the frequency and timing of musical notes. 
 
 ### Demo
 
 The STM32L4 playing a melody through the LM386 amplifier and speaker.
 
-{{< video images/Lab4Video.mp4 >}}
+{{< video images/Lab4Video.mp4 title="Demo video: the breadboard with the LM386 amplifier circuit, connected to the STM32L4 board, playing a melody through the speaker" >}}
 
 ### Electrical schematic
 
-![Electrical Schematic](images/Lab4schematic.png)
+![Electrical Schematic](images/Lab4schematic.png){fig-alt="Lab 4 schematic: microcontroller pin PB3 through two inverters and a potentiometer into an LM386 amplifier, which drives a speaker through a 220 microfarad capacitor"}
 
 ### Design Choices and Math:
 
-We chose TIM2 because it has 32 bits and it is easy to change frequency by altering the ARR and PSC values
+I chose TIM2 because it has 32 bits and it is easy to change frequency by altering the ARR and PSC values
 
 Minimum frequency
 
@@ -74,11 +80,11 @@ And since we can get way larger ARR values, the clock does tick within 1% of the
 
 ### AI Prototype
 
-After asking ChatGPT, we got the following response:
+After asking ChatGPT, I got the following response:
 
-![AI Prototype](images/Lab4_AIPrototype.png)
+![AI Prototype](images/Lab4_AIPrototype.png){fig-alt="ChatGPT answer listing the STM32L432KC timers and recommending TIM2 because it is 32-bit"}
 
-This is similar to what we concluded, where we chose Timer 2 since it seemed easier to use and has the ability to count up to 32 bits, which since we were originally considering using timer overflow to control notes instead of number of clock cycles we used in the end. this also made me understand better the math behind it.
+This is similar to what I concluded, where I chose Timer 2 since it seemed easier to use and has the ability to count up to 32 bits, which mattered since I was originally considering using timer overflow to control notes instead of number of clock cycles I used in the end. this also made me understand better the math behind it.
 
 ### Resources
 

@@ -176,11 +176,11 @@ void loop() {
 I took the FFT of the first 1000 samples of each signal. At 100 Hz this gives a 0.1 Hz frequency resolution, so each harmonic of 10.7 Hz falls cleanly in its own bin. A Hann window was applied to all three signals to reduce leakage from the mismatch between the start and end of the record. The resulting magnitudes were multiplied by 2 to correct for the window's amplitude loss. The spectrum from −50 to 50 Hz captures up to the 4th harmonic, which is as far as a 100 Hz sample rate can represent.
 
 ::: {layout-ncol=3}
-![Square wave](images/spectrum-square.png)
+![Square wave](images/spectrum-square.png){fig-alt="Fourier transform of the raw square wave: a peak at about 11 Hz plus many smaller harmonic peaks out to 50 Hz"}
 
 ![After the analog filter (note the small 2nd-harmonic spike at 21.4 Hz)](images/spectrum-analog.png)
 
-![After both filters](images/spectrum-both.png)
+![After both filters](images/spectrum-both.png){fig-alt="Fourier transform after both filters: only the DC component and the fundamental near 11 Hz remain, with the harmonics removed"}
 :::
 
 The analog filter alone already leaves something that looks like a sinusoid. The digital stage then removes the remaining 21.4 Hz spike from the second harmonic.

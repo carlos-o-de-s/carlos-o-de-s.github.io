@@ -2,24 +2,29 @@
 - title: Digital Control of an RC Circuit
   path: ../Systems-Controls-Projects/Digital-PI-Observer-Control/index.qmd
   image: Systems-Controls-Projects/Digital-PI-Observer-Control/images/observer-experimental.png
+  image-alt: "Plot of simulated and measured output voltage rising to 2.5 V and settling in about 2 seconds under observer-based control"
   description: "PI vs. observer-based LQR control of a second-order circuit on an Arduino: 2 s settling with under 1% overshoot on hardware."
 
 - title: Inverted Pendulum on a Cart
   path: ../Systems-Controls-Projects/Inverted-Pendulum/index.qmd
   image: Systems-Controls-Projects/Inverted-Pendulum/images/alpha-0.5.png
+  image-alt: "Simulated pendulum angle, cart position, and acceleration over 10 seconds, with the cart settling at 1 m and the pendulum held upright"
   description: "State feedback with integral action and an observer, balancing a nonlinear pendulum under a constant disturbance."
 
 - title: Square Wave to Sine Wave Filtering
   path: ../Systems-Controls-Projects/Square-to-Sine-Filtering/index.qmd
   image: Systems-Controls-Projects/Square-to-Sine-Filtering/images/raw-data.png
+  image-alt: "Overlaid plot of the original 0 to 5 V square wave, the analog-filtered wave, and the smoother digitally filtered wave"
   description: "A 4th-order analog Butterworth filter plus an FIR comb filter on an Arduino, removing a square wave's harmonics to the ADC noise floor."
 
 - title: Multicycle RISC-V Processor
   path: ../Systems-Controls-Projects/Multicycle-RISC-V-Processor/index.qmd
   image: Systems-Controls-Projects/Multicycle-RISC-V-Processor/images/block-diagram.png
+  image-alt: "Block diagram of the multicycle RISC-V processor: a controller sends control signals to the datapath, which shares one external memory for instructions and data"
   description: "Extending a single-cycle RV32I processor in SystemVerilog to share one memory and one ALU, sequenced by an 11-state FSM controller."
 
 - title: Zipline Speed Optimization
   path: ../Systems-Controls-Projects/Zipline-Speed-Optimization/index.qmd
   image: Systems-Controls-Projects/Zipline-Speed-Optimization/images/velocity-profiles.png
+  image-alt: "Speed along the 500 m zipline for 30, 70, and 140 kg riders, each peaking mid-line and slowing near the 5 m/s exit limit"
   description: "Optimizing the drop and tension of a 500 m zipline with cable modeling and numerical ODEs, so riders from 30 to 140 kg all finish safely."

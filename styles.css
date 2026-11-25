@@ -243,3 +243,31 @@ mjx-container[display="true"] {
     font-size: 0.9rem;
   }
 }
+
+/* ---- Navbar search box ---- */
+/* Full search bar on wide screens. Between 1200 and 1500px the menus are already tight,
+   so the box shrinks to its magnifier icon and widens when clicked. */
+@media (min-width: 1200px) {
+  #quarto-search.type-textbox .aa-Autocomplete,
+  #quarto-search.type-textbox .aa-Form {
+    width: 11rem;
+    transition: width 0.2s ease;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1499.98px) {
+  #quarto-search.type-textbox .aa-Autocomplete,
+  #quarto-search.type-textbox .aa-Form {
+    width: 2.6rem;
+  }
+
+  #quarto-search.type-textbox .aa-Form:focus-within,
+  #quarto-search.type-textbox .aa-Autocomplete:focus-within,
+  #quarto-search.type-textbox .aa-Autocomplete:focus-within .aa-Form {
+    width: 14rem;
+  }
+
+  #quarto-search.type-textbox .aa-Form:not(:focus-within) .aa-Input::placeholder {
+    color: transparent;
+  }
+}

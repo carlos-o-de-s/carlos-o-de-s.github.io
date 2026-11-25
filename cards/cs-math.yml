@@ -2,14 +2,17 @@
 - title: AI Image Depth Perception
   path: ../CS-Math-Projects/AI-Image-Depth-Perception/index.qmd
   image: CS-Math-Projects/AI-Image-Depth-Perception/images/Depth_result.png
-  description: "A small CNN that predicts a depth map from a single photo, trained on the DIODE dataset."
+  image-alt: "Three panels: an indoor photo, its true depth map, and the depth map predicted by the network"
+  description: "A CNN under 500,000 parameters that predicts a depth map from a single photo (DIODE dataset). It recovers general shapes, though most predictions are still noisy."
 
 - title: Best Route Using ML
   path: ../CS-Math-Projects/Best-Route-Using-ML/index.qmd
   image: CS-Math-Projects/Best-Route-Using-ML/images/Routes.png
-  description: "Using a Random Forest to approximate the shortest delivery route between points in San Antonio."
+  image-alt: "Four candidate delivery routes on a San Antonio street map, labeled with travel times from 230.6 to 236.4 seconds"
+  description: "A Random Forest that picks delivery routes between points in San Antonio: about 40% exactly optimal, and on average only 10% longer than the best route (vs. 40% for random)."
 
 - title: Hyperbola Integral Using Rotations
   path: ../CS-Math-Projects/Hyperbola-Integral-Using-Rotations/index.qmd
   image: CS-Math-Projects/Hyperbola-Integral-Using-Rotations/images/Hyperbola1.png
-  description: "Finding the area under a hyperbola using only the integral of 1/x and a 45° rotation."
+  image-alt: "Graphs of the rotated hyperbola with the regions A, B, C, and D used to build up the area under the curve"
+  description: "Deriving the closed-form area under y² − x² = 2 using only the integral of 1/x and a 45° rotation, matching the standard textbook result without trig substitution."

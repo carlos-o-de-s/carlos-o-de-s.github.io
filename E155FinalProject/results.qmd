@@ -4,7 +4,9 @@ title: "Results"
 
 After working in this project for over a hundred hours, we were able to get continuous playback out of the SD card while being able to skip forward to the next song, adjust the filter and speed, and be user friendly. 
 
-{{< video ivideo/media.mp4 >}}
+The demo below shows the joystick controlling the filter and playback speed while songs play through the speakers.
+
+{{< video ivideo/media.mp4 title="Demo video: a hand moves the red joystick controller of the portable DJ set while the song plays through two desktop speakers, changing the filter and playback speed" >}}
 
 ## Formulas for Performance
 
@@ -15,7 +17,7 @@ $$
 $$
 
 Another consideration is the maximum and minimum playing speeds, in our case, we chose to use the following value, where the ADC value goes from 0 - 255;
-![Testbench 1](images/arr.png)
+![Code that maps the speed potentiometer reading to the timer ARR value](images/arr.png){fig-alt="C code that reads the speed potentiometer from the ADC, scales it, and sets the timer ARR to 455 plus the scaled value times 772 divided by 255"}
 
 $$
 455 + 772 = 1217

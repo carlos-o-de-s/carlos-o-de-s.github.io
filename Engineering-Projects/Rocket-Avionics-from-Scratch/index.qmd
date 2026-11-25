@@ -4,7 +4,7 @@ title: "Rocket Avionics From Scratch"
 
 Although commercially available, rocket avionics have one main issue: lack of customization. Sometimes a specific rocket needs to collect different kinds of data and deploy stages based on different conditions other than time, acceleration, altitude, or other common triggers. This project focuses on making a cheap, customizable rocket avionics system that can be easily used and modified for different needs.
 
-![Diagram describing data flow](images/Avionics1.png)
+![Diagram describing data flow](images/Avionics1.png){fig-alt="Data flow diagram: the onboard computer (ESP32, GPS, barometer, 9-axis IMU, LoRa) sends live flight data over LoRa radio to the handheld device (ESP32, GPS, magnetometer, LoRa), which can send an emergency parachute deployment command back"}
 
 
 
@@ -12,24 +12,24 @@ Although commercially available, rocket avionics have one main issue: lack of cu
 ::: {.g-col-6}
 **Handheld receiver and Tracker:**
 The red LED will blink faster the closer you are pointing to the direction of where the rocket is. 
-![](images/Avionics5.png)
+![](images/Avionics5.png){fig-alt="Breadboarded handheld receiver and tracker prototype with jumper wires and a USB cable"}
 :::
 ::: {.g-col-6}
 **Radio Modules**
 These modules now have LoRa designed antennas, meaning that the gain is much better. These antennas should work at a range of 10 miles, but it is currently not tested.
-![](images/Avionics3.png)
+![](images/Avionics3.png){fig-alt="Two LoRa radio modules, each with a coiled wire antenna"}
 :::
 ::: {.g-col-6}
 **Onboard Computer**
 The red LED is to see the signals that would activate the parachute deployment. The purpose of this board is to send data, save data, and receive deployment orders from the handheld receiver.
 
-![](images/Avionics4.png)
+![](images/Avionics4.png){fig-alt="Breadboarded onboard flight computer prototype with sensor boards and jumper wires"}
 :::
 ::: {.g-col-6}
 **How does the tracker work?**
 The receiver will need 3 data points: GPS of rocket, GPS of itself, and Magnetometer data. This means that you can calculate the angle between where the rocket is and where the receiver is and check how closely it matches the magnetometer data, changing the blinking frequency.
 
-![](images/Avionics2.png)
+![](images/Avionics2.png){fig-alt="Diagram of the tracker's angle from north: the angle between north and the line from the handheld receiver to the onboard computer"}
 :::
 :::
 

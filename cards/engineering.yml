@@ -3,24 +3,29 @@
 - title: Hybrid Rocket
   path: ../Engineering-Projects/Hybrid-Rocket/index.qmd
   image: Engineering-Projects/Hybrid-Rocket/images/Hybridrocket4.jpg
+  image-alt: "Hybrid rocket lifting off its launch tower in a cloud of dust at White Sands, with mountains behind"
   description: "High school rocketry team: a hybrid rocket launched to 18,994 ft at White Sands Missile Range. I worked mainly on recovery."
 
 - title: Liquid Rocket Engine
   path: ../Engineering-Projects/Liquid-Rocket-Engine/index.qmd
   image: Engineering-Projects/Liquid-Rocket-Engine/images/LRED1.png
+  image-alt: "Exploded CAD view of the liquid rocket engine with a parts list: chamber, saddles, exit seal, outer wall, injector plate, oxidizer cover, and retaining plate"
   description: "Student-run HMC engine: machining parts and building electronics for a test at Friends of Amateur Rocketry."
 
 - title: Hybrid Rocket Engine
   path: ../Engineering-Projects/Hybrid-Rocket-Engine/index.qmd
   image: Engineering-Projects/Hybrid-Rocket-Engine/images/HRE1.jpeg
+  image-alt: "Machined aluminum tube for the hybrid rocket engine lying on a workshop floor"
   description: "Designing and building a small hybrid engine with a 3D-printed fuel grain and nitrous oxide."
 
 - title: Rocket Avionics From Scratch
   path: ../Engineering-Projects/Rocket-Avionics-from-Scratch/index.qmd
   image: Engineering-Projects/Rocket-Avionics-from-Scratch/images/Avionics4.png
+  image-alt: "Breadboarded flight computer prototype with sensor boards and jumper wires"
   description: "A cheap, customizable flight computer with LoRa telemetry and a handheld tracker."
 
 - title: Hardware Input Control
   path: ../Engineering-Projects/Hardware-Input-Control/index.qmd
   image: Engineering-Projects/Hardware-Input-Control/images/Press2.png
+  image-alt: "Game controller circuit board with wires soldered to the up, down, left, and right button pads"
   description: "Pressing controller and keyboard buttons electronically with an Arduino and transistors."
