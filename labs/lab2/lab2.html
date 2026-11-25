@@ -48,14 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -106,11 +105,13 @@ window.Quarto = {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/labs/lab2/images/Lab2top.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Lab 2 schematic: eight switches into the UPduino, five LEDs on 160 ohm resistors, and two 2N3906 PNP transistors switching power to the two digits of an HDSP-521A display whose shared segment lines use 160 ohm resistors">
 <meta property="og:image:height" content="1006">
 <meta property="og:image:width" content="1594">
 <meta name="twitter:title" content="Lab 2: Multiplexed 7-Segment Display – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/labs/lab2/images/Lab2top.png">
+<meta name="twitter:image:alt" content="Lab 2 schematic: eight switches into the UPduino, five LEDs on 160 ohm resistors, and two 2N3906 PNP transistors switching power to the two digits of an HDSP-521A display whose shared segment lines use 160 ohm resistors">
 <meta name="twitter:image-height" content="1006">
 <meta name="twitter:image-width" content="1594">
 <meta name="twitter:card" content="summary_large_image">
@@ -331,33 +332,47 @@ window.Quarto = {
 </header>
 
 
-<p>In this Lab, we were tasked to make 2 HEX displays using a single module by multiplexing, and showing the addition of both HEX numbers in a 5 bit binary LED display. This lab uses a code almost identical to last lab, with a few changes. This resulted in a successful lab2 where we were able to get the two hex numbers displayed with minimal use of pins and showing the sum on LED’s.</p>
-<p>Spent 10 hours</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled" title="At a glance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>At a glance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> Drive two 7-segment digits from a single decoder by time-multiplexing their power with PNP transistors, and show the 5-bit sum of the two hex inputs on LEDs.</p>
+<p><strong>My work (individual lab):</strong> Designed the multiplexing circuit and calculated the LED, segment, and transistor base resistors, wrote the SystemVerilog (reusing my Lab 1 decoder), and wrote a testbench that steps through every hex value on each display.</p>
+<p><strong>Result:</strong> Both digits displayed correctly on hardware while switching at about 2.5 kHz (far above visible flicker), the sum showed on the LEDs, and the testbenches finished with zero errors. Time spent: 10 hours.</p>
+</div>
+</div>
+<p>In this individual lab, I was tasked to make 2 HEX displays using a single module by multiplexing, and showing the addition of both HEX numbers in a 5 bit binary LED display. This lab uses a code almost identical to last lab, with a few changes. This resulted in a successful lab2 where I was able to get the two hex numbers displayed with minimal use of pins and showing the sum on LED’s.</p>
 <section id="circuits-and-diagrams" class="level3">
 <h3 class="anchored" data-anchor-id="circuits-and-diagrams">Circuits and Diagrams</h3>
-<p>First, we start by making a circuit that can support using two multiplexed 7 segment displays, this was done by controlling the power input of each display with a PNP transistor and outputting the 7 segment signal to the current display we are powering.</p>
+<p>First, I made a circuit that can support using two multiplexed 7 segment displays, this was done by controlling the power input of each display with a PNP transistor and outputting the 7 segment signal to the current display we are powering.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab2top.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab2top.png" class="img-fluid figure-img" alt="Lab 2 schematic: eight switches into the UPduino, five LEDs on 160 ohm resistors, and two 2N3906 PNP transistors switching power to the two digits of an HDSP-521A display whose shared segment lines use 160 ohm resistors"></p>
 <figcaption>Electrical schematic of the Lab 2 circuits</figcaption>
 </figure>
 </div>
 <p>This looks like this after assembly:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/lab2circuit.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/lab2circuit.jpeg" class="img-fluid figure-img" alt="Breadboard with a dual red 7-segment display showing 0 0, transistors, resistors, and a row of five yellow LEDs"></p>
 <figcaption>Lab 2 wiring</figcaption>
 </figure>
 </div>
 <p>After wiring the circuit like this, it was configured as follows to be able to control it using verilog code:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/lab2pins.png" class="img-fluid figure-img"></p>
+<p><img src="images/lab2pins.png" class="img-fluid figure-img" alt="Lattice Radiant pin assignment table for switch inputs s1 and s2, the two display-select outputs, the five LEDs, and the seven segment outputs"></p>
 <figcaption>FPGA pin setup</figcaption>
 </figure>
 </div>
-<p>This was then used in our top module, which uses code that was made in Lab1 (lab1_co.sv, which controls the 7 segment display) and the code that controls all the logic and switching between displays.</p>
-<pre class="{verilog, code-fold: true}"><code>/*
+<p>This was then used in my top module, which uses code that was made in Lab1 (lab1_co.sv, which controls the 7 segment display) and the code that controls all the logic and switching between displays.</p>
+<pre><code>/*
 by Carlos Ojeda de Silva, September 10 2025
 cojedadesilva@g.hmc.edu
 This file combines both tasks for lab2
@@ -375,20 +390,20 @@ endmodule</code></pre>
 <p>This top module results in a block diagram that looks as follows:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab2diagram.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab2diagram.png" class="img-fluid figure-img" alt="Lab 2 block diagram: inputs s1 and s2 go to a led_co module that outputs the display select, the LED sum, and the selected digit sout, which feeds the sevseg decoder that drives the segment pins"></p>
 <figcaption>Top module Block Diagram</figcaption>
 </figure>
 </div>
 <section id="circuit-calculations" class="level4">
 <h4 class="anchored" data-anchor-id="circuit-calculations">Circuit calculations:</h4>
-<p>In the previous lab, we used 5v as the V_in of the 7 segment display, which makes the display bleed a bit of current into every LED when off since 3.3v &lt; 5v. This was fixed by changing the V_in to 3.3v and recalculating the required resistance to be:</p>
+<p>In the previous lab, I used 5v as the V_in of the 7 segment display, which makes the display bleed a bit of current into every LED when off since 3.3v &lt; 5v. This was fixed by changing the V_in to 3.3v and recalculating the required resistance to be:</p>
 <p>Math for the yellow LED’s for the 5bit display, in this case, the FPGA is not recommended to use over 8mA and the yellow LED has a 2v drop, so:</p>
 <p><span class="math display">\[
 0.008 &gt; \frac{3.3-2}{R}
 \]</span> <span class="math display">\[
 R &gt; 130
 \]</span></p>
-<p>For these LED’s, we used a 160Ω resistor</p>
+<p>For these LED’s, I used a 160Ω resistor</p>
 <p>Voltage drop of around 0.4V in the transistor, a red LED has a voltage drop of around 1.8v at the current we are driving them at, so:</p>
 <p><span class="math display">\[
 0.010 &gt; \frac{3.3-0.4-1.8}{R}
@@ -401,14 +416,14 @@ R = \frac{0.95}{0.0025}
 \]</span> <span class="math display">\[
 R = 380
 \]</span></p>
-<p>In this case, we also chose 10mA for the 7 segment display since the datasheet does recommend a value closer to that, and it was very visible. The selected value was 160Ω. This value was also used for the normal LED’s used in the fulladder since they have similar current needs and voltage drops.</p>
+<p>In this case, I also chose 10mA for the 7 segment display since the datasheet does recommend a value closer to that, and it was very visible. The selected value was 160Ω. This value was also used for the normal LED’s used in the fulladder since they have similar current needs and voltage drops.</p>
 <p>This also corresponds to the current ratings of the 2N3906 Transistor we are using, which allows a maximum of 200mA to be drawn, meaning that having all segments on (7 per transistor) results in a total current draw of &lt;70mA.</p>
 </section>
 </section>
 <section id="segment-display-multiplexing" class="level3">
 <h3 class="anchored" data-anchor-id="segment-display-multiplexing">7 Segment Display Multiplexing</h3>
-<p>For this part of the lab, we first need to use the 7 segment display code from Lab1, where all we have to change is the input and how the output is treated. To do this we first connected both PNP transistor’s power (Emitter) to the 3.3v line. Then we connected the Base to the FPGA pins so whenever they are high, the transistor switches. Finally we connected each 7 segment display power to the collector. We also added a pulldown resistor (chose 10k since it is standard and much larger than the 160Ω chosen for the display) to the PNP transistor to remove any excess charge accumulated when switching off. Here is the verilog code used:</p>
-<pre class="{verilog, code-fold: true}"><code>/*
+<p>For this part of the lab, we first need to use the 7 segment display code from Lab1, where all we have to change is the input and how the output is treated. To do this, I first connected both PNP transistor’s power (Emitter) to the 3.3v line. Then I connected the Base to the FPGA pins so whenever they are high, the transistor switches. Finally, I connected each 7 segment display power to the collector. I also added a pulldown resistor (chose 10k since it is standard and much larger than the 160Ω chosen for the display) to the PNP transistor to remove any excess charge accumulated when switching off. Here is the verilog code used:</p>
+<pre><code>/*
 by Carlos Ojeda de Silva, September 10 2025
 cojedadesilva@g.hmc.edu
 This file controls which 7 segment display is used with the corresponding s values. It also outputs the sum of 2 numbers in binary with 5 leds
@@ -440,33 +455,33 @@ module leds_co(
   assign disps[0] = counter[21];
   assign disps[1] = ~counter[21];
 endmodule</code></pre>
-<p>This code was mainly recycled from the lab1 code also named leds_co.sv, where the logic was changed to select the display with the disps variable. The same addition was chosen as the previous lab, but since 2.4Hz is too slow, we reduced the exponent from 31 to 21 to make it 1048 (2^10) times faster, resulting in 2.5kHz. This is much faster than the human eye being at most in the hundreds of Hz.</p>
+<p>This code was mainly recycled from the lab1 code also named leds_co.sv, where the logic was changed to select the display with the disps variable. The same addition was chosen as the previous lab, but since 2.4Hz is too slow, I reduced the exponent from 31 to 21 to make it 1048 (2^10) times faster, resulting in 2.5kHz. This is much faster than the human eye being at most in the hundreds of Hz.</p>
 </section>
 <section id="bit-full-adder" class="level3">
 <h3 class="anchored" data-anchor-id="bit-full-adder">5 Bit Full Adder</h3>
-<p>To make the full adder, we first need to consider we are adding two 4-bit numbers, meaning that the sum could be 5 bits long, meaning that our output will be of length 5. Then we used the following line of verilog code to assign the leds the sum:</p>
-<pre class="{verilog, code-fold: true}"><code>  assign leds = s1+s2;</code></pre>
+<p>To make the full adder, we first need to consider we are adding two 4-bit numbers, meaning that the sum could be 5 bits long, meaning that our output will be of length 5. Then I used the following line of verilog code to assign the leds the sum:</p>
+<pre><code>  assign leds = s1+s2;</code></pre>
 <p>Finally, the pins are assigned so the LED’s order matches one that can be interpreted from left to right.</p>
 </section>
 <section id="testbench" class="level3">
 <h3 class="anchored" data-anchor-id="testbench">Testbench</h3>
-<p>To test the fpga setup, we have designed a testbench that tests every hex value for each display (0-15 display 1 then stays at 15 while the second one goes from 0-15).</p>
+<p>To test the FPGA setup, I designed a testbench that tests every hex value for each display (0-15 display 1 then stays at 15 while the second one goes from 0-15).</p>
 <p>The test bench was also made by doing small modifications to the code, where we can control the timing (counter[21]) to force it to switch between displays.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/lab2testbench.png" class="img-fluid figure-img"></p>
+<p><img src="images/lab2testbench.png" class="img-fluid figure-img" alt="ModelSim waveform of the Lab 2 top testbench sweeping both hex inputs, with segment and LED outputs matching the expected values and errors at zero"></p>
 <figcaption>Top Testbench Trace</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab1tb_sevseg.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab1tb_sevseg.png" class="img-fluid figure-img" alt="ModelSim waveform of the reused seven segment testbench: the output matches the expected value for all 16 inputs and errors stays at zero"></p>
 <figcaption>Seven Segment Testbench Trace</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab2tb_ledlogic.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab2tb_ledlogic.png" class="img-fluid figure-img" alt="ModelSim waveform of the multiplexing and LED logic testbench showing the display select switching, the selected digit, and the LED sum, with errors at zero"></p>
 <figcaption>Multiplexing/LED logic Testbench Trace</figcaption>
 </figure>
 </div>
@@ -474,10 +489,10 @@ endmodule</code></pre>
 </section>
 <section id="ai-prototype" class="level3">
 <h3 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h3>
-<p>Using ChatGPT, we inputted the following prompt:</p>
+<p>Using ChatGPT, I entered the following prompt:</p>
 <p>Write SystemVerilog HDL to time multiplex a single seven segment decoder (that decodes from four bits to a common anode seven segment display) to decode two sets of input bits and drive two sets of seven output bits.</p>
-<p>from which we got this code:</p>
-<pre class="{verilog, code-fold: true}"><code>module seven_segment_mux (
+<p>from which I got this code:</p>
+<pre><code>module seven_segment_mux (
     input logic clk,               // Clock input to drive time multiplexing
     input logic rst_n,             // Active low reset
     input logic [3:0] digit1,      // First 4-bit input digit (for first 7-segment display)
@@ -557,7 +572,7 @@ endmodule
 </ul>
 <p>but I still think it was a high quality output since it did make something that compiled and has around 70% of the logic right, while only taking 2 min to make and test.</p>
 <p>The only part of the code that looks different to what I usually make is the use of a function. I imagined you always made a new module, but I think I can use it for Lab3 to make a demultiplexer.</p>
-<p>I believe if we dumb down the specifics (7 pins for display and 2 for power that switch back and forth) it would work well</p>
+<p>I believe if I simplified the specifics (7 pins for display and 2 for power that switch back and forth) it would work well</p>
 </section>
 <section id="lab-2-resources" class="level3">
 <h3 class="anchored" data-anchor-id="lab-2-resources">Lab 2 resources:</h3>
@@ -619,6 +634,9 @@ endmodule
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -665,6 +683,13 @@ endmodule
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -1078,7 +1103,7 @@ endmodule
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

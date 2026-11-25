@@ -48,14 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -77,13 +76,13 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:description" content="Predicting the shape of a photographed object using AI">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/CS-Math-Projects/AI-Image-Depth-Perception/images/Depth_dataset.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
-<meta property="og:image:alt" content="Original Dataset">
+<meta property="og:image:alt" content="Table of the DIODE dataset splits (train, validation, and test, indoors and outdoors, with scene, scan, and image counts) and the laser scanner's specifications">
 <meta property="og:image:height" content="425">
 <meta property="og:image:width" content="760">
 <meta name="twitter:title" content="AI Image Depth Perception – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Predicting the shape of a photographed object using AI">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/CS-Math-Projects/AI-Image-Depth-Perception/images/Depth_dataset.png">
-<meta name="twitter:image:alt" content="Original Dataset">
+<meta name="twitter:image:alt" content="Table of the DIODE dataset splits (train, validation, and test, indoors and outdoors, with scene, scan, and image counts) and the laser scanner's specifications">
 <meta name="twitter:image-height" content="425">
 <meta name="twitter:image-width" content="760">
 <meta name="twitter:card" content="summary_large_image">
@@ -296,7 +295,7 @@ ul.task-list li input[type="checkbox"] {
 
 <p>Have you ever wondered if robots can know the shape of the world around them from a single camera in a similar way to how we know how far things are? Well, this project aims to develop a simple AI algorithm that can do that.</p>
 <p>This project used an open source dataset named <strong><a href="https://diode-dataset.org/">Diode Dataset</a></strong> where there are depth maps associated with images.</p>
-<p><img src="images/Depth_dataset.png" class="img-fluid" alt="Original Dataset"> For this project based on computing limitations, only the validation and test images were used.</p>
+<p><img src="images/Depth_dataset.png" class="img-fluid" alt="Table of the DIODE dataset splits (train, validation, and test, indoors and outdoors, with scene, scan, and image counts) and the laser scanner's specifications"> For this project based on computing limitations, only the validation and test images were used.</p>
 <p>Some pre-processing was done, which is described below:</p>
 <ul>
 <li>The top 5% and bottom 5% of depth values are clipped.</li>
@@ -306,7 +305,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Image resolution was decreased from 1024x784 into 256x192.</li>
 </ul>
 <p>For this project, a Convolutional Neural Network with less than 500,000 parameters was used, this was with the purpose to widen the application scopes of this model. Although the algorithm was able to predict general shapes at its best, more work is needed in order to apply it as a solution for computer vision.</p>
-<p><img src="images/Depth_result.png" class="img-fluid" alt="Results of AI algorithm"> Although this specific example had a good prediction of shape, most images produced noisier predictions.</p>
+<p><img src="images/Depth_result.png" class="img-fluid" alt="Three panels: an indoor photo, its true depth map, and the depth map predicted by the network, which captures the general shape"> Although this specific example had a good prediction of shape, most images produced noisier predictions.</p>
 
 
 
@@ -360,6 +359,9 @@ ul.task-list li input[type="checkbox"] {
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -406,6 +408,13 @@ ul.task-list li input[type="checkbox"] {
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -819,7 +828,7 @@ ul.task-list li input[type="checkbox"] {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

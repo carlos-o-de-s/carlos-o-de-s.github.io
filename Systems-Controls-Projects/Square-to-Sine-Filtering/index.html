@@ -83,14 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -99,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -397,7 +396,7 @@ a_0 + a_1\sin(\omega_0 t)
 <p><em>Developed for Harvey Mudd’s Systems Engineering course (E101).</em></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/raw-data.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p><img src="images/raw-data.png" class="img-fluid figure-img" style="width:70.0%" alt="Measured signals: raw square wave (blue), after the analog filter (orange), and after both filters (yellow)"></p>
 <figcaption>Measured signals: raw square wave (blue), after the analog filter (orange), and after both filters (yellow)</figcaption>
 </figure>
 </div>
@@ -453,7 +452,7 @@ H_i(s) = \frac{1}{R_1R_2C_1C_2\,s^2 + (R_1 + R_2)C_2\,s + 1}
 <div class="quarto-layout-cell" style="flex-basis: 55.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/sallen-key-schematic.png" class="img-fluid figure-img"></p>
+<p><img src="images/sallen-key-schematic.png" class="img-fluid figure-img" alt="Two-stage Sallen-Key filter"></p>
 <figcaption>Two-stage Sallen-Key filter</figcaption>
 </figure>
 </div>
@@ -461,7 +460,7 @@ H_i(s) = \frac{1}{R_1R_2C_1C_2\,s^2 + (R_1 + R_2)C_2\,s + 1}
 <div class="quarto-layout-cell" style="flex-basis: 45.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/breadboard.jpg" class="img-fluid figure-img"></p>
+<p><img src="images/breadboard.jpg" class="img-fluid figure-img" alt="The filter on a breadboard next to the Arduino Uno"></p>
 <figcaption>The filter on a breadboard next to the Arduino Uno</figcaption>
 </figure>
 </div>
@@ -470,7 +469,7 @@ H_i(s) = \frac{1}{R_1R_2C_1C_2\,s^2 + (R_1 + R_2)C_2\,s + 1}
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/analog-bode.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p><img src="images/analog-bode.png" class="img-fluid figure-img" style="width:70.0%" alt="Magnitude response of the analog filter: flat to ~10 Hz, then −80 dB/decade"></p>
 <figcaption>Magnitude response of the analog filter: flat to ~10 Hz, then −80 dB/decade</figcaption>
 </figure>
 </div>
@@ -523,7 +522,7 @@ H_D(z) = b\,\frac{1 - z^{-10}}{(1 - z^{-1})(1 - 2\cos(\pi/5)z^{-1} + z^{-2})}
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/fir-magnitude.png" class="img-fluid figure-img"></p>
+<p><img src="images/fir-magnitude.png" class="img-fluid figure-img" alt="FIR magnitude response from −50 to 50 Hz"></p>
 <figcaption>FIR magnitude response from −50 to 50 Hz</figcaption>
 </figure>
 </div>
@@ -531,7 +530,7 @@ H_D(z) = b\,\frac{1 - z^{-10}}{(1 - z^{-1})(1 - 2\cos(\pi/5)z^{-1} + z^{-2})}
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/fir-bode.png" class="img-fluid figure-img"></p>
+<p><img src="images/fir-bode.png" class="img-fluid figure-img" alt="FIR Bode plot. The response repeats every 100 Hz because the signal is sampled"></p>
 <figcaption>FIR Bode plot. The response repeats every 100 Hz because the signal is sampled</figcaption>
 </figure>
 </div>
@@ -544,7 +543,7 @@ H_D(z) = b\,\frac{1 - z^{-10}}{(1 - z^{-1})(1 - 2\cos(\pi/5)z^{-1} + z^{-2})}
 <p>The FIR filter drops off much faster than the analog filter above 10 Hz. However, its response repeats every 100 Hz, so on its own it would pass any high-frequency content that aliases down into its passband. The analog filter removes that content before the signal is sampled. In series, the combined response falls below the 1 % level (−40 dB) at about 17 Hz. From about 23 Hz upward it stays below −60 dB.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/combined-bode.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p><img src="images/combined-bode.png" class="img-fluid figure-img" style="width:70.0%" alt="Combined response of both filters, analog stage first"></p>
 <figcaption>Combined response of both filters, analog stage first</figcaption>
 </figure>
 </div>
@@ -554,14 +553,14 @@ H_D(z) = b\,\frac{1 - z^{-10}}{(1 - z^{-1})(1 - 2\cos(\pi/5)z^{-1} + z^{-2})}
 <p>Swapping the two stages would put the analog filter after the sampler. A filter that acts on sampled data only ever sees frequencies between 0 and 50 Hz, because everything above 50 Hz has already been folded (aliased) back into that range. As a result, the Butterworth filter’s response stops falling and instead repeats every 100 Hz:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/analog-after-sampling.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p><img src="images/analog-after-sampling.png" class="img-fluid figure-img" style="width:70.0%" alt="The analog filter’s effective response when it acts on data already sampled at 100 Hz"></p>
 <figcaption>The analog filter’s effective response when it acts on data already sampled at 100 Hz</figcaption>
 </figure>
 </div>
 <p>The overlay below compares both orderings against the individual filters:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/filter-order-bode.png" class="img-fluid figure-img"></p>
+<p><img src="images/filter-order-bode.png" class="img-fluid figure-img" alt="Magnitude response of each filter alone and of both orderings. The dashed line marks the 1 % level (−40 dB). The frequency axis is in rad/s: 10 Hz ≈ 63 rad/s and 100 Hz ≈ 628 rad/s."></p>
 <figcaption>Magnitude response of each filter alone and of both orderings. The dashed line marks the 1 % level (−40 dB). The frequency axis is in rad/s: 10 Hz ≈ 63 rad/s and 100 Hz ≈ 628 rad/s.</figcaption>
 </figure>
 </div>
@@ -654,7 +653,7 @@ f_s = 8.13 \times 10.7 \approx 87 \text{ samples/s}.
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/spectrum-square.png" class="img-fluid figure-img"></p>
+<p><img src="images/spectrum-square.png" class="img-fluid figure-img" alt="Fourier transform of the raw square wave: a peak at about 11 Hz plus many smaller harmonic peaks out to 50 Hz"></p>
 <figcaption>Square wave</figcaption>
 </figure>
 </div>
@@ -662,7 +661,7 @@ f_s = 8.13 \times 10.7 \approx 87 \text{ samples/s}.
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/spectrum-analog.png" class="img-fluid figure-img"></p>
+<p><img src="images/spectrum-analog.png" class="img-fluid figure-img" alt="After the analog filter (note the small 2nd-harmonic spike at 21.4 Hz)"></p>
 <figcaption>After the analog filter (note the small 2nd-harmonic spike at 21.4 Hz)</figcaption>
 </figure>
 </div>
@@ -670,7 +669,7 @@ f_s = 8.13 \times 10.7 \approx 87 \text{ samples/s}.
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/spectrum-both.png" class="img-fluid figure-img"></p>
+<p><img src="images/spectrum-both.png" class="img-fluid figure-img" alt="Fourier transform after both filters: only the DC component and the fundamental near 11 Hz remain, with the harmonics removed"></p>
 <figcaption>After both filters</figcaption>
 </figure>
 </div>
@@ -913,6 +912,9 @@ f_s = 8.13 \times 10.7 \approx 87 \text{ samples/s}.
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -959,6 +961,13 @@ f_s = 8.13 \times 10.7 \approx 87 \text{ samples/s}.
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -1372,7 +1381,7 @@ f_s = 8.13 \times 10.7 \approx 87 \text{ samples/s}.
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

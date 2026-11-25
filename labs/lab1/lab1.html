@@ -48,14 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -106,9 +105,11 @@ window.Quarto = {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/labs/lab1/images/testcaseFPGA.jpeg">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Soldered E155 development board with the UPduino FPGA and STM32 board, connected by a ribbon cable to a breadboard with a lit red 7-segment display">
 <meta name="twitter:title" content="Lab 1: FPGA and MCU Setup and Testing – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/labs/lab1/images/testcaseFPGA.jpeg">
+<meta name="twitter:image:alt" content="Soldered E155 development board with the UPduino FPGA and STM32 board, connected by a ribbon cable to a breadboard with a lit red 7-segment display">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -327,34 +328,48 @@ window.Quarto = {
 </header>
 
 
-<p>During this lab, we are tasked to make a 2.4Hz square wave, an AND gate operation, an XOR gate operation and a translator from binary introduced from switches into a hex number in a 7 segment display. These different tasks explore different types of skill when working with FPGA’s.</p>
-<p>Spent 12 hours</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled" title="At a glance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>At a glance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> Solder and bring up the E155 development board, then program the UPduino FPGA to blink an LED at 2.4 Hz, run AND/XOR logic on switch inputs, and show the 4-bit switch value as a hex digit on a 7-segment display.</p>
+<p><strong>My work (individual lab):</strong> Soldered the board (including surface-mount parts), designed the display circuit and sized its resistors, wrote the SystemVerilog, and verified it with testbenches and an oscilloscope.</p>
+<p><strong>Result:</strong> The oscilloscope measured the blinker at 2.44 Hz, all 16 switch combinations passed in simulation with zero errors, and the display showed the correct digit on hardware. Time spent: 12 hours.</p>
+</div>
+</div>
+<p>In this individual lab, I was tasked to make a 2.4Hz square wave, an AND gate operation, an XOR gate operation and a translator from binary introduced from switches into a hex number in a 7 segment display. These different tasks explore different types of skill when working with FPGA’s.</p>
 <section id="pcb-soldering-and-circuits" class="level3">
 <h3 class="anchored" data-anchor-id="pcb-soldering-and-circuits">PCB soldering and circuits</h3>
-<p>First, we have to make sure the FPGA setup will be adequate for the E155 course, where we need to include all the components and verify the connections and board all work properly. This helped me develop skills mainly in surface mounted devices, since it is a type of soldering I am not very familiar with.</p>
+<p>First, I had to make sure the FPGA setup will be adequate for the E155 course, which meant soldering all the components and verify the connections and board all work properly. This helped me develop skills mainly in surface mounted devices, since it is a type of soldering I am not very familiar with.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/testcaseFPGA.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/testcaseFPGA.jpeg" class="img-fluid figure-img" alt="Soldered E155 development board with the UPduino FPGA and STM32 board, connected by a ribbon cable to a breadboard with a lit red 7-segment display"></p>
 <figcaption>Board after Soldering</figcaption>
 </figure>
 </div>
-<p>After getting the board set up, we started to work into making the circuit for the following parts of the lab. This required some amount of calculations and design choices that are gone more in depth later in this page.</p>
+<p>After getting the board set up, I started working on the circuit for the following parts of the lab. This required some amount of calculations and design choices that are gone more in depth later in this page.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab1diagram.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab1diagram.png" class="img-fluid figure-img" alt="Block diagram of the Lab 1 top module: switch inputs s[3:0] on pins 32, 35, 31 and 37 feed a leds_co module that drives the blinker and two LEDs, and a sevseg module with the HSOSC oscillator that drives the seven segment outputs"></p>
 <figcaption>Block Diagram</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab1top.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab1top.png" class="img-fluid figure-img" alt="Circuit diagram: UPduino 3.1 outputs drive three LEDs and the seven segments of an HDSP-511A display, each through a 1 kilohm resistor"></p>
 <figcaption>Circuit Diagram</figcaption>
 </figure>
 </div>
-<p>It is also important to note that we had to program which pins are which in the FPGA setup:</p>
+<p>It is also important to note that I had to program which pins are which in the FPGA setup:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/fpgapins.png" class="img-fluid figure-img"></p>
+<p><img src="images/fpgapins.png" class="img-fluid figure-img" alt="Lattice Radiant pin assignment table listing the FPGA pin for each switch input and each LED and segment output"></p>
 <figcaption>FPGA pin setup</figcaption>
 </figure>
 </div>
@@ -362,7 +377,7 @@ window.Quarto = {
 <section id="andxor-gate-operations" class="level3">
 <h3 class="anchored" data-anchor-id="andxor-gate-operations">and/xor gate operations</h3>
 <p>This can be easily done in verilog by defining the output (an LED in this case) to be the “and” or “xor” operation of the desired inputs. This can be done as easily as:</p>
-<pre class="{verilog, code-fold: true}"><code>assign led00 = s[0] ^ s[1]; //xor
+<pre><code>assign led00 = s[0] ^ s[1]; //xor
 assign led10 = s[2] &amp; s[3]; //and</code></pre>
 </section>
 <section id="hz-timing" class="level3">
@@ -378,37 +393,37 @@ f = 48,000,000
 c = 215
 \]</span></p>
 <p>The value 215 was chosen to give us the closest frequency to the desired 2.4 Hz. This would result in a code that looks like this:</p>
-<pre class="{verilog, code-fold: true}"><code>    always_ff @(posedge int_osc)
+<pre><code>    always_ff @(posedge int_osc)
         begin
             counter &lt;= counter + 215; //107 * 48,000,000 ~= 2.4 * 2^30, so a 2.4Hz square wave
         end
   assign fpga_blink_out = counter[31];</code></pre>
-<p>After getting this code working, we tested the signal generated using an oscilloscope and verified it was at 2.4Hz.</p>
+<p>After getting this code working, I tested the signal generated using an oscilloscope and verified it was at 2.4Hz.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Oscprint.png" class="img-fluid figure-img"></p>
+<p><img src="images/Oscprint.png" class="img-fluid figure-img" alt="Rigol oscilloscope showing the FPGA square wave with a measured period of 410 ms and a frequency of 2.44 Hz"></p>
 <figcaption>Oscilloscope trace</figcaption>
 </figure>
 </div>
 </section>
 <section id="segment-display" class="level3">
 <h3 class="anchored" data-anchor-id="segment-display">7 segment display</h3>
-<p>To make the 7 segment display to work by being controlled by the UPduino board, we first need to consider that the 7 segment display we are using (HDSP-511A) works by grounding the pins to turn on the desired segment. This means that whenever we are making the logic on which segments turn on and off, we have to consider that 0 is on and 1 is off. This was made in System Verilog and tested using a testbench, where we made a test case for each of the possible combinations of 4 switches (16 tests).</p>
+<p>To make the 7 segment display to work by being controlled by the UPduino board, we first need to consider that the 7 segment display we are using (HDSP-511A) works by grounding the pins to turn on the desired segment. This means that whenever we are making the logic on which segments turn on and off, we have to consider that 0 is on and 1 is off. This was made in System Verilog and tested using a testbench, where I made a test case for each of the possible combinations of 4 switches (16 tests).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Testbench.png" class="img-fluid figure-img"></p>
+<p><img src="images/Testbench.png" class="img-fluid figure-img" alt="ModelSim waveform of the top-level testbench stepping the switch input from f down to 0, with the errors signal staying at zero"></p>
 <figcaption>Top Testbench Trace</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab1tb_ledlogic.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab1tb_ledlogic.png" class="img-fluid figure-img" alt="ModelSim waveform of the LED logic testbench across all 16 switch values, with the errors signal staying at zero"></p>
 <figcaption>LED Logic Testbench Trace</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab1tb_sevseg.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab1tb_sevseg.png" class="img-fluid figure-img" alt="ModelSim waveform of the seven segment testbench: the decoded output matches the expected value for all 16 inputs and errors stays at zero"></p>
 <figcaption>Seven Segment Testbench Trace</figcaption>
 </figure>
 </div>
@@ -419,10 +434,10 @@ c = 215
 \]</span> <span class="math display">\[
 R &gt; 580
 \]</span></p>
-<p>In this case, we chose to use 1k resistors since they were visible and available.</p>
+<p>In this case, I chose 1k resistors since they were visible and available.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/testcaseFPGA.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/testcaseFPGA.jpeg" class="img-fluid figure-img" alt="Hardware test with the switches set to 1001: the 7-segment display shows 9"></p>
 <figcaption>Test with 9 in binary (1001) showing the right output</figcaption>
 </figure>
 </div>
@@ -430,10 +445,10 @@ R &gt; 580
 </section>
 <section id="ai-prototype" class="level3">
 <h3 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h3>
-<p>Using ChatGPT, we inputted the following prompt:</p>
+<p>Using ChatGPT, I entered the following prompt:</p>
 <p>Write SystemVerilog HDL to leverage the internal high speed oscillator in the Lattice UP5K FPGA and blink an LED at 2 Hz. Take full advantage of SystemVerilog syntax, for example, using logic instead of wire and reg.</p>
-<p>from which we got this code:</p>
-<pre class="{verilog, code-fold: true}"><code>module led_blinker_2hz (
+<p>from which I got this code:</p>
+<pre><code>module led_blinker_2hz (
     output logic led
 );
 
@@ -465,8 +480,8 @@ R &gt; 580
     end
 
 endmodule</code></pre>
-<p>After testing this code, we realized that it didn’t work, we copied the error message and tried the new code.</p>
-<pre class="{verilog, code-fold: true}"><code>module led_blinker_2hz (
+<p>After testing this code, I realized that it didn’t work, so I copied the error message and tried the new code.</p>
+<pre><code>module led_blinker_2hz (
     output logic led
 );
 
@@ -552,6 +567,9 @@ endmodule</code></pre>
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -598,6 +616,13 @@ endmodule</code></pre>
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -1011,7 +1036,7 @@ endmodule</code></pre>
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

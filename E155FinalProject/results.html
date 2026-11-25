@@ -50,14 +50,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -66,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -108,13 +107,13 @@ window.Quarto = {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/E155FinalProject/images/arr.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
-<meta property="og:image:alt" content="Testbench 1">
+<meta property="og:image:alt" content="C code that reads the speed potentiometer from the ADC, scales it, and sets the timer ARR to 455 plus the scaled value times 772 divided by 255">
 <meta property="og:image:height" content="130">
 <meta property="og:image:width" content="760">
 <meta name="twitter:title" content="Results – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/E155FinalProject/images/arr.png">
-<meta name="twitter:image:alt" content="Testbench 1">
+<meta name="twitter:image:alt" content="C code that reads the speed potentiometer from the ADC, scales it, and sets the timer ARR to 455 plus the scaled value times 772 divided by 255">
 <meta name="twitter:image-height" content="130">
 <meta name="twitter:image-width" content="760">
 <meta name="twitter:card" content="summary_large_image">
@@ -331,14 +330,15 @@ window.Quarto = {
 
 
 <p>After working in this project for over a hundred hours, we were able to get continuous playback out of the SD card while being able to skip forward to the next song, adjust the filter and speed, and be user friendly.</p>
-<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="ivideo/media.mp4"></video></div>
+<p>The demo below shows the joystick controlling the filter and playback speed while songs play through the speakers.</p>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title="Demo video: a hand moves the red joystick controller of the portable DJ set while the song plays through two desktop speakers, changing the filter and playback speed"><source src="ivideo/media.mp4"></video></div>
 <section id="formulas-for-performance" class="level2">
 <h2 class="anchored" data-anchor-id="formulas-for-performance">Formulas for Performance</h2>
 <p>Using a Moving Average filter as the lowpass filter was probably not an ideal choice, but its simplicity and results were good. This filter should have a “corner frequency” of around 165 Hz, done with the formula:</p>
 <p><span class="math display">\[
 \frac{48{,}000 \times 0.441}{128} = 165.4\ \text{Hz}
 \]</span></p>
-<p>Another consideration is the maximum and minimum playing speeds, in our case, we chose to use the following value, where the ADC value goes from 0 - 255; <img src="images/arr.png" class="img-fluid" alt="Testbench 1"></p>
+<p>Another consideration is the maximum and minimum playing speeds, in our case, we chose to use the following value, where the ADC value goes from 0 - 255; <img src="images/arr.png" class="img-fluid" alt="C code that reads the speed potentiometer from the ADC, scales it, and sets the timer ARR to 455 plus the scaled value times 772 divided by 255"></p>
 <p><span class="math display">\[
 455 + 772 = 1217
 \]</span> This means we have a frequency of <span class="math display">\[
@@ -350,7 +350,7 @@ window.Quarto = {
 <p>The FIR filter chosen should have the following frequency response:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/bode.jpg" class="img-fluid figure-img"></p>
+<p><img src="images/bode.jpg" class="img-fluid figure-img" alt="Frequency Response of Our Filter"></p>
 <figcaption>Frequency Response of Our Filter</figcaption>
 </figure>
 </div>
@@ -408,6 +408,9 @@ window.Quarto = {
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -454,6 +457,13 @@ window.Quarto = {
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -867,7 +877,7 @@ window.Quarto = {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

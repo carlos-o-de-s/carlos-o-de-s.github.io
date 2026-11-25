@@ -83,14 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -99,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -393,7 +392,7 @@ window.Quarto = {
 <p><em>Developed for Harvey Mudd’s Engineering Math course (E72). The equations for the rider’s path come from a paper provided by the course.</em></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/velocity-profiles.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p><img src="images/velocity-profiles.png" class="img-fluid figure-img" style="width:70.0%" alt="Speed along the line at the optimal design. The lightest rider sets the limit by barely reaching the end."></p>
 <figcaption>Speed along the line at the optimal design. The lightest rider sets the limit by barely reaching the end.</figcaption>
 </figure>
 </div>
@@ -414,7 +413,7 @@ T_0\cos\theta_0 = \frac{wL}{b_0}
 <p>Rider speed is much lower than the speed of waves in the cable, so the two problems can be separated. The rider’s position sets the line’s shape, but the rider’s acceleration does not noticeably affect it.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/rider-paths.png" class="img-fluid figure-img"></p>
+<p><img src="images/rider-paths.png" class="img-fluid figure-img" alt="Left: the path of each rider at the optimal design. Right: the same paths measured from the unloaded cable."></p>
 <figcaption>Left: the path of each rider at the optimal design. Right: the same paths measured from the unloaded cable.</figcaption>
 </figure>
 </div>
@@ -575,7 +574,7 @@ m\frac{dv}{dt} = mg\sin(-\alpha) - \frac{1}{2}\rho C_d A v^2
 <p><code>fmincon</code> is a local optimizer, and the penalties make this objective jump at the edges of the allowed region, so I checked the result with separate sweeps of tension and drop. With the drop fixed at 40 m, tension trades peak speed against exit speed:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/tension-sweep.png" class="img-fluid figure-img"></p>
+<p><img src="images/tension-sweep.png" class="img-fluid figure-img" alt="Sweeping tension at a 40 m drop. The shaded band is the range of tensions that meets every constraint."></p>
 <figcaption>Sweeping tension at a 40 m drop. The shaded band is the range of tensions that meets every constraint.</figcaption>
 </figure>
 </div>
@@ -667,7 +666,7 @@ m\frac{dv}{dt} = mg\sin(-\alpha) - \frac{1}{2}\rho C_d A v^2
 </table>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/friction-profiles.png" class="img-fluid figure-img"></p>
+<p><img src="images/friction-profiles.png" class="img-fluid figure-img" alt="Speed along the line with friction, at the optimal tension for each friction coefficient"></p>
 <figcaption>Speed along the line with friction, at the optimal tension for each friction coefficient</figcaption>
 </figure>
 </div>
@@ -745,6 +744,9 @@ m\frac{dv}{dt} = mg\sin(-\alpha) - \frac{1}{2}\rho C_d A v^2
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -791,6 +793,13 @@ m\frac{dv}{dt} = mg\sin(-\alpha) - \frac{1}{2}\rho C_d A v^2
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -1204,7 +1213,7 @@ m\frac{dv}{dt} = mg\sin(-\alpha) - \frac{1}{2}\rho C_d A v^2
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

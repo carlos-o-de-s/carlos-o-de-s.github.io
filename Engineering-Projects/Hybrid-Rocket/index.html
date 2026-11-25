@@ -43,19 +43,20 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="../../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -77,9 +78,11 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/Engineering-Projects/Hybrid-Rocket/images/Hybridrocket4.jpg">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Launch Image of the Rocket">
 <meta name="twitter:title" content="Hybrid Rocket – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/Engineering-Projects/Hybrid-Rocket/images/Hybridrocket4.jpg">
+<meta name="twitter:image:alt" content="Launch Image of the Rocket">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -289,7 +292,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Hybridrocket4.jpg" class="img-fluid figure-img"></p>
+<p><img src="images/Hybridrocket4.jpg" class="img-fluid figure-img" alt="Launch Image of the Rocket"></p>
 <figcaption>Launch Image of the Rocket</figcaption>
 </figure>
 </div>
@@ -297,38 +300,28 @@ ul.task-list li input[type="checkbox"] {
 <p>The first step was to simulate the flight and make sure the general shape and size of the rocket would be able to meet our objectives, here is a picture of the simulation we ran on Google Sheets using Euler’s method in order to predict where the rocket would end up in (Disclaimer: this simulation was modified post flight to match flight data we got, mainly as a test of the efficacy of the simulation algorithm)</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Hybridrocket2.png" class="img-fluid figure-img"></p>
+<p><img src="images/Hybridrocket2.png" class="img-fluid figure-img" alt="Google Sheets flight simulation using Euler's method: a table of thrust, drag, mass, and altitude at each time step, with a plot of the predicted altitude arc"></p>
 <figcaption>Flight Profile</figcaption>
 </figure>
 </div>
 <p>This algorithm was compared to the actual flight after we added specific values from the flight in order to calculate the efficiency of the engine (Isp). This next image has a yellow line representing the actual flight path of the rocket, and there is an overlapping blue line that is what we simulated. Using the specific angle the rocket went, how high it went, and how far it landed (crashed), we determined that the Isp was around 157 seconds. We also assumed constant wind speeds for this result, but we have checked that modifying these would have minimal impact (within reasonable range). Another issue the rocket had is that the tank was only half full (or half empty), meaning that we also had to account for this in these simulations post flight analysis.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Hybridrocket1.png" class="img-fluid figure-img"></p>
+<p><img src="images/Hybridrocket1.png" class="img-fluid figure-img" alt="Flight path plot with the simulated trajectory (blue) overlaid on the actual flight path (yellow)"></p>
 <figcaption>Simulation vs Actual data</figcaption>
 </figure>
 </div>
 <p>Although all of this simulation was really interesting, we can now talk about the subsystem I was mainly involved in: Recovery (I think this was spoiled before, but the rocket crashed). Although the rocket crashed, it is unclear if it was the avionics or recovery that failed, but it is more likely it would have been the avionics since not even the nosecone was able to deploy, which should be directly reliant on the avionics. All of this was analysed post flight and noted for the next year in the project, where they were able to get a working recovery system. At the end of the day, having a system you can’t fully test work first time is difficult. Here is a short overview of the recovery system:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Hybridrocket3.png" class="img-fluid figure-img"></p>
+<p><img src="images/Hybridrocket3.png" class="img-fluid figure-img" alt="Exploded CAD drawing of the Goddard recovery assembly: an aluminum bulkhead, threaded rods, U-bolt, eye bolt, O-ring, and two aluminum line cutters, with a parts list"></p>
 <figcaption>Recovery system design</figcaption>
 </figure>
 </div>
 <p>This system consisted of a dual deployment using only 1 parachute. Although we only have 1 parachute, we can make it act like 2 different sizes by using a technique called reefing, where we tie down the parachute so it is closed when it is deployed. This helps since it acts like a smaller parachute and then we can cut this line using our custom designed and built line cutters to fully open them. For this, we tested the line cutters before flight, which we can see in the video below:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><video src="videos/Hybridvid2.mp4" class="img-fluid" controls=""><a href="videos/Hybridvid2.mp4">Video</a></video></p>
-<figcaption>Line cutter test</figcaption>
-</figure>
-</div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title="Video: bench test of the custom line cutters used to release the reefed parachute"><source src="videos/Hybridvid2.mp4"></video></div>
 <p>Finally, this recovery system and the other components of the rocket were integrated, making sure they all worked together in order to achieve the video shown, The rocket was 63kg dry mass and 95kg wet mass (with fuel and oxidizer), although designed to be 113kg: The rocket reached a total altitude over ground level of 18994 feet (5789 meters).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><video src="videos/Hybridvid1.mp4" class="img-fluid" controls=""><a href="videos/Hybridvid1.mp4">Video</a></video></p>
-<figcaption>Rocket Flight</figcaption>
-</figure>
-</div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video2" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title="Video: the hybrid rocket launching at White Sands Missile Range"><source src="videos/Hybridvid1.mp4"></video></div>
 
 
 
@@ -382,6 +375,9 @@ ul.task-list li input[type="checkbox"] {
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -428,6 +424,13 @@ ul.task-list li input[type="checkbox"] {
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -841,13 +844,15 @@ ul.task-list li input[type="checkbox"] {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+<script>videojs(video_shortcode_videojs_video1);</script>
+<script>videojs(video_shortcode_videojs_video2);</script>
 
 
 

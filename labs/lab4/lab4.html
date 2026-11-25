@@ -50,14 +50,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -66,7 +65,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -108,11 +107,13 @@ window.Quarto = {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/labs/lab4/images/Lab4schematic.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Lab 4 schematic: microcontroller pin PB3 through two inverters and a potentiometer into an LM386 amplifier, which drives a speaker through a 220 microfarad capacitor">
 <meta property="og:image:height" content="407">
 <meta property="og:image:width" content="721">
 <meta name="twitter:title" content="Lab 4: Digital Audio – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/labs/lab4/images/Lab4schematic.png">
+<meta name="twitter:image:alt" content="Lab 4 schematic: microcontroller pin PB3 through two inverters and a potentiometer into an LM386 amplifier, which drives a speaker through a 220 microfarad capacitor">
 <meta name="twitter:image-height" content="407">
 <meta name="twitter:image-width" content="721">
 <meta name="twitter:card" content="summary_large_image">
@@ -332,25 +333,39 @@ window.Quarto = {
 </header>
 
 
-<p>In this lab, we made a melody player code for a STM32L4 microcontroller where we can control the frequency and timing of musical notes.</p>
-<p>Spent 24 hours</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled" title="At a glance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>At a glance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> Play melodies on an STM32L4 microcontroller, using a hardware timer to set each note’s frequency and duration and driving a speaker through an LM386 amplifier.</p>
+<p><strong>My work (individual lab):</strong> Chose and configured TIM2, worked out the prescaler and ARR math for the timer’s frequency and delay limits, wrote the firmware, and built the amplifier circuit.</p>
+<p><strong>Result:</strong> The board plays melodies through the speaker (see the demo video), and every note from 220 to 1000 Hz is generated within 1% of its target frequency. Time spent: 24 hours.</p>
+</div>
+</div>
+<p>In this individual lab, I wrote melody player code for a STM32L4 microcontroller where we can control the frequency and timing of musical notes.</p>
 <section id="demo" class="level3">
 <h3 class="anchored" data-anchor-id="demo">Demo</h3>
 <p>The STM32L4 playing a melody through the LM386 amplifier and speaker.</p>
-<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="images/Lab4Video.mp4"></video></div>
+<div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-big-play-centered vjs-fluid" controls="" preload="auto" data-setup="{}" title="Demo video: the breadboard with the LM386 amplifier circuit, connected to the STM32L4 board, playing a melody through the speaker"><source src="images/Lab4Video.mp4"></video></div>
 </section>
 <section id="electrical-schematic" class="level3">
 <h3 class="anchored" data-anchor-id="electrical-schematic">Electrical schematic</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab4schematic.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab4schematic.png" class="img-fluid figure-img" alt="Lab 4 schematic: microcontroller pin PB3 through two inverters and a potentiometer into an LM386 amplifier, which drives a speaker through a 220 microfarad capacitor"></p>
 <figcaption>Electrical Schematic</figcaption>
 </figure>
 </div>
 </section>
 <section id="design-choices-and-math" class="level3">
 <h3 class="anchored" data-anchor-id="design-choices-and-math">Design Choices and Math:</h3>
-<p>We chose TIM2 because it has 32 bits and it is easy to change frequency by altering the ARR and PSC values</p>
+<p>I chose TIM2 because it has 32 bits and it is easy to change frequency by altering the ARR and PSC values</p>
 <p>Minimum frequency</p>
 <p>Since our PSC is 39, and ARR is a 32 bit number, the minimum possible frequency is when ARR is at its maximum value (2^32 - 1), or: 4,000,000/((39+1)(2^32))/2 = 1.164x10^-5 Hz, we divide by 2 because we toggle every cycle.</p>
 <p>Maximum frequency</p>
@@ -378,14 +393,14 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
 </section>
 <section id="ai-prototype" class="level3">
 <h3 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h3>
-<p>After asking ChatGPT, we got the following response:</p>
+<p>After asking ChatGPT, I got the following response:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab4_AIPrototype.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab4_AIPrototype.png" class="img-fluid figure-img" alt="ChatGPT answer listing the STM32L432KC timers and recommending TIM2 because it is 32-bit"></p>
 <figcaption>AI Prototype</figcaption>
 </figure>
 </div>
-<p>This is similar to what we concluded, where we chose Timer 2 since it seemed easier to use and has the ability to count up to 32 bits, which since we were originally considering using timer overflow to control notes instead of number of clock cycles we used in the end. this also made me understand better the math behind it.</p>
+<p>This is similar to what I concluded, where I chose Timer 2 since it seemed easier to use and has the ability to count up to 32 bits, which mattered since I was originally considering using timer overflow to control notes instead of number of clock cycles I used in the end. this also made me understand better the math behind it.</p>
 </section>
 <section id="resources" class="level3">
 <h3 class="anchored" data-anchor-id="resources">Resources</h3>
@@ -446,6 +461,9 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -492,6 +510,13 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -905,7 +930,7 @@ f_d = \frac{2,000,000}{40*(49+1)} = 1000 Hz
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

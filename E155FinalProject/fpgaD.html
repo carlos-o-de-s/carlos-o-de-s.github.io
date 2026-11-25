@@ -48,14 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -106,11 +105,13 @@ window.Quarto = {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/E155FinalProject/images/testbench1.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Simulation waveform of the audio SPI receiver testbench, showing the received 16-bit sample byte-swapped as expected">
 <meta property="og:image:height" content="402">
 <meta property="og:image:width" content="2732">
 <meta name="twitter:title" content="FPGA Design – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/E155FinalProject/images/testbench1.png">
+<meta name="twitter:image:alt" content="Simulation waveform of the audio SPI receiver testbench, showing the received 16-bit sample byte-swapped as expected">
 <meta name="twitter:image-height" content="402">
 <meta name="twitter:image-width" content="2732">
 <meta name="twitter:card" content="summary_large_image">
@@ -373,34 +374,34 @@ window.Quarto = {
 <section id="audio-spi-receiver-audio-2-bytes-at-a-time" class="level3">
 <h3 class="anchored" data-anchor-id="audio-spi-receiver-audio-2-bytes-at-a-time">Audio SPI Receiver (audio 2 bytes at a time)</h3>
 <p>We expect to get <code>1010-1010-1011-1011 = aabb</code>, but it is swapped due to endianness (<code>BYTE_SWAP = 1</code>).</p>
-<p><img src="images/testbench1.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench1.png" class="img-fluid" style="width:80.0%" alt="Simulation waveform of the audio SPI receiver testbench, showing the received 16-bit sample byte-swapped as expected"></p>
 </section>
 <section id="fifo" class="level3">
 <h3 class="anchored" data-anchor-id="fifo">FIFO</h3>
 <p>We can see how <code>1111</code>, <code>2222</code>, and <code>3333</code> are sent (2‑byte samples matching audio sample length) and retrieved using a differently timed clock (read enable is slower than write enable).</p>
-<p><img src="images/testbench2.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench2.png" class="img-fluid" style="width:80.0%" alt="Simulation waveform of the FIFO testbench: samples 1111, 2222, and 3333 are written and then read back on a slower read clock"></p>
 </section>
 <section id="synchronizer" class="level3">
 <h3 class="anchored" data-anchor-id="synchronizer">Synchronizer</h3>
 <p>The synchronizer reads the FIFO at the MCU‑specified rate (usually 48 kHz, up to ~90 kHz). It converts occasionally noisy FIFO output (like <code>0000</code>) into a continuous, correctly‑timed stream.</p>
-<p><img src="images/testbench3.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench3.png" class="img-fluid" style="width:80.0%" alt="Simulation waveform of the synchronizer testbench turning the FIFO output into an evenly timed sample stream"></p>
 </section>
 <section id="top-module" class="level3">
 <h3 class="anchored" data-anchor-id="top-module">Top Module</h3>
 <p>Anything after the filter will not show data, since it needs 128 samples to function. Everything else operates correctly: SPI reads values into <code>test_val</code> (after byte swap). Data is saved faster than the 48 kHz clock but output at 48 kHz, as intended.</p>
-<p><img src="images/testbench4.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench4.png" class="img-fluid" style="width:80.0%" alt="Simulation waveform of the top-level FPGA testbench: SPI data is stored quickly and output at 48 kHz"></p>
 </section>
 <section id="i2s-player" class="level3">
 <h3 class="anchored" data-anchor-id="i2s-player">I2S Player</h3>
 <p>Given the following:</p>
-<p><img src="images/testbench43.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench43.png" class="img-fluid" style="width:80.0%" alt="Simulation waveform of the I2S player testbench showing the bit clock, left/right clock, and data line"></p>
 <p>Zooming in, we see that data changes during the <strong>falling</strong> edge of the clock, which is correct—data must change on falling and be read on rising by the PCM5102. Another common mistake was starting transmission on the first bit instead of the second.</p>
 <p>Checking sample values (<code>8000</code>, <code>7FFF</code>, etc.), we confirm they match their binary representation.</p>
-<p><img src="images/testbench45.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench45.png" class="img-fluid" style="width:80.0%" alt="Zoomed I2S waveform where data changes on the falling clock edge and sample values such as 8000 and 7FFF match their binary bits"></p>
 </section>
 <section id="fir-filter" class="level3">
 <h3 class="anchored" data-anchor-id="fir-filter">FIR Filter</h3>
-<p><img src="images/testbench5.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="images/testbench5.png" class="img-fluid" style="width:80.0%" alt="Simulation waveform of the FIR filter testbench"></p>
 
 
 </section>
@@ -456,6 +457,9 @@ window.Quarto = {
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -502,6 +506,13 @@ window.Quarto = {
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -915,7 +926,7 @@ window.Quarto = {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

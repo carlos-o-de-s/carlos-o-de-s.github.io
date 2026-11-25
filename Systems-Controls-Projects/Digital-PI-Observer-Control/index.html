@@ -83,14 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -99,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -435,7 +434,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="the-plant">The plant</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/rc-circuit.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p><img src="images/rc-circuit.png" class="img-fluid figure-img" style="width:70.0%" alt="Second-order RC circuit buffered by an op-amp follower (C = 10\,\mu F, R = 50\,k\Omega)"></p>
 <figcaption>Second-order RC circuit buffered by an op-amp follower (<span class="math inline">\(C = 10\,\mu F\)</span>, <span class="math inline">\(R = 50\,k\Omega\)</span>)</figcaption>
 </figure>
 </div>
@@ -482,7 +481,7 @@ y_{step}(t) = \left(1 - \tfrac{4}{3}e^{-t/4RC} + \tfrac{1}{3}e^{-t/RC}\right)u(t
 <p>I applied a 2.5 V step with the Arduino and logged the output over serial. The measured response follows the model closely during the rise. After about 3 s the real circuit is slightly faster than the model, which matters later in the closed-loop results.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/open-loop-step.png" class="img-fluid figure-img"></p>
+<p><img src="images/open-loop-step.png" class="img-fluid figure-img" alt="Measured open-loop step response (circles) vs.&nbsp;the analytical model (line)"></p>
 <figcaption>Measured open-loop step response (circles) vs.&nbsp;the analytical model (line)</figcaption>
 </figure>
 </div>
@@ -512,7 +511,7 @@ u[n] = u[n-1] + (K_p + TK_i)\,e[n] - K_p\,e[n-1]
 <p>This difference equation is cheap enough to run on the Arduino every sample.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/pi-simulink.png" class="img-fluid figure-img"></p>
+<p><img src="images/pi-simulink.png" class="img-fluid figure-img" alt="Simulink model: discrete PI controller, zero-order hold, 0–5 V saturation, and continuous plant"></p>
 <figcaption>Simulink model: discrete PI controller, zero-order hold, 0–5 V saturation, and continuous plant</figcaption>
 </figure>
 </div>
@@ -521,13 +520,13 @@ u[n] = u[n-1] + (K_p + TK_i)\,e[n] - K_p\,e[n-1]
 <h3 class="anchored" data-anchor-id="simulation-vs.-hardware">Simulation vs.&nbsp;hardware</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/pi-sim-step.png" class="img-fluid figure-img"></p>
+<p><img src="images/pi-sim-step.png" class="img-fluid figure-img" alt="Simulated closed-loop response: output y(t) and control input u(t)"></p>
 <figcaption>Simulated closed-loop response: output y(t) and control input u(t)</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/pi-experimental.png" class="img-fluid figure-img"></p>
+<p><img src="images/pi-experimental.png" class="img-fluid figure-img" alt="Experimental closed-loop response overlaid on simulation"></p>
 <figcaption>Experimental closed-loop response overlaid on simulation</figcaption>
 </figure>
 </div>
@@ -634,13 +633,13 @@ J = \frac{1}{2}\sum_{n=0}^{\infty}\left(Q_{11}x_1[n]^2 + Q_{22}x_2[n]^2 + u[n]^2
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/observer-simulink.png" class="img-fluid figure-img"></p>
+<p><img src="images/observer-simulink.png" class="img-fluid figure-img" alt="Simulink model of the observer-based controller"></p>
 <figcaption>Simulink model of the observer-based controller</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/observer-subsystem.png" class="img-fluid figure-img"></p>
+<p><img src="images/observer-subsystem.png" class="img-fluid figure-img" alt="Observer subsystem: \hat{x}[n+1] = \mathbf{A_d}\hat{x}[n] + \mathbf{B_d}u[n] + \mathbf{L}(y[n] - \mathbf{C_d}\hat{x}[n])"></p>
 <figcaption>Observer subsystem: <span class="math inline">\(\hat{x}[n+1] = \mathbf{A_d}\hat{x}[n] + \mathbf{B_d}u[n] + \mathbf{L}(y[n] - \mathbf{C_d}\hat{x}[n])\)</span></figcaption>
 </figure>
 </div>
@@ -649,13 +648,13 @@ J = \frac{1}{2}\sum_{n=0}^{\infty}\left(Q_{11}x_1[n]^2 + Q_{22}x_2[n]^2 + u[n]^2
 <h3 class="anchored" data-anchor-id="simulation-vs.-hardware-1">Simulation vs.&nbsp;hardware</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/observer-sim-step.png" class="img-fluid figure-img"></p>
+<p><img src="images/observer-sim-step.png" class="img-fluid figure-img" alt="Simulated closed-loop response of the observer-based controller"></p>
 <figcaption>Simulated closed-loop response of the observer-based controller</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/observer-experimental.png" class="img-fluid figure-img"></p>
+<p><img src="images/observer-experimental.png" class="img-fluid figure-img" alt="Experimental response overlaid on simulation"></p>
 <figcaption>Experimental response overlaid on simulation</figcaption>
 </figure>
 </div>
@@ -1014,6 +1013,9 @@ J = \frac{1}{2}\sum_{n=0}^{\infty}\left(Q_{11}x_1[n]^2 + Q_{22}x_2[n]^2 + u[n]^2
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -1060,6 +1062,13 @@ J = \frac{1}{2}\sum_{n=0}^{\infty}\left(Q_{11}x_1[n]^2 + Q_{22}x_2[n]^2 + u[n]^2
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -1473,7 +1482,7 @@ J = \frac{1}{2}\sum_{n=0}^{\infty}\left(Q_{11}x_1[n]^2 + Q_{22}x_2[n]^2 + u[n]^2
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

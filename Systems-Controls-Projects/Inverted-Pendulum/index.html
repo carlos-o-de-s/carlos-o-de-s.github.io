@@ -83,14 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -99,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -442,7 +441,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <p>The observer estimates the full state from the measured <span class="math inline">\(\theta\)</span> and <span class="math inline">\(s\)</span>. Its poles were placed at <span class="math inline">\(-73\)</span> to <span class="math inline">\(-76\)</span>, far faster than the controller, so the estimate converges almost immediately. Slower observer poles (around <span class="math inline">\(-20\)</span>) visibly lagged the true state, and the controller then acted on stale information:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/slow-observer.png" class="img-fluid figure-img"></p>
+<p><img src="images/slow-observer.png" class="img-fluid figure-img" alt="Observer lag with poles near −20: true state (blue) vs.&nbsp;the estimate (orange)"></p>
 <figcaption>Observer lag with poles near −20: true state (blue) vs.&nbsp;the estimate (orange)</figcaption>
 </figure>
 </div>
@@ -453,20 +452,20 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <h2 class="anchored" data-anchor-id="simulink-model">Simulink model</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/simulink-top.png" class="img-fluid figure-img"></p>
+<p><img src="images/simulink-top.png" class="img-fluid figure-img" alt="Top-level model: reference step, integrator, state feedback, ±0.5 m/s² acceleration limit, nonlinear plant, and observer"></p>
 <figcaption>Top-level model: reference step, integrator, state feedback, ±0.5 m/s² acceleration limit, nonlinear plant, and observer</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/simulink-observer.png" class="img-fluid figure-img"></p>
+<p><img src="images/simulink-observer.png" class="img-fluid figure-img" alt="Observer subsystem"></p>
 <figcaption>Observer subsystem</figcaption>
 </figure>
 </div>
 <p>The plant block uses the full nonlinear equations with <span class="math inline">\(\sin\theta\)</span> and <span class="math inline">\(\cos\theta\)</span> rather than the linearized model, so the simulation tests how well the linear design holds up on the real dynamics:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/simulink-nonlinear-plant.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<p><img src="images/simulink-nonlinear-plant.png" class="img-fluid figure-img" style="width:75.0%" alt="Nonlinear pendulum plant"></p>
 <figcaption>Nonlinear pendulum plant</figcaption>
 </figure>
 </div>
@@ -479,7 +478,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/alpha-0.png" class="img-fluid figure-img"></p>
+<p><img src="images/alpha-0.png" class="img-fluid figure-img" alt="\alpha = 0: reaches 1 m with no overshoot"></p>
 <figcaption><span class="math inline">\(\alpha = 0\)</span>: reaches 1 m with no overshoot</figcaption>
 </figure>
 </div>
@@ -487,7 +486,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/alpha-0.5.png" class="img-fluid figure-img"></p>
+<p><img src="images/alpha-0.5.png" class="img-fluid figure-img" alt="\alpha = 0.5: still meets every requirement"></p>
 <figcaption><span class="math inline">\(\alpha = 0.5\)</span>: still meets every requirement</figcaption>
 </figure>
 </div>
@@ -497,7 +496,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/alpha-0.72.png" class="img-fluid figure-img"></p>
+<p><img src="images/alpha-0.72.png" class="img-fluid figure-img" alt="\alpha = 0.72: largest disturbance that stays stable"></p>
 <figcaption><span class="math inline">\(\alpha = 0.72\)</span>: largest disturbance that stays stable</figcaption>
 </figure>
 </div>
@@ -505,7 +504,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/alpha-0.73.png" class="img-fluid figure-img"></p>
+<p><img src="images/alpha-0.73.png" class="img-fluid figure-img" alt="\alpha = 0.73: unstable, the pendulum falls"></p>
 <figcaption><span class="math inline">\(\alpha = 0.73\)</span>: unstable, the pendulum falls</figcaption>
 </figure>
 </div>
@@ -522,7 +521,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
 <h3 class="anchored" data-anchor-id="tuning-for-a-larger-disturbance-and-why-i-didnt-use-it">Tuning for a larger disturbance (and why I didn’t use it)</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/alpha-0.8-tuned.png" class="img-fluid figure-img"></p>
+<p><img src="images/alpha-0.8-tuned.png" class="img-fluid figure-img" alt="A version tuned to survive α = 0.8"></p>
 <figcaption>A version tuned to survive α = 0.8</figcaption>
 </figure>
 </div>
@@ -642,6 +641,9 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -688,6 +690,13 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -1101,7 +1110,7 @@ L\ddot{\theta} - g\sin\theta = -a\cos\theta + L\alpha, \qquad \ddot{s} = a
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

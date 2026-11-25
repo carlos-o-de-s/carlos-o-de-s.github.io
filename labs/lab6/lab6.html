@@ -48,14 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -77,11 +76,13 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/labs/lab6/images/Lab6Schematic.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Lab 6 schematic: STM32 connected to a DS1722 sensor with chip enable on PA11, SCK on PB3, MISO on PB4, and MOSI on PB5, plus an LED with a 160 ohm resistor on PB6">
 <meta property="og:image:height" content="463">
 <meta property="og:image:width" content="697">
 <meta name="twitter:title" content="Lab 6: The Internet of Things and Serial Peripheral Interface – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Engineering portfolio of Carlos Ojeda de Silva, Harvey Mudd College: rocketry, embedded systems, and machine learning projects.">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/labs/lab6/images/Lab6Schematic.png">
+<meta name="twitter:image:alt" content="Lab 6 schematic: STM32 connected to a DS1722 sensor with chip enable on PA11, SCK on PB3, MISO on PB4, and MOSI on PB5, plus an LED with a 160 ohm resistor on PB6">
 <meta name="twitter:image-height" content="463">
 <meta name="twitter:image-width" content="697">
 <meta name="twitter:card" content="summary_large_image">
@@ -303,13 +304,27 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>In this lab, we made an IoT device that can control an LED and read temperature from an SPI sensor. The IoT website also has the option to change the resolution, which changes the sensor read time and how precise we can get. The lab worked as intended: the web page could turn the LED on and off, switch between all five resolutions, and display the current temperature.</p>
-<p>Spent 19 hours</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled" title="At a glance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>At a glance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Goal:</strong> Build an IoT device: an STM32L432KC serves a web page through an ESP8266 that toggles an LED and reads a DS1722 temperature sensor over SPI at a selectable 8 to 12 bit resolution.</p>
+<p><strong>My work (individual lab):</strong> Configured SPI1 for the sensor’s clock mode and active-high chip enable, wrote the request handling and temperature conversion firmware, and checked the SPI traffic with a logic analyzer.</p>
+<p><strong>Result:</strong> The web page turned the LED on and off, switched between all five resolutions, and showed the live temperature; the logic analyzer read 0x19 (25 °C), matching the page. Time spent: 19 hours.</p>
+</div>
+</div>
+<p>In this individual lab, I made an IoT device that can control an LED and read temperature from an SPI sensor. The IoT website also has the option to change the resolution, which changes the sensor read time and how precise we can get. The lab worked as intended: the web page could turn the LED on and off, switch between all five resolutions, and display the current temperature.</p>
 <section id="electrical-schematic" class="level3">
 <h3 class="anchored" data-anchor-id="electrical-schematic">Electrical Schematic</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab6Schematic.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab6Schematic.png" class="img-fluid figure-img" alt="Lab 6 schematic: STM32 connected to a DS1722 sensor with chip enable on PA11, SCK on PB3, MISO on PB4, and MOSI on PB5, plus an LED with a 160 ohm resistor on PB6"></p>
 <figcaption>Electrical Schematic</figcaption>
 </figure>
 </div>
@@ -327,7 +342,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="spi-configuration" class="level3">
 <h3 class="anchored" data-anchor-id="spi-configuration">SPI Configuration</h3>
-<p>SPI1 was set up as a full-duplex master sending 8-bit frames, MSB first, on PB3 (SCK), PB4 (MISO), and PB5 (MOSI). The DS1722 shifts data out on one clock edge and samples on the other, so we used CPOL = 0 (clock idles low) and CPHA = 1 (data changes on the first edge and is captured on the second). The baud rate field was set to <code>0b100</code>, which divides the system clock by 32.</p>
+<p>SPI1 was set up as a full-duplex master sending 8-bit frames, MSB first, on PB3 (SCK), PB4 (MISO), and PB5 (MOSI). The DS1722 shifts data out on one clock edge and samples on the other, so I used CPOL = 0 (clock idles low) and CPHA = 1 (data changes on the first edge and is captured on the second). The baud rate field was set to <code>0b100</code>, which divides the system clock by 32.</p>
 <p>Unlike most SPI devices, the DS1722’s chip enable is <strong>active high</strong>. Because of this, the hardware NSS pin was disabled and the chip enable is driven manually on PA11: it goes high before each transaction and low after it. Every transaction is two bytes: first the register address, then either the data to write or a dummy byte to clock out the reply.</p>
 </section>
 <section id="temperature-resolution" class="level3">
@@ -381,31 +396,31 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="spi-transaction-logic-trace">SPI Transaction Logic Trace</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab6website.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab6website.png" class="img-fluid figure-img" alt="The lab web page with LED on and off buttons, 8 to 12 bit resolution buttons, and the status: LED is off, temperature is 25.0000 C, current resolution is 8 bits"></p>
 <figcaption>The web page showing the LED status, temperature, and resolution</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab6Osctrace.jpeg" class="img-fluid figure-img"></p>
+<p><img src="images/Lab6Osctrace.jpeg" class="img-fluid figure-img" alt="Rigol logic analyzer with SPI decoding: MOSI sends register addresses 00, 02, and 01, and MISO returns E0, 19, and 00"></p>
 <figcaption>Logic analyzer capture of an SPI read from the DS1722</figcaption>
 </figure>
 </div>
-<p>A hex value of 19 is equal to 16 + 9, which is 25 °C, this matches the value we see in the website.</p>
+<p>A hex value of 19 is equal to 16 + 9, which is 25 °C, this matches the value shown on the website.</p>
 </section>
 <section id="ai-prototype" class="level3">
 <h3 class="anchored" data-anchor-id="ai-prototype">AI Prototype</h3>
 <p>The first prompt gave me a decently looking code for a GUI, but it was not functional, I just appended it at the end:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab6AIPrototype1.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab6AIPrototype1.png" class="img-fluid figure-img" alt="Dark-themed version of the lab web page with an AI-generated Temperature Sensor Portal section appended below that shows no reading"></p>
 <figcaption>Lab6 AI Prototype 1</figcaption>
 </figure>
 </div>
-<p>The second prompt gave me a code that looks similar to ours, but it looks a bit shorter than our definitions, so it may not work.</p>
+<p>The second prompt gave me a code that looks similar to mine, but it looks a bit shorter than my definitions, so it may not work.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Lab6AIPrototype2.png" class="img-fluid figure-img"></p>
+<p><img src="images/Lab6AIPrototype2.png" class="img-fluid figure-img" alt="AI-generated C function that reads the DS1722 temperature over SPI using direct register access"></p>
 <figcaption>Lab6 AI Prototype 2</figcaption>
 </figure>
 </div>
@@ -468,6 +483,9 @@ ul.task-list li input[type="checkbox"] {
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -514,6 +532,13 @@ ul.task-list li input[type="checkbox"] {
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -927,7 +952,7 @@ ul.task-list li input[type="checkbox"] {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;

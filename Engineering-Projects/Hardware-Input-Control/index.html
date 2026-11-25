@@ -48,14 +48,13 @@ ul.task-list li input[type="checkbox"] {
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
-  "type": "overlay",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
     "/",
     "s"
   ],
-  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -64,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
+    "search-text-placeholder": "Search all pages",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -77,11 +76,13 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:description" content="Controlling device inputs with a microcontroller">
 <meta property="og:image" content="https://carlos-o-de-s.github.io/Engineering-Projects/Hardware-Input-Control/images/Press1.png">
 <meta property="og:site_name" content="Carlos Ojeda de Silva Portfolio">
+<meta property="og:image:alt" content="Diagram showing Arduino connection to controller">
 <meta property="og:image:height" content="441">
 <meta property="og:image:width" content="467">
 <meta name="twitter:title" content="Hardware Input Control – Carlos Ojeda de Silva Portfolio">
 <meta name="twitter:description" content="Controlling device inputs with a microcontroller">
 <meta name="twitter:image" content="https://carlos-o-de-s.github.io/Engineering-Projects/Hardware-Input-Control/images/Press1.png">
+<meta name="twitter:image:alt" content="Diagram showing Arduino connection to controller">
 <meta name="twitter:image-height" content="441">
 <meta name="twitter:image-width" content="467">
 <meta name="twitter:card" content="summary_large_image">
@@ -304,7 +305,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Have you ever wondered if it is possible to make a non-mechanical device that presses keys/buttons for you? Well, this is a question I had some time ago, which inspired me to test it on a video game controller, and eventually, a keyboard. The system here connects the circuit in a controller to some transistors using nails. The transistors can be switched on and off with the use of a microcontroller, which in this case is an Arduino Uno. The system done with the controller worked well and was able to be programmed. The project then started using a keyboard instead of a controller, which was proven to work. I was limited by the microcontroller I had available because the keyboard circuit had more terminals than the Arduino, meaning that not all letters and symbols could be simulated.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Press1.png" class="img-fluid figure-img"></p>
+<p><img src="images/Press1.png" class="img-fluid figure-img" alt="Diagram showing Arduino connection to controller"></p>
 <figcaption>Diagram showing Arduino connection to controller</figcaption>
 </figure>
 </div>
@@ -313,7 +314,7 @@ ul.task-list li input[type="checkbox"] {
 <p>This circuit worked in an interesting way, where terminals were either type A or B (8A and 18B in total). A and B are able to combine to create different key presses, adding to 144 different possible keys (including letters, symbols, turning your computer off, and more). One interesting hidden key printed the current date and time in just one press. The explanation of how this works explains why when you press “a” and “d” at the same time it will no longer detect when you press “c” (this may vary from keyboard to keyboard), but it does detect when you press “h”. This is because “a” and ”d”, already include the combinations which “c” needs to be detected by the computer (“a” may have the same A terminal than “c” while “d” has the same B terminal as “c”, meaning that pressing “c” doesn’t connect anything that wasn’t connected before).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Press3.png" class="img-fluid figure-img"></p>
+<p><img src="images/Press3.png" class="img-fluid figure-img" alt="The keyboard’s circuit board"></p>
 <figcaption>The keyboard’s circuit board</figcaption>
 </figure>
 </div>
@@ -323,7 +324,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Here is the set up used to connect the keyboard circuit. Note that there are a lot of wires coming out of this device when compared to the controller. In this setup, red wires are A type while black wires are B type.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Press4.png" class="img-fluid figure-img"></p>
+<p><img src="images/Press4.png" class="img-fluid figure-img" alt="Wires connected to the keyboard circuit"></p>
 <figcaption>Wires connected to the keyboard circuit</figcaption>
 </figure>
 </div>
@@ -333,7 +334,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Here is a closer look at the connections made with nails to the controller circuit. These connections only worked because the PCB is single layered. Overall these connections were effective for connecting the plates without the use of soldering since soldering frequently broke off the flat surface.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/Press2.png" class="img-fluid figure-img"></p>
+<p><img src="images/Press2.png" class="img-fluid figure-img" alt="Nails connecting wires to the controller’s button pads"></p>
 <figcaption>Nails connecting wires to the controller’s button pads</figcaption>
 </figure>
 </div>
@@ -396,6 +397,9 @@ ul.task-list li input[type="checkbox"] {
   <button class="mobile-tab" type="button" data-sheet="sheet-labs" data-section="labs">
     <i class="bi bi-cpu"></i><span>E155</span>
   </button>
+  <button class="mobile-tab" type="button" id="mobile-search-tab" aria-label="Search the site">
+    <i class="bi bi-search"></i><span>Search</span>
+  </button>
   <a class="mobile-tab" data-href="Resume/resume.html" data-section="resume">
     <i class="bi bi-file-earmark-person"></i><span>Resume</span>
   </a>
@@ -442,6 +446,13 @@ ul.task-list li input[type="checkbox"] {
       btn.setAttribute('aria-expanded', 'true');
       openSheet = sheet;
     });
+  });
+
+  // Search tab: open Quarto's site search (same index as the navbar search box)
+  document.getElementById('mobile-search-tab').addEventListener('click', function () {
+    close();
+    var trigger = document.querySelector('#quarto-search .aa-DetachedSearchButton, #quarto-search .aa-Input, #quarto-search button');
+    if (trigger) { trigger.click(); trigger.focus(); }
   });
 
   backdrop.addEventListener('click', close);
@@ -855,7 +866,7 @@ ul.task-list li input[type="checkbox"] {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>2026 Carlos Ojeda de Silva</p>
+<p>2026 Carlos Ojeda de Silva · <a href="mailto:cojedadesilva@g.hmc.edu">Contact: cojedadesilva@g.hmc.edu</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;
