@@ -32,7 +32,7 @@ It is also important to note that I had to program which pins are which in the F
 
 This can be easily done in verilog by defining the output (an LED in this case) to be the "and" or "xor" operation of the desired inputs. This can be done as easily as:
 
-```{verilog, code-fold: true}
+```
 assign led00 = s[0] ^ s[1]; //xor
 assign led10 = s[2] & s[3]; //and
 ```
@@ -58,7 +58,7 @@ $$
 The value 215 was chosen to give us the closest frequency to the desired 2.4 Hz.
 This would result in a code that looks like this:
 
-```{verilog, code-fold: true}
+```
 	always_ff @(posedge int_osc)
 		begin
 			counter <= counter + 215; //107 * 48,000,000 ~= 2.4 * 2^30, so a 2.4Hz square wave
@@ -105,7 +105,7 @@ Write SystemVerilog HDL to leverage the internal high speed oscillator in the La
 
 from which I got this code:
 
-```{verilog, code-fold: true}
+```
 module led_blinker_2hz (
     output logic led
 );
@@ -142,7 +142,7 @@ endmodule
 
 After testing this code, I realized that it didn't work, so I copied the error message and tried the new code.
 
-```{verilog, code-fold: true}
+```
 module led_blinker_2hz (
     output logic led
 );

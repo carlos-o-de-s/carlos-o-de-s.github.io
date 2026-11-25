@@ -28,7 +28,7 @@ After wiring the circuit like this, it was configured as follows to be able to c
 
 This was then used in my top module, which uses code that was made in Lab1 (lab1_co.sv, which controls the 7 segment display) and the code that controls all the logic and switching between displays.
 
-```{verilog, code-fold: true}
+```
 /*
 by Carlos Ojeda de Silva, September 10 2025
 cojedadesilva@g.hmc.edu
@@ -92,7 +92,7 @@ This also corresponds to the current ratings of the 2N3906 Transistor we are usi
 
 For this part of the lab, we first need to use the 7 segment display code from Lab1, where all we have to change is the input and how the output is treated. To do this, I first connected both PNP transistor's power (Emitter) to the 3.3v line. Then I connected the Base to the FPGA pins so whenever they are high, the transistor switches. Finally, I connected each 7 segment display power to the collector. I also added a pulldown resistor (chose 10k since it is standard and much larger than the 160Ω chosen for the display) to the PNP transistor to remove any excess charge accumulated when switching off. Here is the verilog code used:
 
-```{verilog, code-fold: true}
+```
 /*
 by Carlos Ojeda de Silva, September 10 2025
 cojedadesilva@g.hmc.edu
@@ -133,7 +133,7 @@ This code was mainly recycled from the lab1 code also named leds_co.sv, where th
 
 To make the full adder, we first need to consider we are adding two 4-bit numbers, meaning that the sum could be 5 bits long, meaning that our output will be of length 5. Then I used the following line of verilog code to assign the leds the sum:
 
-```{verilog, code-fold: true}
+```
   assign leds = s1+s2;
 ```
 
@@ -161,7 +161,7 @@ Write SystemVerilog HDL to time multiplex a single seven segment decoder (that d
 
 from which I got this code:
 
-```{verilog, code-fold: true}
+```
 module seven_segment_mux (
     input logic clk,               // Clock input to drive time multiplexing
     input logic rst_n,             // Active low reset
